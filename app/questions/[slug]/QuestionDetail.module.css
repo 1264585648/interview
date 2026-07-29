@@ -1,9 +1,10 @@
 .page {
-  padding: 30px 0 92px;
+  padding: 34px 0 92px;
+  background: #fff;
 }
 
 .shell {
-  width: min(100%, 860px);
+  width: min(100%, 820px);
   margin: 0 auto;
 }
 
@@ -11,54 +12,54 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-bottom: 28px;
-  color: #7f8793;
+  margin-bottom: 30px;
+  color: #8d877e;
   font-size: 12px;
 }
 
 .backLink:hover {
-  color: #456de6;
+  color: #25272c;
 }
 
 .header {
-  padding-bottom: 34px;
-  border-bottom: 1px solid #e7eaee;
+  padding-bottom: 36px;
+  border-bottom: 1px solid #e8e4de;
 }
 
 .metaLine {
   display: flex;
   flex-wrap: wrap;
   gap: 0;
-  color: #87909c;
+  color: #918b82;
   font-size: 11px;
 }
 
 .metaLine span:first-child {
-  color: #536da9;
+  color: #5f5a53;
   font-weight: 650;
 }
 
 .metaLine span + span::before {
   content: '·';
   margin: 0 7px;
-  color: #c2c7cf;
+  color: #c8c2ba;
 }
 
 .header h1 {
-  margin: 14px 0 14px;
-  color: #1e232b;
-  font-size: clamp(30px, 4vw, 42px);
-  font-weight: 720;
+  margin: 16px 0 15px;
+  color: #1f2125;
+  font-size: clamp(30px, 4vw, 40px);
+  font-weight: 730;
   line-height: 1.28;
   letter-spacing: -0.04em;
 }
 
 .lead {
-  max-width: 760px;
+  max-width: 720px;
   margin: 0;
-  color: #68717e;
+  color: #6f6a62;
   font-size: 14px;
-  line-height: 1.85;
+  line-height: 1.9;
 }
 
 .topics {
@@ -66,13 +67,13 @@
   align-items: baseline;
   gap: 8px;
   margin-top: 18px;
-  color: #8e95a0;
+  color: #918b82;
   font-size: 11px;
 }
 
 .topics > span {
   flex: 0 0 auto;
-  color: #68717e;
+  color: #6f6a62;
   font-weight: 600;
 }
 
@@ -83,31 +84,31 @@
 
 .practiceSection,
 .articleSection {
-  padding-top: 46px;
+  padding-top: 48px;
 }
 
 .articleSection {
-  margin-top: 6px;
-  border-top: 1px solid #eceef2;
+  margin-top: 8px;
+  border-top: 1px solid #ece9e4;
 }
 
 .sectionTitle {
   display: grid;
   grid-template-columns: 32px minmax(0, 1fr);
   gap: 12px;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 .sectionTitle > span {
   padding-top: 4px;
-  color: #a9b0ba;
+  color: #aaa49b;
   font-size: 10px;
   font-weight: 700;
 }
 
 .sectionTitle h2 {
   margin: 0;
-  color: #242932;
+  color: #26282d;
   font-size: 20px;
   font-weight: 680;
   line-height: 1.45;
@@ -116,7 +117,7 @@
 
 .sectionTitle p {
   margin: 5px 0 0;
-  color: #858d98;
+  color: #8d877e;
   font-size: 12px;
   line-height: 1.7;
 }
@@ -133,19 +134,19 @@
 .answer {
   margin-top: 0;
   margin-bottom: 4px;
-  color: #444c59;
+  color: #494b50;
   font-size: 15px;
   line-height: 2;
 }
 
 .deepDive {
   display: grid;
-  gap: 30px;
+  gap: 32px;
 }
 
 .deepDiveBlock h3 {
   margin: 0 0 9px;
-  color: #2c323c;
+  color: #2d2f34;
   font-size: 16px;
   font-weight: 680;
   line-height: 1.55;
@@ -153,55 +154,47 @@
 
 .deepDiveBlock p {
   margin: 0;
-  color: #4e5663;
+  color: #55514b;
   font-size: 14px;
-  line-height: 1.95;
+  line-height: 1.98;
 }
 
 .mistakeList,
 .practiceList {
   padding: 0;
   list-style: none;
-  border-top: 1px solid #e7eaee;
+  border-top: 1px solid #e8e4de;
 }
 
 .mistakeList li,
 .practiceList li {
   position: relative;
-  padding: 15px 0 15px 28px;
-  border-bottom: 1px solid #e7eaee;
-  color: #454d59;
+  padding: 16px 0 16px 28px;
+  border-bottom: 1px solid #e8e4de;
+  color: #4d4943;
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
 .mistakeList li::before,
 .practiceList li::before {
   position: absolute;
   left: 0;
-  top: 17px;
+  top: 18px;
   width: 18px;
-  color: #a0a7b1;
+  color: #99938a;
   font-size: 11px;
   font-weight: 700;
 }
 
-.mistakeList {
-  background: linear-gradient(90deg, rgba(179, 78, 78, 0.025), transparent 42%);
-}
-
 .mistakeList li::before {
   content: '×';
-  color: #b16a6a;
-}
-
-.practiceList {
-  background: linear-gradient(90deg, rgba(69, 109, 230, 0.025), transparent 42%);
+  color: #a76f69;
 }
 
 .practiceList li::before {
   content: '✓';
-  color: #5872b7;
+  color: #667b65;
 }
 
 .keyPoints,
@@ -209,7 +202,7 @@
   margin-top: 0;
   margin-bottom: 0;
   padding: 0;
-  border-top: 1px solid #e7eaee;
+  border-top: 1px solid #e8e4de;
   list-style: none;
 }
 
@@ -221,13 +214,13 @@
   align-items: start;
   min-height: 58px;
   padding: 16px 0;
-  border-bottom: 1px solid #e7eaee;
+  border-bottom: 1px solid #e8e4de;
 }
 
 .keyPoints li > span,
 .followUps li > span {
   padding-top: 2px;
-  color: #abb1ba;
+  color: #aaa49b;
   font-size: 10px;
   font-weight: 700;
 }
@@ -235,14 +228,14 @@
 .keyPoints p,
 .followUps p {
   margin: 0;
-  color: #3f4651;
+  color: #474942;
   font-size: 14px;
-  line-height: 1.75;
+  line-height: 1.8;
 }
 
 @media (max-width: 720px) {
   .page {
-    padding: 20px 0 70px;
+    padding: 22px 0 70px;
   }
 
   .backLink {
@@ -263,7 +256,7 @@
 
   .practiceSection,
   .articleSection {
-    padding-top: 36px;
+    padding-top: 38px;
   }
 
   .sectionTitle {
