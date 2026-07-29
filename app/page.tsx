@@ -1,159 +1,138 @@
 import Link from 'next/link'
-import {
-  ArrowRight,
-  BookOpen,
-  BrainCircuit,
-  Braces,
-  ChartNoAxesCombined,
-  CircleCheck,
-  Database,
-  GitBranch,
-  Layers3,
-  MemoryStick,
-  Network,
-  Sparkles,
-  Star,
-  TimerReset
-} from 'lucide-react'
 import { SiteHeader } from '@/components/SiteHeader'
+import { questions } from '@/data/questions'
+import styles from './HomePage.module.css'
 
-const topics = [
-  { name: 'Agent 基础', count: 18, progress: '9 / 18', icon: Layers3, desc: '理解 Agent 的核心概念与工作原理' },
-  { name: 'Tool Calling', count: 16, progress: '7 / 16', icon: Braces, desc: '掌握工具调用的设计、执行与失败处理' },
-  { name: 'MCP', count: 12, progress: '4 / 12', icon: Network, desc: '理解 Model Context Protocol 与工具生态' },
-  { name: 'RAG', count: 20, progress: '11 / 20', icon: Database, desc: '检索增强生成、路由与证据质量' },
-  { name: 'Memory', count: 14, progress: '6 / 14', icon: BrainCircuit, desc: '理解 Agent 如何保存、检索和管理状态' },
-  { name: 'Context Engineering', count: 9, progress: '3 / 9', icon: MemoryStick, desc: '优化上下文结构、预算与信息利用' },
-  { name: 'Evaluation', count: 13, progress: '5 / 13', icon: ChartNoAxesCombined, desc: '评估 Agent 效果、成本与可靠性' },
-  { name: 'System Design', count: 15, progress: '6 / 15', icon: GitBranch, desc: '设计可扩展、可观测的 Agent 系统' }
+const chapters = [
+  {
+    title: 'Agent 基础与运行时',
+    categories: ['Agent 基础', 'Agent Runtime'],
+    description: '先搞清楚 Agent 为什么和固定 Workflow 不一样，再进入停止条件、失败恢复和运行时控制。'
+  },
+  {
+    title: '工具、协议与知识',
+    categories: ['Tool Calling', 'MCP', 'RAG'],
+    description: '理解模型怎么调用外部能力，以及 MCP、RAG 在 Agent 系统里分别解决什么问题。'
+  },
+  {
+    title: '状态、记忆与上下文',
+    categories: ['Memory', 'Context Engineering'],
+    description: '长任务真正难的是状态管理：什么该保留、什么时候检索、什么时候压缩和遗忘。'
+  },
+  {
+    title: '评估与系统设计',
+    categories: ['Evaluation', 'System Design'],
+    description: '把单点能力组合成生产系统，并说明可靠性、成本、可观测性和架构取舍。'
+  }
 ]
 
-const interviewRows = [
-  ['字节跳动 · Agent Engineer', '2026.07', 'Agent Memory 如何设计？ · Tool 调用失败怎么处理？ · Deep Research Agent 怎么设计？'],
-  ['阿里巴巴 · AI 应用开发', '2026.07', 'MCP 和 Function Calling 有什么区别？ · Agent Context 如何管理？'],
-  ['美团 · LLM Engineer', '2026.06', 'Agent Evaluation 如何做？ · 如何检测 Agent 死循环？']
-]
+const today = questions.find((question) => question.slug === 'agent-tool-loop') ?? questions[0]
 
 export default function HomePage() {
   return (
     <>
       <SiteHeader />
-      <main>
-        <section className="hero container">
-          <div className="hero-copy">
-            <span className="eyebrow"><Sparkles size={15} /> Agent Interview · 每日训练</span>
-            <h1>每天一道<br />Agent 面试题</h1>
-            <p className="hero-subtitle">从“知道答案”，到真正能在面试中说出来。</p>
-            <p className="hero-meta">真实高频题 · AI 连续追问 · 深度解析 · 学习进度</p>
-            <div className="hero-actions">
-              <Link className="button button-primary" href="/questions/agent-tool-loop">开始今日面试 <ArrowRight size={16} /></Link>
-              <Link className="button button-secondary" href="/questions">浏览全部题库</Link>
+      <main className={styles.page}>
+        <section className={`${styles.hero} container`}>
+          <div className={styles.heroInner}>
+            <h1>把 Agent 面试题，真正讲明白。</h1>
+            <p>
+              一套面向工程师的 Agent Interview 手册。从基础概念到生产级系统设计，
+              每道题先自己回答，再看完整解析、工程实践和面试官追问。
+            </p>
+            <div className={styles.heroLinks}>
+              <Link href="/questions">浏览全部题目 <span>→</span></Link>
+              <Link href={`/questions/${questions[0]?.slug}`}>从第一题开始 <span>→</span></Link>
             </div>
           </div>
+        </section>
 
-          <div className="mock-card">
-            <div className="mock-card-head">
-              <span>模拟面试</span>
-              <span className="live-pill"><span /> LIVE DEMO</span>
+        <section className={`${styles.section} container`}>
+          <div className={styles.sectionInner}>
+            <div className={styles.sectionHeading}>
+              <h2>今日一题</h2>
+              <span>{today.estimate}</span>
             </div>
-            <div className="chat-row">
-              <span className="avatar">I</span>
-              <div className="chat-content">
-                <span className="speaker">面试官</span>
-                <p>Agent 和 Workflow 最大的区别是什么？</p>
+            <Link className={styles.featuredQuestion} href={`/questions/${today.slug}`}>
+              <span className={styles.featuredIndex}>027</span>
+              <div>
+                <div className={styles.meta}>{today.category} · {today.frequency} · {today.type}</div>
+                <h3>{today.title}</h3>
+                <p>{today.shortAnswer}</p>
               </div>
-            </div>
-            <div className="chat-bubble user-bubble">我认为最大的区别在于执行流程是否固定……</div>
-            <div className="chat-row followup">
-              <span className="avatar">I</span>
-              <div className="chat-content">
-                <span className="speaker">面试官 · 追问</span>
-                <p>那用了 Tool Calling 就一定算 Agent 吗？</p>
-              </div>
-            </div>
-            <div className="mock-card-footer"><span>模拟面试</span><strong>2 / 5</strong></div>
+              <span className={styles.readMore}>阅读 →</span>
+            </Link>
           </div>
         </section>
 
-        <section className="container section" id="daily">
-          <div className="section-heading compact-heading"><div><span className="section-kicker">DAILY CHALLENGE</span><h2>今日一题</h2></div></div>
-          <div className="daily-card">
-            <div className="day-block"><span>Day</span><strong>027</strong></div>
-            <div className="daily-main">
-              <div className="question-tags"><span>Agent Runtime</span><span className="rating">★★★★☆</span><span>高频</span><span>工程题</span></div>
-              <h3>Agent 为什么容易陷入无限 Tool Calling 循环？</h3>
-              <div className="question-meta"><span><TimerReset size={15} />预计回答 3 分钟</span><span>考察：Stop Condition · Max Steps · Error Handling</span></div>
+        <section className={`${styles.section} container`} id="roadmap">
+          <div className={styles.sectionInner}>
+            <div className={styles.sectionHeadingBlock}>
+              <h2>学习路线</h2>
+              <p>不按标签乱刷题，按一条能在面试里逐步讲清楚的知识路径学习。</p>
             </div>
-            <Link className="button button-primary" href="/questions/agent-tool-loop">开始回答 <ArrowRight size={16} /></Link>
+
+            <div className={styles.chapterList}>
+              {chapters.map((chapter, index) => {
+                const count = questions.filter((question) => chapter.categories.includes(question.category)).length
+                const primaryCategory = chapter.categories.find((category) => questions.some((question) => question.category === category))
+                const href = primaryCategory ? `/questions?category=${encodeURIComponent(primaryCategory)}` : '/questions'
+
+                return (
+                  <Link className={styles.chapterRow} href={href} key={chapter.title}>
+                    <span className={styles.chapterNumber}>{String(index + 1).padStart(2, '0')}</span>
+                    <div>
+                      <h3>{chapter.title}</h3>
+                      <p>{chapter.description}</p>
+                    </div>
+                    <span className={styles.chapterCount}>{count} 道</span>
+                  </Link>
+                )
+              })}
+            </div>
           </div>
         </section>
 
-        <section className="container section">
-          <div className="section-heading">
-            <div><span className="section-kicker">CURATED TRACK</span><h2>Agent 100</h2><p>Agent Engineer 最值得掌握的 100 道面试题</p></div>
-            <Link href="/questions">查看全部 <ArrowRight size={15} /></Link>
-          </div>
-          <div className="progress-card">
-            <div className="progress-main">
-              <div><strong>27</strong><span>/ 100</span></div>
-              <p>已完成 27 道</p>
-              <div className="progress-track"><span style={{ width: '27%' }} /></div>
-              <small>27%</small>
+        <section className={`${styles.section} container`}>
+          <div className={styles.sectionInner}>
+            <div className={styles.sectionHeadingBlock}>
+              <h2>最近整理</h2>
+              <p>先把少量题目做深，再逐步扩展成完整的 Agent Engineer 面试题库。</p>
             </div>
-            <div className="metric"><BookOpen size={19} /><span>连续学习</span><strong>12 天</strong></div>
-            <div className="metric"><CircleCheck size={19} /><span>本周完成</span><strong>8 道</strong></div>
-            <div className="metric"><Star size={19} /><span>平均评分</span><strong>7.6</strong></div>
-          </div>
-        </section>
 
-        <section className="container section" id="roadmap">
-          <div className="section-heading"><div><span className="section-kicker">KNOWLEDGE MAP</span><h2>按专题学习</h2><p>从基础概念到生产级 Agent System Design</p></div></div>
-          <div className="topic-grid">
-            {topics.map((topic, index) => {
-              const Icon = topic.icon
-              const [done, total] = topic.progress.split(' / ').map(Number)
-              return (
-                <Link href={`/questions?category=${encodeURIComponent(topic.name)}`} className="topic-card" key={topic.name}>
-                  <div className="topic-top"><span className="topic-icon"><Icon size={20} /></span><span>{String(index + 1).padStart(2, '0')}</span></div>
-                  <h3>{topic.name}</h3><p>{topic.desc}</p>
-                  <div className="topic-bottom"><span>{topic.count} 道题</span><strong>{topic.progress}</strong></div>
-                  <div className="mini-track"><span style={{ width: `${Math.round((done / total) * 100)}%` }} /></div>
+            <div className={styles.articleList}>
+              {questions.slice(0, 6).map((question, index) => (
+                <Link className={styles.articleRow} href={`/questions/${question.slug}`} key={question.slug}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3>{question.title}</h3>
+                    <p>{question.category} · {question.frequency} · {question.estimate}</p>
+                  </div>
+                  <span>→</span>
                 </Link>
-              )
-            })}
-          </div>
-        </section>
-
-        <section className="container section continue-section">
-          <div className="section-heading"><div><span className="section-kicker">KEEP GOING</span><h2>继续学习</h2></div></div>
-          <div className="continue-grid">
-            <div className="continue-card">
-              <span className="topic-icon"><BrainCircuit size={22} /></span>
-              <div className="continue-copy"><span className="tiny-label">Memory · ★★★☆☆</span><h3>Agent Memory 有哪些类型？</h3><p>上次学习：昨天</p></div>
-              <div className="mastery"><span>掌握度</span><strong>68%</strong><div className="mini-track"><span style={{ width: '68%' }} /></div></div>
-              <Link className="button button-secondary" href="/questions/agent-memory-types">继续练习 <ArrowRight size={15} /></Link>
+              ))}
             </div>
-            <div className="stat-card"><TimerReset size={18} /><span>待复习</span><strong>3</strong></div>
-            <div className="stat-card"><Star size={18} /><span>收藏题目</span><strong>12</strong></div>
-            <div className="stat-card"><CircleCheck size={18} /><span>完成题目</span><strong>27</strong></div>
           </div>
         </section>
 
-        <section className="container section interview-section" id="interviews">
-          <div className="section-heading"><div><span className="section-kicker">REAL INTERVIEWS</span><h2>最新 Agent 面经</h2><p>从真实面试场景里反推最值得训练的问题</p></div><Link href="/questions">查看题库 <ArrowRight size={15} /></Link></div>
-          <div className="interview-list">
-            {interviewRows.map(([company, date, items]) => (
-              <div className="interview-row" key={company}>
-                <span className="company-mark">{company.slice(0, 1)}</span>
-                <div className="company"><strong>{company}</strong><span>{date}</span></div>
-                <p>{items}</p>
-                <Link href="/questions">开始练习 <ArrowRight size={14} /></Link>
-              </div>
-            ))}
+        <section className={`${styles.about} container`} id="about">
+          <div className={styles.aboutInner}>
+            <h2>这个站怎么用</h2>
+            <div className={styles.aboutCopy}>
+              <p>第一遍先不要看答案。用 30 秒到 3 分钟把自己的回答说出来，暴露真正不会的地方。</p>
+              <p>第二遍再看完整解析和工程实践，理解为什么这样回答，以及生产环境里真正会遇到什么问题。</p>
+              <p>最后用追问再测一次。目标不是记住“标准答案”，而是面试官换个问法时，你仍然能自己推导出来。</p>
+            </div>
           </div>
         </section>
       </main>
-      <footer className="footer"><div className="container"><span>AgentInterview · 为 Agent Engineer 面试而做</span><span>Build in public · Demo v0.1</span></div></footer>
+
+      <footer className={styles.footer}>
+        <div className="container">
+          <span>Agent Interview</span>
+          <span>面向 Agent Engineer 的开源面试手册</span>
+        </div>
+      </footer>
     </>
   )
 }

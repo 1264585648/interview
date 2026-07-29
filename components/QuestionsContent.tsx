@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { ArrowRight, Search } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { categories, questions } from '@/data/questions'
 import styles from './QuestionsContent.module.css'
 
@@ -24,25 +24,25 @@ const learningStages = [
     id: 'agent-foundation',
     title: 'Agent 基础与运行时',
     categories: ['Agent 基础', 'Agent Runtime'],
-    description: '先理解 Agent 的行为模型，再进入运行时控制。'
+    description: '先理解 Agent 的行为模型，再进入停止条件、失败恢复与运行时控制。'
   },
   {
     id: 'tools-and-knowledge',
     title: '工具、协议与知识',
     categories: ['Tool Calling', 'MCP', 'RAG'],
-    description: '理解 Agent 如何连接工具、协议与外部知识。'
+    description: '理解 Agent 如何调用外部能力，以及协议和检索在系统里的边界。'
   },
   {
     id: 'state-and-context',
     title: '状态、记忆与上下文',
     categories: ['Memory', 'Context Engineering'],
-    description: '解决长任务里的状态保留、记忆和上下文组织。'
+    description: '处理长任务里的状态保留、记忆检索和上下文组织。'
   },
   {
     id: 'reliability-and-design',
     title: '评估与系统设计',
     categories: ['Evaluation', 'System Design'],
-    description: '进入生产级可靠性、评估和整体架构设计。'
+    description: '从单点能力进入生产级可靠性、评估与整体架构设计。'
   }
 ]
 
@@ -57,7 +57,6 @@ const difficultyLabel: Record<number, string> = {
 export function QuestionsContent() {
   const searchParams = useSearchParams()
   const activeCategory = searchParams.get('category') || '全部'
-
   return <QuestionsView activeCategory={activeCategory} />
 }
 
@@ -104,91 +103,73 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
 
   const pageTitle = activeCategory === '全部' ? 'Agent 面试题' : `${activeCategory} 面试题`
   const pageDescription = activeCategory === '全部'
-    ? '按知识路径整理，点击题目进入解析与模拟回答。'
+    ? '按知识路径整理的 Agent Engineer 面试题。先自己回答，再进入完整解析和追问。'
     : categoryDescriptions[activeCategory] || '按专题整理的 Agent Engineer 面试题。'
 
   return (
     <main className={`${styles.page} container`}>
-      <div className={styles.layout}>
-        <aside className={styles.sidebar}>
-          <div className={styles.sidebarInner}>
-            <div className={styles.sidebarTitle}>题库</div>
-            <nav className={styles.topicNav} aria-label="题目专题">
-              <Link href="/questions" className={activeCategory === '全部' ? styles.active : ''}>
-                <span>全部题目</span>
-                <small>{questions.length}</small>
-              </Link>
-              {learningCategories.map((category) => {
-                const count = questions.filter((question) => question.category === category).length
-                return (
-                  <Link
-                    key={category}
-                    href={`/questions?category=${encodeURIComponent(category)}`}
-                    className={category === activeCategory ? styles.active : ''}
-                  >
-                    <span>{category}</span>
-                    <small>{count || '—'}</small>
-                  </Link>
-                )
-              })}
-            </nav>
-          </div>
-        </aside>
-
-        <section className={styles.content}>
-          <header className={styles.contentHeader}>
-            <div className={styles.titleLine}>
-              <h1>{pageTitle}</h1>
-              <span>{matchedQuestions.length} 道</span>
-            </div>
+      <div className={styles.directory}>
+        <header className={styles.header}>
+          <div>
+            <h1>{pageTitle}</h1>
             <p>{pageDescription}</p>
-          </header>
-
-          <div className={styles.toolbar}>
-            <div className={styles.searchBox}>
-              <Search size={15} />
-              <input
-                value={keyword}
-                onChange={(event) => setKeyword(event.target.value)}
-                placeholder="搜索题目或知识点"
-                aria-label="搜索 Agent 面试题"
-              />
-            </div>
           </div>
+          <span>{matchedQuestions.length} 道</span>
+        </header>
 
-          {groups.length ? groups.map((group) => (
-            <section className={styles.topicSection} id={group.id} key={group.id}>
-              <header className={styles.topicHeader}>
-                <div className={styles.topicTitleLine}>
-                  <h2>{group.title}</h2>
-                  <span>{group.questions.length}</span>
-                </div>
+        <div className={styles.searchBox}>
+          <Search size={15} />
+          <input
+            value={keyword}
+            onChange={(event) => setKeyword(event.target.value)}
+            placeholder="搜索题目或知识点"
+            aria-label="搜索 Agent 面试题"
+          />
+        </div>
+
+        <nav className={styles.categoryNav} aria-label="题目专题">
+          <Link href="/questions" className={activeCategory === '全部' ? styles.active : ''}>全部</Link>
+          {learningCategories.map((category) => (
+            <Link
+              key={category}
+              href={`/questions?category=${encodeURIComponent(category)}`}
+              className={category === activeCategory ? styles.active : ''}
+            >
+              {category}
+            </Link>
+          ))}
+        </nav>
+
+        {groups.length ? groups.map((group) => (
+          <section className={styles.group} id={group.id} key={group.id}>
+            <header className={styles.groupHeader}>
+              <div>
+                <h2>{group.title}</h2>
                 <p>{group.description}</p>
-              </header>
-
-              <div className={styles.questionList}>
-                {group.questions.map((question, questionIndex) => (
-                  <Link className={styles.questionItem} href={`/questions/${question.slug}`} key={question.slug}>
-                    <span className={styles.questionNumber}>{String(questionIndex + 1).padStart(2, '0')}</span>
-                    <h3>{question.title}</h3>
-                    <div className={styles.questionMeta}>
-                      <span className={question.frequency === '高频' ? styles.hot : ''}>{question.frequency}</span>
-                      <span>{question.type}</span>
-                      <span>{difficultyLabel[question.difficulty]}</span>
-                    </div>
-                    <ArrowRight className={styles.questionArrow} size={15} />
-                  </Link>
-                ))}
               </div>
-            </section>
-          )) : (
-            <div className={styles.empty}>
-              <h2>没有找到相关题目</h2>
-              <p>换一个关键词，或者查看其他专题。</p>
-              <button type="button" onClick={() => setKeyword('')}>清空搜索</button>
+              <span>{group.questions.length} 道</span>
+            </header>
+
+            <div className={styles.questionList}>
+              {group.questions.map((question, questionIndex) => (
+                <Link className={styles.questionRow} href={`/questions/${question.slug}`} key={question.slug}>
+                  <span className={styles.number}>{String(questionIndex + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3>{question.title}</h3>
+                    <p>{question.category} · {question.frequency} · {question.type} · {difficultyLabel[question.difficulty]}</p>
+                  </div>
+                  <span className={styles.arrow}>→</span>
+                </Link>
+              ))}
             </div>
-          )}
-        </section>
+          </section>
+        )) : (
+          <div className={styles.empty}>
+            <h2>没有找到相关题目</h2>
+            <p>换一个关键词，或者查看其他专题。</p>
+            <button type="button" onClick={() => setKeyword('')}>清空搜索</button>
+          </div>
+        )}
       </div>
     </main>
   )

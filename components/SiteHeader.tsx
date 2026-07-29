@@ -1,31 +1,24 @@
 import Link from 'next/link'
-import { Search } from 'lucide-react'
+import styles from './SiteHeader.module.css'
 
 export function SiteHeader() {
   return (
-    <header className="site-header">
-      <div className="container nav-shell">
-        <Link className="brand" href="/">
-          <span className="brand-mark" aria-hidden="true">AI</span>
-          <span>AgentInterview</span>
+    <header className={styles.header}>
+      <div className={`${styles.inner} container`}>
+        <Link className={styles.brand} href="/">
+          <strong>Agent Interview</strong>
+          <span>面试手册</span>
         </Link>
 
-        <nav className="main-nav" aria-label="主导航">
-          <Link href="/#daily">今日一题</Link>
+        <nav className={styles.nav} aria-label="主导航">
           <Link href="/questions">题库</Link>
           <Link href="/#roadmap">学习路线</Link>
-          <Link href="/#interviews">面经</Link>
+          <Link href="/#about">关于</Link>
         </nav>
 
-        <div className="nav-actions">
-          <Link className="icon-button" href="/questions" aria-label="搜索题库">
-            <Search size={18} strokeWidth={1.8} />
-          </Link>
-          <button className="text-button" type="button">登录</button>
-          <Link className="button button-primary button-small" href="/questions/agent-tool-loop">
-            开始练习
-          </Link>
-        </div>
+        <Link className={styles.searchLink} href="/questions">
+          搜索题目
+        </Link>
       </div>
     </header>
   )
