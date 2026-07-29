@@ -22,7 +22,7 @@
 }
 
 .header {
-  padding-bottom: 36px;
+  padding-bottom: 34px;
   border-bottom: 1px solid #e8e4de;
 }
 
@@ -82,9 +82,52 @@
   line-height: 1.7;
 }
 
+.topicLink {
+  display: inline-flex;
+  margin-top: 13px;
+  color: #786858;
+  font-size: 11px;
+}
+
+.topicLink:hover {
+  color: #292724;
+}
+
+.toc {
+  display: grid;
+  grid-template-columns: 74px minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px 0;
+  border-bottom: 1px solid #e8e4de;
+}
+
+.toc > span {
+  padding-top: 2px;
+  color: #8d877e;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.toc > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+}
+
+.toc a {
+  color: #69635c;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.toc a:hover {
+  color: #222428;
+}
+
 .practiceSection,
 .articleSection {
   padding-top: 48px;
+  scroll-margin-top: 82px;
 }
 
 .articleSection {
@@ -122,6 +165,7 @@
   line-height: 1.7;
 }
 
+.scene,
 .answer,
 .deepDive,
 .mistakeList,
@@ -131,32 +175,71 @@
   margin-left: 44px;
 }
 
+.scene {
+  border-top: 1px solid #e8e4de;
+}
+
+.sceneLine,
+.sceneTrap {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 18px;
+  padding: 17px 0;
+  border-bottom: 1px solid #e8e4de;
+}
+
+.sceneLine > span,
+.sceneTrap > span {
+  padding-top: 2px;
+  color: #8d877e;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sceneLine p,
+.sceneTrap p {
+  margin: 0;
+  color: #41423f;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.sceneTrap > span {
+  color: #9b6962;
+}
+
+.sceneTrap p {
+  color: #64544f;
+}
+
 .answer {
   margin-top: 0;
   margin-bottom: 4px;
-  color: #494b50;
+  padding: 2px 0 2px 18px;
+  border-left: 2px solid #c9c1b6;
+  color: #454642;
   font-size: 15px;
   line-height: 2;
 }
 
 .deepDive {
   display: grid;
-  gap: 32px;
+  gap: 34px;
 }
 
 .deepDiveBlock h3 {
-  margin: 0 0 9px;
+  margin: 0 0 10px;
   color: #2d2f34;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 680;
   line-height: 1.55;
 }
 
 .deepDiveBlock p {
   margin: 0;
-  color: #55514b;
-  font-size: 14px;
-  line-height: 1.98;
+  color: #514d47;
+  font-size: 15px;
+  line-height: 2;
 }
 
 .mistakeList,
@@ -233,6 +316,26 @@
   line-height: 1.8;
 }
 
+.questionFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 64px;
+  padding-top: 22px;
+  border-top: 1px solid #e8e4de;
+  color: #756f67;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.questionFooter span:last-child {
+  text-align: right;
+}
+
+.questionFooter a:hover {
+  color: #272824;
+}
+
 @media (max-width: 720px) {
   .page {
     padding: 22px 0 70px;
@@ -254,6 +357,15 @@
     font-size: 13px;
   }
 
+  .toc {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .toc > div {
+    gap: 7px 14px;
+  }
+
   .practiceSection,
   .articleSection {
     padding-top: 38px;
@@ -269,6 +381,7 @@
     font-size: 18px;
   }
 
+  .scene,
   .answer,
   .deepDive,
   .mistakeList,
@@ -278,12 +391,19 @@
     margin-left: 34px;
   }
 
+  .sceneLine,
+  .sceneTrap {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
   .answer {
+    padding-left: 14px;
     font-size: 14px;
   }
 
   .deepDive {
-    gap: 24px;
+    gap: 26px;
   }
 
   .deepDiveBlock h3 {
@@ -294,7 +414,18 @@
   .mistakeList li,
   .practiceList li,
   .keyPoints p,
-  .followUps p {
+  .followUps p,
+  .sceneLine p,
+  .sceneTrap p {
     font-size: 13px;
+  }
+
+  .questionFooter {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .questionFooter span:last-child {
+    text-align: left;
   }
 }
