@@ -47,7 +47,7 @@ export default async function QuestionDetailPage({ params }: Props) {
             </div>
 
             <h1>{question.title}</h1>
-            <p className={styles.lead}>先像真实面试一样回答，再看参考答案和考察点。重点不是背定义，而是把判断过程讲清楚。</p>
+            <p className={styles.lead}>先像真实面试一样回答，再看参考答案和完整解析。目标不是背答案，而是理解面试官为什么问、工程上怎么做。</p>
 
             <div className={styles.topics}>
               <span>考察：</span>
@@ -81,6 +81,54 @@ export default async function QuestionDetailPage({ params }: Props) {
             <div className={styles.sectionTitle}>
               <span>03</span>
               <div>
+                <h2>完整解析</h2>
+                <p>把短答案拆开，理解每个判断背后的系统设计逻辑。</p>
+              </div>
+            </div>
+            <div className={styles.deepDive}>
+              {question.deepDive.map((item) => (
+                <article key={item.title} className={styles.deepDiveBlock}>
+                  <h3>{item.title}</h3>
+                  <p>{item.content}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          <section className={styles.articleSection}>
+            <div className={styles.sectionTitle}>
+              <span>04</span>
+              <div>
+                <h2>常见错误回答</h2>
+                <p>这些回答听起来没错，但通常只能拿到“知道概念”的评价。</p>
+              </div>
+            </div>
+            <ul className={styles.mistakeList}>
+              {question.commonMistakes.map((mistake) => (
+                <li key={mistake}>{mistake}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className={styles.articleSection}>
+            <div className={styles.sectionTitle}>
+              <span>05</span>
+              <div>
+                <h2>工程实践</h2>
+                <p>真正做进生产系统时，需要把概念落到这些约束和机制上。</p>
+              </div>
+            </div>
+            <ul className={styles.practiceList}>
+              {question.engineeringPractice.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          </section>
+
+          <section className={styles.articleSection}>
+            <div className={styles.sectionTitle}>
+              <span>06</span>
+              <div>
                 <h2>面试官在听什么</h2>
                 <p>这些关键词决定你的回答是在背概念，还是理解了系统。</p>
               </div>
@@ -97,7 +145,7 @@ export default async function QuestionDetailPage({ params }: Props) {
 
           <section className={styles.articleSection}>
             <div className={styles.sectionTitle}>
-              <span>04</span>
+              <span>07</span>
               <div>
                 <h2>面试官可能继续追问</h2>
                 <p>第一问只是入口，真正拉开差距的是后续追问。</p>
