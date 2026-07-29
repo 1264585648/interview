@@ -4,7 +4,7 @@ import { questions } from '@/data/questions'
 import { topicGuides } from '@/data/topics'
 import styles from './HomePage.module.css'
 
-const today = questions.find((question) => question.slug === 'agent-tool-loop') ?? questions[0]
+const featured = questions.find((question) => question.slug === 'agent-tool-loop') ?? questions[0]
 
 export default function HomePage() {
   return (
@@ -13,32 +13,38 @@ export default function HomePage() {
       <main className={styles.page}>
         <section className={`${styles.hero} container`}>
           <div className={styles.heroInner}>
-            <h1>把 Agent 面试题，真正讲明白。</h1>
-            <p>
-              一套面向工程师的 Agent Interview 手册。从基础概念到生产级系统设计，
-              每道题先自己回答，再看完整解析、工程实践和面试官追问。
-            </p>
-            <div className={styles.heroLinks}>
-              <Link href="/questions">浏览全部题目 <span>→</span></Link>
-              <Link href="/topics">按专题系统学习 <span>→</span></Link>
+            <div className={styles.heroCopy}>
+              <div className={styles.masthead}>Agent Engineer Interview Handbook</div>
+              <h1>Agent 工程师面试手册</h1>
+              <p>
+                不是一份“背答案”的题库，而是一套把 Agent 行为模型、工具、Memory、
+                Context、Evaluation 和生产级系统设计串起来的工程面试笔记。
+              </p>
+              <Link className={styles.startLink} href={`/topics/${topicGuides[0].slug}`}>从第一专题开始 →</Link>
             </div>
+
+            <aside className={styles.heroAside}>
+              <span>怎么读</span>
+              <p>先看专题，建立知识地图。</p>
+              <p>再进单题，先自己回答。</p>
+              <p>最后看图解、完整解析和追问。</p>
+            </aside>
           </div>
         </section>
 
         <section className={`${styles.section} container`}>
           <div className={styles.sectionInner}>
             <div className={styles.sectionHeading}>
-              <h2>今日一题</h2>
-              <span>{today.estimate}</span>
+              <h2>推荐先读</h2>
+              <span>{featured.estimate}</span>
             </div>
-            <Link className={styles.featuredQuestion} href={`/questions/${today.slug}`}>
-              <span className={styles.featuredIndex}>027</span>
+            <Link className={styles.featuredQuestion} href={`/questions/${featured.slug}`}>
               <div>
-                <div className={styles.meta}>{today.category} · {today.frequency} · {today.type}</div>
-                <h3>{today.title}</h3>
-                <p>{today.shortAnswer}</p>
+                <div className={styles.meta}>{featured.category} · {featured.frequency} · {featured.type}</div>
+                <h3>{featured.title}</h3>
+                <p>{featured.shortAnswer}</p>
               </div>
-              <span className={styles.readMore}>阅读 →</span>
+              <span className={styles.readMore}>阅读这题 →</span>
             </Link>
           </div>
         </section>
@@ -46,8 +52,8 @@ export default function HomePage() {
         <section className={`${styles.section} container`} id="roadmap">
           <div className={styles.sectionInner}>
             <div className={styles.sectionHeadingBlock}>
-              <h2>专题学习</h2>
-              <p>先建立知识地图，再进入具体问题。避免只记住术语，却说不清它们之间的关系。</p>
+              <h2>专题导读</h2>
+              <p>先知道这些概念为什么连在一起，再进入具体题目。四条知识线从基础控制流一直走到生产系统。</p>
             </div>
 
             <div className={styles.chapterList}>
@@ -61,7 +67,7 @@ export default function HomePage() {
                       <h3>{topic.title}</h3>
                       <p>{topic.summary}</p>
                     </div>
-                    <span className={styles.chapterCount}>{count} 道</span>
+                    <span className={styles.chapterCount}>{count} 道题</span>
                   </Link>
                 )
               })}
@@ -72,8 +78,8 @@ export default function HomePage() {
         <section className={`${styles.section} container`}>
           <div className={styles.sectionInner}>
             <div className={styles.sectionHeadingBlock}>
-              <h2>最近整理</h2>
-              <p>先把少量题目做深，再逐步扩展成完整的 Agent Engineer 面试题库。</p>
+              <h2>最近更新</h2>
+              <p>优先把少量高频题写深：有问题背景、结构图、参考回答、完整解析、工程实践和追问。</p>
             </div>
 
             <div className={styles.articleList}>
@@ -93,11 +99,11 @@ export default function HomePage() {
 
         <section className={`${styles.about} container`} id="about">
           <div className={styles.aboutInner}>
-            <h2>这个站怎么用</h2>
+            <h2>为什么这样学</h2>
             <div className={styles.aboutCopy}>
-              <p>第一遍先不要看答案。用 30 秒到 3 分钟把自己的回答说出来，暴露真正不会的地方。</p>
-              <p>第二遍再看完整解析和工程实践，理解为什么这样回答，以及生产环境里真正会遇到什么问题。</p>
-              <p>最后用追问再测一次。目标不是记住“标准答案”，而是面试官换个问法时，你仍然能自己推导出来。</p>
+              <p>Agent 面试很少停在定义题。真正拉开差距的，是你能不能把控制流、状态、工具结果和失败恢复串成一个系统。</p>
+              <p>所以每道题先还原面试现场，再画系统结构，最后才给参考答案。先建立因果关系，再记结论。</p>
+              <p>当面试官换一个问法、加一个异常条件时，你仍然能从系统约束重新推导，而不是依赖背过的标准答案。</p>
             </div>
           </div>
         </section>
