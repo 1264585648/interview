@@ -1,8 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { ArrowRight, CheckCircle2, RotateCcw, Send, Sparkles } from 'lucide-react'
+import { ArrowRight, RotateCcw, Send } from 'lucide-react'
 import type { InterviewQuestion } from '@/data/questions'
+import styles from './InterviewTrainer.module.css'
 
 type Props = {
   question: InterviewQuestion
@@ -48,75 +49,65 @@ export function InterviewTrainer({ question }: Props) {
 
   if (isFinished) {
     return (
-      <section className="trainer-card result-card">
-        <div className="result-score">
-          <span>本轮模拟评分</span>
-          <strong>{score}</strong>
-          <small>/ 10</small>
-        </div>
-        <div className="result-copy">
-          <span className="eyebrow"><Sparkles size={15} /> Demo Feedback</span>
-          <h2>不错，你已经完成一轮追问。</h2>
-          <p>
-            当前 Demo 使用规则评分展示完整交互闭环。接入模型后，这里会根据每轮回答动态选择追问，并输出概念理解、工程深度、表达结构和遗漏点。
-          </p>
-          <div className="feedback-points">
-            {question.keyPoints.map((point) => (
-              <span key={point}><CheckCircle2 size={15} /> {point}</span>
-            ))}
+      <div className={styles.result}>
+        <div className={styles.resultTop}>
+          <div>
+            <span>本轮模拟</span>
+            <strong>{score} / 10</strong>
           </div>
-          <button className="button button-secondary" type="button" onClick={restart}>
-            <RotateCcw size={16} /> 再练一次
+          <button className={styles.secondaryButton} type="button" onClick={restart}>
+            <RotateCcw size={14} /> 再练一次
           </button>
         </div>
-      </section>
+        <p>当前 Demo 使用规则评分展示训练闭环。接入模型后，会根据每轮回答动态追问，并反馈概念理解、工程深度、表达结构和遗漏点。</p>
+        <div className={styles.coverage}>
+          <span>本题关键点</span>
+          <p>{question.keyPoints.join(' · ')}</p>
+        </div>
+      </div>
     )
   }
 
   return (
-    <section className="trainer-card">
-      <div className="trainer-topline">
-        <span>AI 模拟面试</span>
+    <div className={styles.trainer}>
+      <div className={styles.topLine}>
+        <span>模拟面试</span>
         <span>{Math.min(step + 1, question.followUps.length + 1)} / {question.followUps.length + 1}</span>
       </div>
 
-      <div className="interviewer-row">
-        <span className="avatar">I</span>
-        <div>
-          <span className="speaker">面试官</span>
-          <h2>{currentPrompt}</h2>
-        </div>
+      <div className={styles.prompt}>
+        <span>面试官</span>
+        <h3>{currentPrompt}</h3>
       </div>
 
       {!submitted ? (
-        <div className="answer-box">
+        <div className={styles.answerArea}>
           <label htmlFor="answer">你的回答</label>
           <textarea
             id="answer"
             value={answer}
             onChange={(event) => setAnswer(event.target.value)}
-            placeholder="像真实面试一样回答。建议先给结论，再解释原理，最后补充工程实践。"
-            rows={7}
+            placeholder="像真实面试一样回答。先给结论，再解释为什么。"
+            rows={6}
           />
-          <div className="answer-actions">
+          <div className={styles.actions}>
             <span>{answer.length} 字</span>
-            <button className="button button-primary" type="button" onClick={submitAnswer} disabled={answer.trim().length < 8}>
-              提交回答 <Send size={16} />
+            <button className={styles.primaryButton} type="button" onClick={submitAnswer} disabled={answer.trim().length < 8}>
+              提交回答 <Send size={14} />
             </button>
           </div>
         </div>
       ) : (
-        <div className="followup-panel">
-          <span className="status-dot" />
+        <div className={styles.nextPanel}>
           <div>
-            <strong>面试官正在基于你的回答继续追问</strong>
-            <p>Demo 先使用预设高质量追问，后续接入 LLM 后会根据回答实时生成。</p>
+            <strong>回答已记录</strong>
+            <p>继续进入下一轮追问，完成后再统一看结果。</p>
           </div>
-          <button className="button button-primary" type="button" onClick={nextQuestion}>
-            {step === question.followUps.length ? '查看结果' : '继续追问'} <ArrowRight size={16} />
+          <button className={styles.primaryButton} type="button" onClick={nextQuestion}>
+            {step === question.followUps.length ? '查看结果' : '继续追问'} <ArrowRight size={14} />
           </button>
         </div>
       )}
-    </section>
+    </div>
   )
 }
