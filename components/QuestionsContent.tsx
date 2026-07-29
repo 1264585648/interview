@@ -24,25 +24,25 @@ const learningStages = [
     id: 'agent-foundation',
     title: 'Agent 基础与运行时',
     categories: ['Agent 基础', 'Agent Runtime'],
-    description: '先理解 Agent 的行为模型，再进入停止条件、失败恢复与运行时控制。'
+    description: '先理解 Agent 的行为模型，再进入运行时控制。'
   },
   {
     id: 'tools-and-knowledge',
     title: '工具、协议与知识',
     categories: ['Tool Calling', 'MCP', 'RAG'],
-    description: '理解 Agent 如何调用外部能力，以及 MCP 和检索在系统里的角色。'
+    description: '理解 Agent 如何连接工具、协议与外部知识。'
   },
   {
     id: 'state-and-context',
     title: '状态、记忆与上下文',
     categories: ['Memory', 'Context Engineering'],
-    description: '解决长任务里的状态保留、记忆检索和上下文组织问题。'
+    description: '解决长任务里的状态保留、记忆和上下文组织。'
   },
   {
     id: 'reliability-and-design',
     title: '评估与系统设计',
     categories: ['Evaluation', 'System Design'],
-    description: '从单点能力进入生产级可靠性、评估与整体架构设计。'
+    description: '进入生产级可靠性、评估和整体架构设计。'
   }
 ]
 
@@ -98,13 +98,13 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
         id: `topic-${activeCategory}`,
         title: activeCategory,
         categories: [activeCategory],
-        description: categoryDescriptions[activeCategory] || '围绕这一专题整理高频题、工程题与系统设计题。',
+        description: categoryDescriptions[activeCategory] || '围绕这一专题整理核心面试题。',
         questions: matchedQuestions
       }].filter((group) => group.questions.length > 0)
 
   const pageTitle = activeCategory === '全部' ? 'Agent 面试题' : `${activeCategory} 面试题`
   const pageDescription = activeCategory === '全部'
-    ? '按知识路径整理的 Agent Engineer 高频题、工程题和系统设计题。'
+    ? '按知识路径整理，点击题目进入解析与模拟回答。'
     : categoryDescriptions[activeCategory] || '按专题整理的 Agent Engineer 面试题。'
 
   return (
@@ -132,36 +132,21 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
                 )
               })}
             </nav>
-
-            {activeCategory === '全部' && (
-              <div className={styles.stageNav}>
-                <span>学习顺序</span>
-                {learningStages.map((stage, index) => (
-                  <a href={`#${stage.id}`} key={stage.id}>
-                    <small>{String(index + 1).padStart(2, '0')}</small>
-                    <span>{stage.title}</span>
-                  </a>
-                ))}
-              </div>
-            )}
           </div>
         </aside>
 
         <section className={styles.content}>
           <header className={styles.contentHeader}>
-            <div className={styles.breadcrumb}>面试题库 / {activeCategory === '全部' ? '全部题目' : activeCategory}</div>
-            <div className={styles.titleRow}>
-              <div>
-                <h1>{pageTitle}</h1>
-                <p>{pageDescription}</p>
-              </div>
+            <div className={styles.titleLine}>
+              <h1>{pageTitle}</h1>
               <span>{matchedQuestions.length} 道</span>
             </div>
+            <p>{pageDescription}</p>
           </header>
 
           <div className={styles.toolbar}>
             <div className={styles.searchBox}>
-              <Search size={16} />
+              <Search size={15} />
               <input
                 value={keyword}
                 onChange={(event) => setKeyword(event.target.value)}
@@ -171,24 +156,12 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
             </div>
           </div>
 
-          {!keyword && activeCategory === '全部' && (
-            <nav className={styles.quickPath} aria-label="推荐学习路径">
-              {learningStages.map((stage, index) => (
-                <a href={`#${stage.id}`} key={stage.id}>
-                  <small>{String(index + 1).padStart(2, '0')}</small>
-                  <span>{stage.title}</span>
-                </a>
-              ))}
-            </nav>
-          )}
-
-          {groups.length ? groups.map((group, groupIndex) => (
+          {groups.length ? groups.map((group) => (
             <section className={styles.topicSection} id={group.id} key={group.id}>
               <header className={styles.topicHeader}>
                 <div className={styles.topicTitleLine}>
-                  <span>{String(groupIndex + 1).padStart(2, '0')}</span>
                   <h2>{group.title}</h2>
-                  <small>{group.questions.length} 道</small>
+                  <span>{group.questions.length}</span>
                 </div>
                 <p>{group.description}</p>
               </header>
@@ -196,18 +169,14 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
               <div className={styles.questionList}>
                 {group.questions.map((question, questionIndex) => (
                   <Link className={styles.questionItem} href={`/questions/${question.slug}`} key={question.slug}>
-                    <div className={styles.questionNumber}>{String(questionIndex + 1).padStart(2, '0')}</div>
-                    <div className={styles.questionBody}>
-                      <h3>{question.title}</h3>
-                      <div className={styles.questionMeta}>
-                        <span>{question.category}</span>
-                        <span>{question.frequency}</span>
-                        <span>{question.type}</span>
-                        <span>{difficultyLabel[question.difficulty]}</span>
-                      </div>
-                      <p>{question.topics.join(' · ')}</p>
+                    <span className={styles.questionNumber}>{String(questionIndex + 1).padStart(2, '0')}</span>
+                    <h3>{question.title}</h3>
+                    <div className={styles.questionMeta}>
+                      <span className={question.frequency === '高频' ? styles.hot : ''}>{question.frequency}</span>
+                      <span>{question.type}</span>
+                      <span>{difficultyLabel[question.difficulty]}</span>
                     </div>
-                    <ArrowRight className={styles.questionArrow} size={17} />
+                    <ArrowRight className={styles.questionArrow} size={15} />
                   </Link>
                 ))}
               </div>
