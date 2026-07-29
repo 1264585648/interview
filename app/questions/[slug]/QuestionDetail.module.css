@@ -121,16 +121,93 @@
   line-height: 1.7;
 }
 
+.answer,
+.deepDive,
+.mistakeList,
+.practiceList,
+.keyPoints,
+.followUps {
+  margin-left: 44px;
+}
+
 .answer {
-  margin: 0 0 4px 44px;
+  margin-top: 0;
+  margin-bottom: 4px;
   color: #444c59;
   font-size: 15px;
   line-height: 2;
 }
 
+.deepDive {
+  display: grid;
+  gap: 30px;
+}
+
+.deepDiveBlock h3 {
+  margin: 0 0 9px;
+  color: #2c323c;
+  font-size: 16px;
+  font-weight: 680;
+  line-height: 1.55;
+}
+
+.deepDiveBlock p {
+  margin: 0;
+  color: #4e5663;
+  font-size: 14px;
+  line-height: 1.95;
+}
+
+.mistakeList,
+.practiceList {
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid #e7eaee;
+}
+
+.mistakeList li,
+.practiceList li {
+  position: relative;
+  padding: 15px 0 15px 28px;
+  border-bottom: 1px solid #e7eaee;
+  color: #454d59;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.mistakeList li::before,
+.practiceList li::before {
+  position: absolute;
+  left: 0;
+  top: 17px;
+  width: 18px;
+  color: #a0a7b1;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.mistakeList {
+  background: linear-gradient(90deg, rgba(179, 78, 78, 0.025), transparent 42%);
+}
+
+.mistakeList li::before {
+  content: '×';
+  color: #b16a6a;
+}
+
+.practiceList {
+  background: linear-gradient(90deg, rgba(69, 109, 230, 0.025), transparent 42%);
+}
+
+.practiceList li::before {
+  content: '✓';
+  color: #5872b7;
+}
+
 .keyPoints,
 .followUps {
-  margin: 0 0 0 44px;
+  margin-top: 0;
+  margin-bottom: 0;
   padding: 0;
   border-top: 1px solid #e7eaee;
   list-style: none;
@@ -200,6 +277,9 @@
   }
 
   .answer,
+  .deepDive,
+  .mistakeList,
+  .practiceList,
   .keyPoints,
   .followUps {
     margin-left: 34px;
@@ -207,5 +287,21 @@
 
   .answer {
     font-size: 14px;
+  }
+
+  .deepDive {
+    gap: 24px;
+  }
+
+  .deepDiveBlock h3 {
+    font-size: 15px;
+  }
+
+  .deepDiveBlock p,
+  .mistakeList li,
+  .practiceList li,
+  .keyPoints p,
+  .followUps p {
+    font-size: 13px;
   }
 }
