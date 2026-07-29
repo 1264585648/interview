@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Search } from 'lucide-react'
 import { categories, questions } from '@/data/questions'
+import { getTopicForCategory } from '@/data/topics'
 import styles from './QuestionsContent.module.css'
 
 const categoryDescriptions: Record<string, string> = {
@@ -62,7 +63,9 @@ export function QuestionsContent() {
 
 export function QuestionsView({ activeCategory }: { activeCategory: string }) {
   const [keyword, setKeyword] = useState('')
-  const learningCategories = categories.filter((category) => category !== '全部')
+  const learningCategories = categories.filter((category) =>
+    category !== '全部' && questions.some((question) => question.category === category)
+  )
 
   const matchedQuestions = useMemo(() => {
     const normalized = keyword.trim().toLowerCase()
@@ -105,6 +108,7 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
   const pageDescription = activeCategory === '全部'
     ? '按知识路径整理的 Agent Engineer 面试题。先自己回答，再进入完整解析和追问。'
     : categoryDescriptions[activeCategory] || '按专题整理的 Agent Engineer 面试题。'
+  const topicGuide = activeCategory === '全部' ? null : getTopicForCategory(activeCategory)
 
   return (
     <main className={`${styles.page} container`}>
@@ -139,6 +143,14 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
             </Link>
           ))}
         </nav>
+
+        <div className={styles.guideLink}>
+          {topicGuide ? (
+            <Link href={`/topics/${topicGuide.slug}`}>先读「{topicGuide.title}」专题导读 →</Link>
+          ) : (
+            <Link href="/topics">不知道从哪开始？按 4 个专题系统学习 →</Link>
+          )}
+        </div>
 
         {groups.length ? groups.map((group) => (
           <section className={styles.group} id={group.id} key={group.id}>
