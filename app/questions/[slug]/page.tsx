@@ -1,16 +1,21 @@
 import Link from 'next/link'
-import { ArrowLeft, BookOpenCheck, Clock3, Gauge, Sparkles } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { SiteHeader } from '@/components/SiteHeader'
 import { InterviewTrainer } from '@/components/InterviewTrainer'
 import { getQuestion, questions } from '@/data/questions'
+import styles from './QuestionDetail.module.css'
 
 type Props = {
   params: Promise<{ slug: string }>
 }
 
-function stars(value: number) {
-  return '★'.repeat(value) + '☆'.repeat(5 - value)
+const difficultyLabel: Record<number, string> = {
+  1: '入门',
+  2: '基础',
+  3: '核心',
+  4: '进阶',
+  5: '系统设计'
 }
 
 export function generateStaticParams() {
@@ -26,53 +31,88 @@ export default async function QuestionDetailPage({ params }: Props) {
   return (
     <>
       <SiteHeader />
-      <main className="container detail-page">
-        <Link className="back-link" href="/questions"><ArrowLeft size={15} /> 返回题库</Link>
+      <main className={`${styles.page} container`}>
+        <div className={styles.shell}>
+          <Link className={styles.backLink} href="/questions">
+            <ArrowLeft size={14} /> 返回题库
+          </Link>
 
-        <section className="detail-hero">
-          <div className="detail-main">
-            <div className="question-tags"><span>{question.category}</span><span>{question.frequency}</span><span>{question.type}</span></div>
+          <header className={styles.header}>
+            <div className={styles.metaLine}>
+              <span>{question.category}</span>
+              <span>{question.frequency}</span>
+              <span>{question.type}</span>
+              <span>{difficultyLabel[question.difficulty]}</span>
+              <span>建议回答 {question.estimate}</span>
+            </div>
+
             <h1>{question.title}</h1>
-            <p>先把它当成真实面试来回答。完成追问后，再对照要点和参考答案。</p>
-            <div className="detail-meta">
-              <span><Gauge size={16} /> {stars(question.difficulty)}</span>
-              <span><Clock3 size={16} /> 建议回答 {question.estimate}</span>
+            <p className={styles.lead}>先像真实面试一样回答，再看参考答案和考察点。重点不是背定义，而是把判断过程讲清楚。</p>
+
+            <div className={styles.topics}>
+              <span>考察：</span>
+              <p>{question.topics.join(' · ')}</p>
             </div>
-          </div>
-          <div className="topic-stack">
-            <span>本题考察</span>
-            {question.topics.map((topic) => <strong key={topic}>{topic}</strong>)}
-          </div>
-        </section>
+          </header>
 
-        <InterviewTrainer question={question} />
+          <section className={styles.practiceSection}>
+            <div className={styles.sectionTitle}>
+              <span>01</span>
+              <div>
+                <h2>先回答这道题</h2>
+                <p>建议先给结论，再解释原理，最后补一个工程实践判断。</p>
+              </div>
+            </div>
+            <InterviewTrainer question={question} />
+          </section>
 
-        <section className="analysis-grid">
-          <article className="analysis-card">
-            <span className="eyebrow"><BookOpenCheck size={15} /> 30 秒参考回答</span>
-            <h2>先给结论，再解释为什么。</h2>
-            <p className="answer-copy">{question.shortAnswer}</p>
-          </article>
+          <section className={styles.articleSection}>
+            <div className={styles.sectionTitle}>
+              <span>02</span>
+              <div>
+                <h2>30 秒参考回答</h2>
+                <p>真实面试里，先用一段话把核心结论讲完整。</p>
+              </div>
+            </div>
+            <p className={styles.answer}>{question.shortAnswer}</p>
+          </section>
 
-          <article className="analysis-card">
-            <span className="eyebrow"><Sparkles size={15} /> 面试官在听什么</span>
-            <h2>不是背定义，而是这些关键判断。</h2>
-            <div className="keypoint-list">
+          <section className={styles.articleSection}>
+            <div className={styles.sectionTitle}>
+              <span>03</span>
+              <div>
+                <h2>面试官在听什么</h2>
+                <p>这些关键词决定你的回答是在背概念，还是理解了系统。</p>
+              </div>
+            </div>
+            <ol className={styles.keyPoints}>
               {question.keyPoints.map((point, index) => (
-                <div key={point}><span>{String(index + 1).padStart(2, '0')}</span><strong>{point}</strong></div>
+                <li key={point}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <p>{point}</p>
+                </li>
               ))}
-            </div>
-          </article>
-        </section>
+            </ol>
+          </section>
 
-        <section className="followups-section">
-          <div className="section-heading"><div><span className="section-kicker">FOLLOW-UP QUESTIONS</span><h2>面试官可能继续追问</h2><p>真正拉开差距的，通常不是第一问，而是你能不能接住后续。</p></div></div>
-          <div className="followup-list">
-            {question.followUps.map((followup, index) => (
-              <div key={followup}><span>{String(index + 1).padStart(2, '0')}</span><p>{followup}</p></div>
-            ))}
-          </div>
-        </section>
+          <section className={styles.articleSection}>
+            <div className={styles.sectionTitle}>
+              <span>04</span>
+              <div>
+                <h2>面试官可能继续追问</h2>
+                <p>第一问只是入口，真正拉开差距的是后续追问。</p>
+              </div>
+            </div>
+            <ol className={styles.followUps}>
+              {question.followUps.map((followup, index) => (
+                <li key={followup}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <p>{followup}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        </div>
       </main>
     </>
   )
