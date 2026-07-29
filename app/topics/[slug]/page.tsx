@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ConceptFlow } from '@/components/ConceptFlow'
 import { SiteHeader } from '@/components/SiteHeader'
-import { questions } from '@/data/questions'
+import { questions, type InterviewQuestion } from '@/data/questions'
 import { getTopicGuide, topicGuides } from '@/data/topics'
 import styles from '../Topics.module.css'
 
@@ -55,7 +55,7 @@ export default async function TopicPage({ params }: Props) {
             {topic.phases.map((phase) => {
               const phaseQuestions = phase.questionSlugs
                 .map((questionSlug) => questions.find((question) => question.slug === questionSlug))
-                .filter((question): question is NonNullable<typeof question> => Boolean(question))
+                .filter((question): question is InterviewQuestion => Boolean(question))
 
               return (
                 <section className={styles.phase} key={phase.title}>
