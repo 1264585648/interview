@@ -3,7 +3,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { ArrowRight, BookOpenCheck, Route, Search } from 'lucide-react'
+import { ArrowRight, BookOpenCheck, Search } from 'lucide-react'
 import { categories, questions } from '@/data/questions'
 import styles from './QuestionsContent.module.css'
 
@@ -18,6 +18,33 @@ const categoryDescriptions: Record<string, string> = {
   Evaluation: '不只看最终答案，而是从任务成功、轨迹质量、工具调用、成本、延迟和线上指标评估 Agent。',
   'System Design': '把前面的能力串成生产级系统，训练架构拆分、可靠性、可观测性、成本与扩展性。'
 }
+
+const learningStages = [
+  {
+    id: 'agent-foundation',
+    title: 'Agent 基础与运行时',
+    categories: ['Agent 基础', 'Agent Runtime'],
+    description: '先理解 Agent 的控制流和行为模型，再进入停止条件、失败恢复与预算控制。这一阶段决定后面的工程题能不能讲清楚。'
+  },
+  {
+    id: 'tools-and-knowledge',
+    title: '工具、协议与知识',
+    categories: ['Tool Calling', 'MCP', 'RAG'],
+    description: '让 Agent 从“会思考”走向“会做事”。重点理解工具调用、MCP 协议边界，以及检索如何从固定链路升级为可决策动作。'
+  },
+  {
+    id: 'state-and-context',
+    title: '状态、记忆与上下文',
+    categories: ['Memory', 'Context Engineering'],
+    description: '长任务真正困难的是状态管理。需要回答清楚什么该保留、怎么检索、何时压缩，以及有限 Context 应该放什么。'
+  },
+  {
+    id: 'reliability-and-design',
+    title: '评估与系统设计',
+    categories: ['Evaluation', 'System Design'],
+    description: '最后从单点能力进入生产级系统：怎样评价 Agent 是否可靠，以及如何把规划、搜索、状态、引用和可观测性组合成完整架构。'
+  }
+]
 
 const difficultyLabel: Record<number, string> = {
   1: '入门',
@@ -61,34 +88,33 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
     })
   }, [activeCategory, keyword])
 
-  const groups = (activeCategory === '全部' ? learningCategories : [activeCategory])
-    .map((category) => ({
-      category,
-      questions: matchedQuestions.filter((question) => question.category === category)
-    }))
-    .filter((group) => group.questions.length > 0)
+  const groups = activeCategory === '全部'
+    ? learningStages
+        .map((stage) => ({
+          ...stage,
+          questions: matchedQuestions.filter((question) => stage.categories.includes(question.category))
+        }))
+        .filter((stage) => stage.questions.length > 0)
+    : [{
+        id: `topic-${activeCategory}`,
+        title: activeCategory,
+        categories: [activeCategory],
+        description: categoryDescriptions[activeCategory] || '围绕这一专题逐步补齐高频题、工程题与系统设计题。',
+        questions: matchedQuestions
+      }].filter((group) => group.questions.length > 0)
 
   return (
     <main className={`${styles.page} container`}>
       <section className={styles.hero}>
-        <div>
-          <span className={styles.kicker}>AGENT INTERVIEW HANDBOOK</span>
-          <h1>Agent 工程师面试题库</h1>
-          <p>按照知识路径系统学习 Agent、RAG、MCP、Memory 与生产级 AI 工程。先建立理解，再进入模拟面试。</p>
-          <div className={styles.summary}>
-            <span><strong>{questions.length}</strong> 道 Demo 题</span>
-            <i />
-            <span><strong>{onlineCategoryCount}</strong> 个已上线专题</span>
-            <i />
-            <span>持续扩充</span>
-          </div>
-        </div>
-        <div className={styles.heroGuide}>
-          <Route size={18} />
-          <div>
-            <strong>推荐学习方式</strong>
-            <span>按左侧专题顺序刷题；真正面试前，再用单题页完成连续追问。</span>
-          </div>
+        <span className={styles.kicker}>AGENT INTERVIEW HANDBOOK</span>
+        <h1>Agent 工程师面试手册</h1>
+        <p>从 Agent 基础、工具调用和 Memory，一路学到 Evaluation 与 System Design。不是把题目堆成数据库，而是按真实面试需要建立一条可连续学习的知识路径。</p>
+        <div className={styles.summary}>
+          <span><strong>{questions.length}</strong> 道 Demo 题</span>
+          <i />
+          <span><strong>{onlineCategoryCount}</strong> 个已上线专题</span>
+          <i />
+          <span>持续更新</span>
         </div>
       </section>
 
@@ -97,7 +123,7 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
           <div className={styles.sidebarInner}>
             <div className={styles.sidebarTitle}>
               <BookOpenCheck size={17} />
-              <span>学习专题</span>
+              <span>题库导航</span>
             </div>
 
             <nav className={styles.topicNav} aria-label="题目专题">
@@ -120,11 +146,17 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
               })}
             </nav>
 
-            <div className={styles.sidebarNote}>
-              <span>Agent 100</span>
-              <strong>Demo 阶段先把阅读体验做好</strong>
-              <p>后续题目会继续按专题与章节补齐，而不是简单堆成一张长表。</p>
-            </div>
+            {activeCategory === '全部' && (
+              <div className={styles.stageNav}>
+                <span>推荐顺序</span>
+                {learningStages.map((stage, index) => (
+                  <a href={`#${stage.id}`} key={stage.id}>
+                    <small>{String(index + 1).padStart(2, '0')}</small>
+                    <span>{stage.title}</span>
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </aside>
 
@@ -135,7 +167,7 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
               <input
                 value={keyword}
                 onChange={(event) => setKeyword(event.target.value)}
-                placeholder="搜索题目、知识点，例如 Memory、Stop Condition..."
+                placeholder="搜索题目或知识点，例如 Memory、Stop Condition..."
                 aria-label="搜索 Agent 面试题"
               />
             </div>
@@ -143,21 +175,29 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
           </div>
 
           {!keyword && activeCategory === '全部' && (
-            <div className={styles.intro}>
-              <span>HOW TO USE</span>
-              <h2>把它当成一本面试手册，而不是数据库。</h2>
-              <p>每个专题先说明面试真正关注什么，再按学习顺序进入题目。列表只保留帮助你判断“这题值不值得现在学”的信息。</p>
-            </div>
+            <section className={styles.intro}>
+              <span>推荐学习路径</span>
+              <h2>先把核心模型讲明白，再逐步进入生产工程。</h2>
+              <p>第一遍按顺序阅读，先形成完整知识地图；第二遍进入单题页模拟回答，让追问暴露真正没有掌握的地方。</p>
+              <div className={styles.pathLine}>
+                {learningStages.map((stage, index) => (
+                  <a href={`#${stage.id}`} key={stage.id}>
+                    <small>{String(index + 1).padStart(2, '0')}</small>
+                    <span>{stage.title}</span>
+                  </a>
+                ))}
+              </div>
+            </section>
           )}
 
           {groups.length ? groups.map((group, groupIndex) => (
-            <section className={styles.topicSection} key={group.category}>
+            <section className={styles.topicSection} id={group.id} key={group.id}>
               <header className={styles.topicHeader}>
                 <div className={styles.chapterNumber}>{String(groupIndex + 1).padStart(2, '0')}</div>
                 <div>
-                  <span className={styles.chapterLabel}>TOPIC</span>
-                  <h2>{group.category}</h2>
-                  <p>{categoryDescriptions[group.category] || '围绕这一专题逐步补齐高频题、工程题与系统设计题。'}</p>
+                  <span className={styles.chapterLabel}>{activeCategory === '全部' ? 'LEARNING STAGE' : 'TOPIC'}</span>
+                  <h2>{group.title}</h2>
+                  <p>{group.description}</p>
                   <div className={styles.topicMeta}>{group.questions.length} 道题 · 建议按顺序学习</div>
                 </div>
               </header>
@@ -168,15 +208,16 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
                     <div className={styles.questionNumber}>{String(questionIndex + 1).padStart(2, '0')}</div>
                     <div className={styles.questionBody}>
                       <div className={styles.questionMeta}>
+                        <span>{question.category}</span>
                         <span>{question.frequency}</span>
                         <span>{question.type}</span>
                         <span>{difficultyLabel[question.difficulty]}</span>
                       </div>
                       <h3><Link href={`/questions/${question.slug}`}>{question.title}</Link></h3>
-                      <p>{question.topics.join(' · ')}</p>
+                      <p><strong>考察：</strong>{question.topics.join(' · ')}</p>
                     </div>
                     <Link className={styles.questionAction} href={`/questions/${question.slug}`}>
-                      <span>阅读与练习</span>
+                      <span>进入题目</span>
                       <ArrowRight size={16} />
                     </Link>
                   </article>
