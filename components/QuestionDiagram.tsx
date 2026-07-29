@@ -1,10 +1,11 @@
+import type { ReactNode } from 'react'
 import styles from './QuestionDiagram.module.css'
 
 function Arrow() {
   return <span className={styles.arrow} aria-hidden="true">→</span>
 }
 
-function Node({ children, muted = false }: { children: React.ReactNode; muted?: boolean }) {
+function Node({ children, muted = false }: { children: ReactNode; muted?: boolean }) {
   return <span className={`${styles.node} ${muted ? styles.mutedNode : ''}`}>{children}</span>
 }
 
