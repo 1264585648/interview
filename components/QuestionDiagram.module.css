@@ -1,0 +1,209 @@
+.figure {
+  margin: 28px 0 4px 44px;
+  padding: 22px 0 24px;
+  border-top: 1px solid #e6e1da;
+  border-bottom: 1px solid #e6e1da;
+}
+
+.figure figcaption {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.figure figcaption strong {
+  color: #292b30;
+  font-size: 13px;
+  font-weight: 680;
+}
+
+.figure figcaption span {
+  color: #8a847b;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.node {
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: 1px solid #cbc5bc;
+  background: #fff;
+  color: #35373b;
+  font-size: 11px;
+  font-weight: 650;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.mutedNode {
+  border-color: #e1ddd7;
+  background: #faf8f5;
+  color: #706b63;
+  font-weight: 560;
+}
+
+.arrow {
+  flex: 0 0 auto;
+  color: #aaa49b;
+  font-size: 14px;
+}
+
+.pipeline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pipelineItem {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pipelineItem .node {
+  white-space: nowrap;
+}
+
+.compareGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.compareLane {
+  min-width: 0;
+  padding-top: 15px;
+  border-top: 2px solid #3c3d40;
+}
+
+.compareLane:nth-child(2) {
+  border-top-color: #8d877e;
+}
+
+.laneLabel {
+  display: block;
+  margin-bottom: 14px;
+  color: #5f5a53;
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.compareLane p,
+.loopBack,
+.returnLine,
+.storeLinks,
+.downArrow {
+  color: #8a847b;
+  font-size: 10px;
+  line-height: 1.7;
+}
+
+.compareLane p {
+  margin: 12px 0 0;
+}
+
+.loopRow {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.loopBack,
+.returnLine {
+  margin-top: 12px;
+  padding-left: 4px;
+}
+
+.loopDiagram,
+.memoryGrid,
+.contextDiagram,
+.researchDiagram {
+  display: grid;
+  gap: 18px;
+}
+
+.guardRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.guardRow .node {
+  min-height: 31px;
+  padding: 6px 9px;
+  font-size: 10px;
+}
+
+.memoryMain {
+  overflow-x: auto;
+}
+
+.memoryStore {
+  display: grid;
+  grid-template-columns: minmax(130px, 180px) minmax(0, 1fr);
+  gap: 18px;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px dashed #d9d4cd;
+  border-bottom: 1px dashed #d9d4cd;
+}
+
+.storeLinks {
+  display: grid;
+  gap: 5px;
+}
+
+.sourceGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.downArrow {
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .figure {
+    margin-left: 34px;
+    overflow: hidden;
+  }
+
+  .compareGrid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .pipeline,
+  .loopRow {
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .pipeline::-webkit-scrollbar,
+  .loopRow::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pipelineItem .node,
+  .loopRow .node {
+    flex: 0 0 auto;
+  }
+
+  .sourceGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .memoryStore {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}

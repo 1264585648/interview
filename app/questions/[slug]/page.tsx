@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { notFound } from 'next/navigation'
-import { ConceptFlow } from '@/components/ConceptFlow'
+import { QuestionDiagram } from '@/components/QuestionDiagram'
 import { SiteHeader } from '@/components/SiteHeader'
 import { InterviewTrainer } from '@/components/InterviewTrainer'
 import { getQuestion, questions } from '@/data/questions'
@@ -91,7 +91,7 @@ export default async function QuestionDetailPage({ params }: Props) {
               <span>01</span>
               <div>
                 <h2>先看一眼面试现场</h2>
-                <p>这道题真正的难点，通常会在第一句追问之后暴露出来。</p>
+                <p>先建立问题语境和系统结构，再开始组织自己的回答。</p>
               </div>
             </div>
 
@@ -110,7 +110,7 @@ export default async function QuestionDetailPage({ params }: Props) {
               </div>
             </div>
 
-            {topic ? <ConceptFlow items={topic.flow} label="这道题所在的知识线" /> : null}
+            <QuestionDiagram slug={question.slug} />
           </section>
 
           <section className={styles.practiceSection} id="practice">
