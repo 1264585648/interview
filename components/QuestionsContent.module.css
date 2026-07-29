@@ -73,8 +73,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8px 20px;
-  padding: 20px 0 26px;
-  border-bottom: 1px solid #ece9e4;
+  padding: 20px 0 18px;
 }
 
 .categoryNav a {
@@ -90,6 +89,23 @@
 
 .categoryNav a.active {
   font-weight: 680;
+}
+
+.guideLink {
+  padding: 14px 0 18px;
+  border-top: 1px solid #ece9e4;
+  border-bottom: 1px solid #ece9e4;
+  color: #6f675f;
+  font-size: 12px;
+}
+
+.guideLink a {
+  display: inline-flex;
+  line-height: 1.6;
+}
+
+.guideLink a:hover {
+  color: #2b2926;
 }
 
 .group {
@@ -174,7 +190,7 @@
 
 .questionRow:hover h3,
 .questionRow:hover .arrow {
-  color: #244f9e;
+  color: #6f553e;
 }
 
 .questionRow:hover .arrow {
@@ -238,6 +254,10 @@
 
   .categoryNav a {
     flex: 0 0 auto;
+  }
+
+  .guideLink {
+    padding-block: 12px 16px;
   }
 
   .group {
