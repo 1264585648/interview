@@ -12,7 +12,7 @@ export function SiteHeader() {
 
         <nav className={styles.nav} aria-label="主导航">
           <Link href="/questions">题库</Link>
-          <Link href="/#roadmap">学习路线</Link>
+          <Link href="/topics">专题</Link>
           <Link href="/#about">关于</Link>
         </nav>
 
