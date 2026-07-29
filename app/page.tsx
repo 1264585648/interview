@@ -1,30 +1,8 @@
 import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { questions } from '@/data/questions'
+import { topicGuides } from '@/data/topics'
 import styles from './HomePage.module.css'
-
-const chapters = [
-  {
-    title: 'Agent 基础与运行时',
-    categories: ['Agent 基础', 'Agent Runtime'],
-    description: '先搞清楚 Agent 为什么和固定 Workflow 不一样，再进入停止条件、失败恢复和运行时控制。'
-  },
-  {
-    title: '工具、协议与知识',
-    categories: ['Tool Calling', 'MCP', 'RAG'],
-    description: '理解模型怎么调用外部能力，以及 MCP、RAG 在 Agent 系统里分别解决什么问题。'
-  },
-  {
-    title: '状态、记忆与上下文',
-    categories: ['Memory', 'Context Engineering'],
-    description: '长任务真正难的是状态管理：什么该保留、什么时候检索、什么时候压缩和遗忘。'
-  },
-  {
-    title: '评估与系统设计',
-    categories: ['Evaluation', 'System Design'],
-    description: '把单点能力组合成生产系统，并说明可靠性、成本、可观测性和架构取舍。'
-  }
-]
 
 const today = questions.find((question) => question.slug === 'agent-tool-loop') ?? questions[0]
 
@@ -42,7 +20,7 @@ export default function HomePage() {
             </p>
             <div className={styles.heroLinks}>
               <Link href="/questions">浏览全部题目 <span>→</span></Link>
-              <Link href={`/questions/${questions[0]?.slug}`}>从第一题开始 <span>→</span></Link>
+              <Link href="/topics">按专题系统学习 <span>→</span></Link>
             </div>
           </div>
         </section>
@@ -68,22 +46,20 @@ export default function HomePage() {
         <section className={`${styles.section} container`} id="roadmap">
           <div className={styles.sectionInner}>
             <div className={styles.sectionHeadingBlock}>
-              <h2>学习路线</h2>
-              <p>不按标签乱刷题，按一条能在面试里逐步讲清楚的知识路径学习。</p>
+              <h2>专题学习</h2>
+              <p>先建立知识地图，再进入具体问题。避免只记住术语，却说不清它们之间的关系。</p>
             </div>
 
             <div className={styles.chapterList}>
-              {chapters.map((chapter, index) => {
-                const count = questions.filter((question) => chapter.categories.includes(question.category)).length
-                const primaryCategory = chapter.categories.find((category) => questions.some((question) => question.category === category))
-                const href = primaryCategory ? `/questions?category=${encodeURIComponent(primaryCategory)}` : '/questions'
+              {topicGuides.map((topic, index) => {
+                const count = questions.filter((question) => topic.categories.includes(question.category)).length
 
                 return (
-                  <Link className={styles.chapterRow} href={href} key={chapter.title}>
+                  <Link className={styles.chapterRow} href={`/topics/${topic.slug}`} key={topic.slug}>
                     <span className={styles.chapterNumber}>{String(index + 1).padStart(2, '0')}</span>
                     <div>
-                      <h3>{chapter.title}</h3>
-                      <p>{chapter.description}</p>
+                      <h3>{topic.title}</h3>
+                      <p>{topic.summary}</p>
                     </div>
                     <span className={styles.chapterCount}>{count} 道</span>
                   </Link>
