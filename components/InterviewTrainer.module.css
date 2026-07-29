@@ -1,36 +1,36 @@
 .trainer,
 .result {
   margin-left: 44px;
-  border-top: 1px solid #e5e8ed;
-  border-bottom: 1px solid #e5e8ed;
+  border-top: 1px solid #e5e1da;
+  border-bottom: 1px solid #e5e1da;
 }
 
 .topLine {
-  min-height: 42px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #9299a4;
+  color: #99938a;
   font-size: 10px;
 }
 
 .prompt {
   padding: 22px 0 18px;
-  border-top: 1px solid #eef0f3;
+  border-top: 1px solid #f0ede8;
 }
 
 .prompt > span,
 .answerArea label,
 .coverage > span,
 .resultTop span {
-  color: #8d95a0;
+  color: #918b82;
   font-size: 10px;
   font-weight: 650;
 }
 
 .prompt h3 {
   margin: 7px 0 0;
-  color: #252a33;
+  color: #292b30;
   font-size: 19px;
   font-weight: 650;
   line-height: 1.55;
@@ -43,31 +43,32 @@
 
 .answerArea label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 7px;
 }
 
 .answerArea textarea {
   width: 100%;
   resize: vertical;
-  min-height: 140px;
-  border: 1px solid #dfe3e8;
-  border-radius: 7px;
+  min-height: 132px;
+  border: 0;
+  border-bottom: 1px solid #d4cfc7;
+  border-radius: 0;
   outline: none;
-  padding: 13px 14px;
-  background: #fff;
-  color: #252a33;
+  padding: 10px 0 12px;
+  background: transparent;
+  color: #292b30;
   font: inherit;
   font-size: 14px;
-  line-height: 1.8;
+  line-height: 1.85;
 }
 
 .answerArea textarea:focus {
-  border-color: #b9c5e8;
-  box-shadow: 0 0 0 3px rgba(69, 109, 230, 0.06);
+  border-bottom-color: #5f5a53;
+  box-shadow: none;
 }
 
 .answerArea textarea::placeholder {
-  color: #a4abb4;
+  color: #aaa49b;
 }
 
 .actions,
@@ -80,11 +81,11 @@
 }
 
 .actions {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .actions > span {
-  color: #a0a7b1;
+  color: #aaa49b;
   font-size: 10px;
 }
 
@@ -96,7 +97,7 @@
   gap: 6px;
   min-height: 34px;
   padding: 0 12px;
-  border-radius: 6px;
+  border-radius: 4px;
   font: inherit;
   font-size: 11px;
   font-weight: 650;
@@ -104,31 +105,38 @@
 }
 
 .primaryButton {
-  border: 1px solid #456de6;
-  background: #456de6;
+  border: 1px solid #292b30;
+  background: #292b30;
   color: #fff;
 }
 
+.primaryButton:hover {
+  background: #111317;
+}
+
 .primaryButton:disabled {
-  border-color: #d8dde7;
-  background: #d8dde7;
+  border-color: #d8d4cd;
+  background: #d8d4cd;
   cursor: not-allowed;
 }
 
 .secondaryButton {
-  border: 1px solid #dfe3e8;
-  background: #fff;
-  color: #596273;
+  border: 0;
+  border-bottom: 1px solid #aaa49b;
+  border-radius: 0;
+  padding-inline: 0;
+  background: transparent;
+  color: #625d56;
 }
 
 .nextPanel {
-  min-height: 86px;
+  min-height: 84px;
   padding: 18px 0;
-  border-top: 1px solid #eef0f3;
+  border-top: 1px solid #f0ede8;
 }
 
 .nextPanel strong {
-  color: #313741;
+  color: #313239;
   font-size: 13px;
   font-weight: 650;
 }
@@ -137,9 +145,9 @@
 .result > p,
 .coverage p {
   margin: 5px 0 0;
-  color: #7f8793;
+  color: #7e786f;
   font-size: 11px;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 .result {
@@ -153,7 +161,7 @@
 }
 
 .resultTop strong {
-  color: #252a33;
+  color: #292b30;
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.03em;
@@ -168,11 +176,11 @@
 .coverage {
   margin-top: 18px;
   padding-top: 16px;
-  border-top: 1px solid #eef0f3;
+  border-top: 1px solid #f0ede8;
 }
 
 .coverage p {
-  color: #5f6875;
+  color: #5f5a53;
   font-size: 12px;
 }
 
