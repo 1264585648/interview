@@ -1,0 +1,211 @@
+.page {
+  padding: 30px 0 92px;
+}
+
+.shell {
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 28px;
+  color: #7f8793;
+  font-size: 12px;
+}
+
+.backLink:hover {
+  color: #456de6;
+}
+
+.header {
+  padding-bottom: 34px;
+  border-bottom: 1px solid #e7eaee;
+}
+
+.metaLine {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  color: #87909c;
+  font-size: 11px;
+}
+
+.metaLine span:first-child {
+  color: #536da9;
+  font-weight: 650;
+}
+
+.metaLine span + span::before {
+  content: '·';
+  margin: 0 7px;
+  color: #c2c7cf;
+}
+
+.header h1 {
+  margin: 14px 0 14px;
+  color: #1e232b;
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 720;
+  line-height: 1.28;
+  letter-spacing: -0.04em;
+}
+
+.lead {
+  max-width: 760px;
+  margin: 0;
+  color: #68717e;
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+.topics {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 18px;
+  color: #8e95a0;
+  font-size: 11px;
+}
+
+.topics > span {
+  flex: 0 0 auto;
+  color: #68717e;
+  font-weight: 600;
+}
+
+.topics p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+.practiceSection,
+.articleSection {
+  padding-top: 46px;
+}
+
+.articleSection {
+  margin-top: 6px;
+  border-top: 1px solid #eceef2;
+}
+
+.sectionTitle {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.sectionTitle > span {
+  padding-top: 4px;
+  color: #a9b0ba;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.sectionTitle h2 {
+  margin: 0;
+  color: #242932;
+  font-size: 20px;
+  font-weight: 680;
+  line-height: 1.45;
+  letter-spacing: -0.02em;
+}
+
+.sectionTitle p {
+  margin: 5px 0 0;
+  color: #858d98;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.answer {
+  margin: 0 0 4px 44px;
+  color: #444c59;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.keyPoints,
+.followUps {
+  margin: 0 0 0 44px;
+  padding: 0;
+  border-top: 1px solid #e7eaee;
+  list-style: none;
+}
+
+.keyPoints li,
+.followUps li {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+  min-height: 58px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e7eaee;
+}
+
+.keyPoints li > span,
+.followUps li > span {
+  padding-top: 2px;
+  color: #abb1ba;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.keyPoints p,
+.followUps p {
+  margin: 0;
+  color: #3f4651;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: 20px 0 70px;
+  }
+
+  .backLink {
+    margin-bottom: 22px;
+  }
+
+  .header {
+    padding-bottom: 28px;
+  }
+
+  .header h1 {
+    font-size: 30px;
+  }
+
+  .lead {
+    font-size: 13px;
+  }
+
+  .practiceSection,
+  .articleSection {
+    padding-top: 36px;
+  }
+
+  .sectionTitle {
+    grid-template-columns: 26px minmax(0, 1fr);
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .sectionTitle h2 {
+    font-size: 18px;
+  }
+
+  .answer,
+  .keyPoints,
+  .followUps {
+    margin-left: 34px;
+  }
+
+  .answer {
+    font-size: 14px;
+  }
+}
