@@ -21,14 +21,11 @@ const difficultyLabel: Record<number, string> = {
 }
 
 const sectionLinks = [
-  ['scene', '面试现场'],
-  ['practice', '先回答'],
-  ['answer', '30 秒回答'],
-  ['deep-dive', '完整解析'],
-  ['mistakes', '常见错误'],
-  ['engineering', '工程实践'],
-  ['focus', '面试官点评'],
-  ['follow-ups', '追问链']
+  ['scene', '面试现场', '先答一次'],
+  ['answer', '参考回答', '30 秒 / 2 分钟'],
+  ['deep-dive', '核心解析', '原理与心智模型'],
+  ['engineering', '生产环境', '案例、代码与坑'],
+  ['follow-ups', '面试追问', '面试官视角']
 ] as const
 
 export function QuestionArticlePage({ slug }: { slug: string }) {
@@ -41,245 +38,301 @@ export function QuestionArticlePage({ slug }: { slug: string }) {
   const questionIndex = questions.findIndex((item) => item.slug === question.slug)
   const previous = questionIndex > 0 ? questions[questionIndex - 1] : null
   const next = questionIndex < questions.length - 1 ? questions[questionIndex + 1] : null
+  const selfCheck = [question.title, ...question.followUps.slice(0, 3)]
 
   return (
     <>
       <SiteHeader />
       <main className={`${styles.page} container`}>
-        <article className={styles.shell}>
-          <Link className={styles.backLink} href="/questions">
-            <ArrowLeft size={14} /> 返回题库
-          </Link>
-
-          <header className={styles.header}>
-            <div className={styles.metaLine}>
-              <span>{question.category}</span>
-              <span>{question.frequency}</span>
-              <span>{question.type}</span>
-              <span>{difficultyLabel[question.difficulty]}</span>
-              <span>建议回答 {question.estimate}</span>
-            </div>
-
-            <h1>{question.title}</h1>
-            <p className={styles.lead}>先像真实面试一样回答，再看参考答案和完整解析。目标不是背答案，而是理解面试官为什么问、工程上怎么做。</p>
-
-            <div className={styles.topics}>
-              <span>考察：</span>
-              <p>{question.topics.join(' · ')}</p>
-            </div>
-
-            {topic ? (
-              <Link className={styles.topicLink} href={`/topics/${topic.slug}`}>
-                属于专题：{topic.title} →
-              </Link>
-            ) : null}
-          </header>
-
-          <nav className={styles.toc} aria-label="本题目录">
-            <span>本题目录</span>
-            <div>
-              {sectionLinks.map(([id, label]) => <a href={`#${id}`} key={id}>{label}</a>)}
-            </div>
-          </nav>
-
-          <section className={styles.articleSection} id="scene">
-            <div className={styles.sectionTitle}>
-              <span>01</span>
-              <div>
-                <h2>先看一眼面试现场</h2>
-                <p>先建立问题语境和系统结构，再开始组织自己的回答。</p>
-              </div>
-            </div>
-
-            <div className={styles.scene}>
-              <div className={styles.sceneLine}>
-                <span>面试官</span>
-                <p>{question.title}</p>
-              </div>
-              <div className={styles.sceneLine}>
-                <span>继续追问</span>
-                <p>{question.followUps[0]}</p>
-              </div>
-              <div className={styles.sceneTrap}>
-                <span>容易翻车</span>
-                <p>{question.commonMistakes[0]}</p>
-              </div>
-            </div>
-
-            <QuestionDiagram slug={question.slug} />
-
-            {article ? (
-              <aside className={articleStyles.callout}>
-                <span>先抓住这句话</span>
-                <p>{article.keyConclusion}</p>
-              </aside>
-            ) : null}
-          </section>
-
-          <section className={styles.practiceSection} id="practice">
-            <div className={styles.sectionTitle}>
-              <span>02</span>
-              <div>
-                <h2>现在自己回答一次</h2>
-                <p>建议先给结论，再解释原理，最后补一个工程实践判断。</p>
-              </div>
-            </div>
-            <InterviewTrainer question={question} />
-          </section>
-
-          <section className={styles.articleSection} id="answer">
-            <div className={styles.sectionTitle}>
-              <span>03</span>
-              <div>
-                <h2>30 秒参考回答</h2>
-                <p>真实面试里，先用一段话把核心结论讲完整。</p>
-              </div>
-            </div>
-            <p className={styles.answer}>{question.shortAnswer}</p>
-
-            {article ? (
-              <div className={articleStyles.answerStructure}>
-                <span>推荐回答顺序</span>
-                <ol>
-                  {article.answerStructure.map((step, index) => (
-                    <li key={step}>
-                      <span>{String(index + 1).padStart(2, '0')}</span>
-                      <p>{step}</p>
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            ) : null}
-          </section>
-
-          <section className={styles.articleSection} id="deep-dive">
-            <div className={styles.sectionTitle}>
-              <span>04</span>
-              <div>
-                <h2>完整解析</h2>
-                <p>从控制机制、边界条件和生产取舍一路推导，不只记住结论。</p>
-              </div>
-            </div>
-
-            <QuestionLongform question={question} />
-
-            <QuestionComparison slug={question.slug} />
-
-            {article ? (
-              <div className={articleStyles.codeExample}>
-                <div className={articleStyles.codeIntro}>
-                  <span>把原理落到伪代码</span>
-                  <p>{article.codeCaption}</p>
-                </div>
-                <pre><code>{article.pseudoCode}</code></pre>
-              </div>
-            ) : null}
-          </section>
-
-          <section className={styles.articleSection} id="mistakes">
-            <div className={styles.sectionTitle}>
-              <span>05</span>
-              <div>
-                <h2>常见错误回答</h2>
-                <p>这些回答听起来没错，但通常只能拿到“知道概念”的评价。</p>
-              </div>
-            </div>
-            <ul className={styles.mistakeList}>
-              {question.commonMistakes.map((mistake) => (
-                <li key={mistake}>{mistake}</li>
-              ))}
-            </ul>
-          </section>
-
-          <section className={styles.articleSection} id="engineering">
-            <div className={styles.sectionTitle}>
-              <span>06</span>
-              <div>
-                <h2>工程实践</h2>
-                <p>不要停在原则层，看看同一个问题在生产环境里会怎样失败。</p>
-              </div>
-            </div>
-
-            {article ? (
-              <div className={articleStyles.engineeringCase}>
-                <div className={articleStyles.caseRow}>
-                  <span>错误现场</span>
-                  <p>{article.engineeringCase.problem}</p>
-                </div>
-                <div className={articleStyles.caseRow}>
-                  <span>更稳妥的做法</span>
-                  <p>{article.engineeringCase.better}</p>
-                </div>
-              </div>
-            ) : null}
-
-            <ul className={styles.practiceList}>
-              {question.engineeringPractice.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </section>
-
-          <section className={styles.articleSection} id="focus">
-            <div className={styles.sectionTitle}>
-              <span>07</span>
-              <div>
-                <h2>面试官在听什么</h2>
-                <p>关键词只是表面，更重要的是你有没有回答这道题真正想考的判断。</p>
-              </div>
-            </div>
-
-            {article ? (
-              <aside className={`${articleStyles.callout} ${articleStyles.interviewerCallout}`}>
-                <span>面试官点评</span>
-                <p>{article.interviewerNote}</p>
-              </aside>
-            ) : null}
-
-            <ol className={styles.keyPoints}>
-              {question.keyPoints.map((point, index) => (
-                <li key={point}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
-                  <p>{point}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section className={styles.articleSection} id="follow-ups">
-            <div className={styles.sectionTitle}>
-              <span>08</span>
-              <div>
-                <h2>真实追问链</h2>
-                <p>把第一问当入口，顺着控制权、边界和生产取舍继续往下答。</p>
-              </div>
-            </div>
-            <ol className={styles.followUps}>
-              <li>
-                <span>Q1</span>
-                <p>{question.title}</p>
-              </li>
-              {question.followUps.map((followup, index) => (
-                <li key={followup}>
-                  <span>Q{index + 2}</span>
-                  <p>{followup}</p>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          {article ? (
-            <aside className={articleStyles.remember}>
-              <span>一句话记住</span>
-              <strong>{article.takeaway}</strong>
-            </aside>
+        <nav className={styles.breadcrumb} aria-label="面包屑">
+          <Link href="/">首页</Link>
+          <span>/</span>
+          <Link href="/questions">面试题库</Link>
+          {topic ? (
+            <>
+              <span>/</span>
+              <Link href={`/topics/${topic.slug}`}>{topic.title}</Link>
+            </>
           ) : null}
+          <span>/</span>
+          <strong>{String(questionIndex + 1).padStart(2, '0')}</strong>
+        </nav>
 
-          <footer className={styles.questionFooter}>
-            <span>{previous ? <Link href={`/questions/${previous.slug}`}>← 上一题：{previous.title}</Link> : '这是第一题'}</span>
-            <span>{next ? <Link href={`/questions/${next.slug}`}>下一题：{next.title} →</Link> : <Link href="/questions">返回题库 →</Link>}</span>
-          </footer>
-        </article>
+        <div className={styles.layout}>
+          <article className={styles.shell}>
+            <Link className={styles.backLink} href="/questions">
+              <ArrowLeft size={14} /> 返回题库
+            </Link>
+
+            <header className={styles.header}>
+              <div className={styles.metaLine}>
+                <span>{question.category}</span>
+                <span>{question.frequency}</span>
+                <span>{question.type}</span>
+                <span>{difficultyLabel[question.difficulty]}</span>
+                <span>建议回答 {question.estimate}</span>
+              </div>
+
+              <h1>{question.title}</h1>
+              <p className={styles.lead}>
+                把这道题当成一次真实面试：先组织自己的答案，再对照参考回答，最后用工程场景和追问验证是否真的理解。
+              </p>
+
+              <div className={styles.topicStrip}>
+                <span>本题考察</span>
+                <p>{question.topics.join(' · ')}</p>
+              </div>
+            </header>
+
+            <section className={styles.chapter} id="scene">
+              <div className={styles.chapterHeading}>
+                <span>01</span>
+                <div>
+                  <p className={styles.chapterEyebrow}>INTERVIEW</p>
+                  <h2>面试现场</h2>
+                  <p>先进入问题语境，不要急着看答案。</p>
+                </div>
+              </div>
+
+              <div className={styles.scene}>
+                <div className={styles.sceneLine}>
+                  <span>面试官</span>
+                  <p>{question.title}</p>
+                </div>
+                <div className={styles.sceneLine}>
+                  <span>继续追问</span>
+                  <p>{question.followUps[0]}</p>
+                </div>
+                <div className={styles.sceneTrap}>
+                  <span>容易翻车</span>
+                  <p>{question.commonMistakes[0]}</p>
+                </div>
+              </div>
+
+              <div className={styles.practiceIntro}>
+                <span>轮到你了</span>
+                <div>
+                  <h3>先自己回答一次</h3>
+                  <p>建议先给结论，再解释原理，最后补一个生产环境里的判断。</p>
+                </div>
+              </div>
+              <InterviewTrainer question={question} />
+            </section>
+
+            <section className={styles.chapter} id="answer">
+              <div className={styles.chapterHeading}>
+                <span>02</span>
+                <div>
+                  <p className={styles.chapterEyebrow}>ANSWER</p>
+                  <h2>参考回答</h2>
+                  <p>先学会短答，再把答案扩展成结构完整的两分钟表达。</p>
+                </div>
+              </div>
+
+              <div className={styles.answerBlock}>
+                <div className={styles.answerLabel}>
+                  <strong>30 秒回答</strong>
+                  <span>先把核心结论讲完整</span>
+                </div>
+                <p className={styles.answer}>{question.shortAnswer}</p>
+              </div>
+
+              <div className={styles.answerBlock}>
+                <div className={styles.answerLabel}>
+                  <strong>2 分钟高分回答</strong>
+                  <span>沿着“结论 → 原理 → 取舍”展开</span>
+                </div>
+                <div className={styles.longAnswer}>
+                  <p>{question.shortAnswer}</p>
+                  {question.deepDive.map((item) => (
+                    <p key={item.title}>
+                      <strong>{item.title}：</strong>{item.content}
+                    </p>
+                  ))}
+                  {article ? <p><strong>最后落到工程上：</strong>{article.engineeringCase.better}</p> : null}
+                </div>
+              </div>
+
+              {article ? (
+                <div className={articleStyles.answerStructure}>
+                  <span>推荐回答顺序</span>
+                  <ol>
+                    {article.answerStructure.map((step, index) => (
+                      <li key={step}>
+                        <span>{String(index + 1).padStart(2, '0')}</span>
+                        <p>{step}</p>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              ) : null}
+            </section>
+
+            <section className={styles.chapter} id="deep-dive">
+              <div className={styles.chapterHeading}>
+                <span>03</span>
+                <div>
+                  <p className={styles.chapterEyebrow}>MENTAL MODEL</p>
+                  <h2>核心解析</h2>
+                  <p>把定义拆成控制机制、边界条件和系统结构，形成可迁移的心智模型。</p>
+                </div>
+              </div>
+
+              {article ? (
+                <aside className={`${articleStyles.callout} ${styles.keyConclusion}`}>
+                  <span>先记住这句话</span>
+                  <p>{article.keyConclusion}</p>
+                </aside>
+              ) : null}
+
+              <QuestionDiagram slug={question.slug} />
+              <QuestionLongform question={question} />
+              <QuestionComparison slug={question.slug} />
+            </section>
+
+            <section className={styles.chapter} id="engineering">
+              <div className={styles.chapterHeading}>
+                <span>04</span>
+                <div>
+                  <p className={styles.chapterEyebrow}>PRODUCTION</p>
+                  <h2>放到生产环境会发生什么？</h2>
+                  <p>从“概念正确”走到“系统能跑”，看失败模式、约束和工程取舍。</p>
+                </div>
+              </div>
+
+              {article ? (
+                <>
+                  <div className={styles.subsectionHeading}>
+                    <span>生产案例</span>
+                    <h3>先看一个容易踩坑的现场</h3>
+                  </div>
+                  <div className={articleStyles.engineeringCase}>
+                    <div className={articleStyles.caseRow}>
+                      <span>错误现场</span>
+                      <p>{article.engineeringCase.problem}</p>
+                    </div>
+                    <div className={articleStyles.caseRow}>
+                      <span>更稳妥的做法</span>
+                      <p>{article.engineeringCase.better}</p>
+                    </div>
+                  </div>
+
+                  <div className={articleStyles.codeExample}>
+                    <div className={articleStyles.codeIntro}>
+                      <span>把原理落到伪代码</span>
+                      <p>{article.codeCaption}</p>
+                    </div>
+                    <pre><code>{article.pseudoCode}</code></pre>
+                  </div>
+                </>
+              ) : null}
+
+              <div className={styles.subsectionHeading}>
+                <span>工程检查</span>
+                <h3>生产里至少要想到这些</h3>
+              </div>
+              <ul className={styles.practiceList}>
+                {question.engineeringPractice.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+
+              <div className={styles.subsectionHeading}>
+                <span>常见失分</span>
+                <h3>这些回答听起来没错，但深度不够</h3>
+              </div>
+              <div className={styles.mistakeStack}>
+                {question.commonMistakes.map((mistake, index) => (
+                  <div className={styles.mistakeItem} key={mistake}>
+                    <span>错误 {String(index + 1).padStart(2, '0')}</span>
+                    <p>{mistake}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className={styles.chapter} id="follow-ups">
+              <div className={styles.chapterHeading}>
+                <span>05</span>
+                <div>
+                  <p className={styles.chapterEyebrow}>INTERVIEW DEPTH</p>
+                  <h2>面试追问</h2>
+                  <p>第一问只是入口，真正拉开差距的是你能不能接住后面的工程判断。</p>
+                </div>
+              </div>
+
+              {article ? (
+                <aside className={`${articleStyles.callout} ${articleStyles.interviewerCallout}`}>
+                  <span>面试官在听什么</span>
+                  <p>{article.interviewerNote}</p>
+                </aside>
+              ) : null}
+
+              <div className={styles.keyPointPanel}>
+                <span>判断维度</span>
+                <div>
+                  {question.keyPoints.map((point) => <strong key={point}>{point}</strong>)}
+                </div>
+              </div>
+
+              <ol className={styles.followUps}>
+                <li>
+                  <span>Q1</span>
+                  <p>{question.title}</p>
+                </li>
+                {question.followUps.map((followup, index) => (
+                  <li key={followup}>
+                    <span>Q{index + 2}</span>
+                    <p>{followup}</p>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            {article ? (
+              <aside className={articleStyles.remember}>
+                <span>一句话记住</span>
+                <strong>{article.takeaway}</strong>
+              </aside>
+            ) : null}
+
+            <section className={styles.selfCheck}>
+              <div>
+                <span>SELF CHECK</span>
+                <h2>学完这题，你应该能回答</h2>
+              </div>
+              <ul>
+                {selfCheck.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </section>
+
+            <footer className={styles.questionFooter}>
+              <span>{previous ? <Link href={`/questions/${previous.slug}`}>← 上一题：{previous.title}</Link> : '这是第一题'}</span>
+              <span>{next ? <Link href={`/questions/${next.slug}`}>下一题：{next.title} →</Link> : <Link href="/questions">返回题库 →</Link>}</span>
+            </footer>
+          </article>
+
+          <aside className={styles.sidebar}>
+            <div className={styles.sidebarInner}>
+              <span className={styles.sidebarTitle}>本题目录</span>
+              <nav aria-label="本题目录">
+                {sectionLinks.map(([id, label, hint], index) => (
+                  <a href={`#${id}`} key={id}>
+                    <span>{String(index + 1).padStart(2, '0')}</span>
+                    <div>
+                      <strong>{label}</strong>
+                      <small>{hint}</small>
+                    </div>
+                  </a>
+                ))}
+              </nav>
+              <div className={styles.sidebarNote}>
+                <span>阅读建议</span>
+                <p>第一次先做第 01 节，不看答案；复习时直接扫 30 秒回答、核心图和追问链。</p>
+              </div>
+            </div>
+          </aside>
+        </div>
       </main>
     </>
   )

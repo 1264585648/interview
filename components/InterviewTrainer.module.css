@@ -1,44 +1,52 @@
 .trainer,
 .result {
-  margin-left: 44px;
-  border-top: 1px solid #e5e1da;
-  border-bottom: 1px solid #e5e1da;
+  margin-left: 48px;
+  border: 1px solid #e3e7ee;
+  border-radius: 10px;
+  background: #fbfcfe;
+  overflow: hidden;
 }
 
 .topLine {
-  min-height: 40px;
+  min-height: 42px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #99938a;
+  padding: 0 18px;
+  border-bottom: 1px solid #edf0f4;
+  color: #9097a3;
   font-size: 10px;
 }
 
+.topLine span:first-child {
+  color: #315ee8;
+  font-weight: 760;
+}
+
 .prompt {
-  padding: 22px 0 18px;
-  border-top: 1px solid #f0ede8;
+  padding: 22px 18px 18px;
 }
 
 .prompt > span,
 .answerArea label,
 .coverage > span,
 .resultTop span {
-  color: #918b82;
+  color: #878e9a;
   font-size: 10px;
-  font-weight: 650;
+  font-weight: 700;
 }
 
 .prompt h3 {
   margin: 7px 0 0;
-  color: #292b30;
+  color: #252a33;
   font-size: 19px;
-  font-weight: 650;
+  font-weight: 680;
   line-height: 1.55;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
 }
 
 .answerArea {
-  padding-bottom: 20px;
+  padding: 0 18px 18px;
 }
 
 .answerArea label {
@@ -48,27 +56,27 @@
 
 .answerArea textarea {
   width: 100%;
-  resize: vertical;
   min-height: 132px;
-  border: 0;
-  border-bottom: 1px solid #d4cfc7;
-  border-radius: 0;
+  resize: vertical;
+  padding: 13px 14px;
+  border: 1px solid #dfe3ea;
+  border-radius: 8px;
   outline: none;
-  padding: 10px 0 12px;
-  background: transparent;
-  color: #292b30;
+  background: #fff;
+  color: #292f39;
   font: inherit;
   font-size: 14px;
   line-height: 1.85;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
 }
 
 .answerArea textarea:focus {
-  border-bottom-color: #5f5a53;
-  box-shadow: none;
+  border-color: #8ea7f6;
+  box-shadow: 0 0 0 3px rgba(49, 94, 232, 0.08);
 }
 
 .answerArea textarea::placeholder {
-  color: #aaa49b;
+  color: #a8aeb8;
 }
 
 .actions,
@@ -85,7 +93,7 @@
 }
 
 .actions > span {
-  color: #aaa49b;
+  color: #a1a7b1;
   font-size: 10px;
 }
 
@@ -95,63 +103,65 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 34px;
-  padding: 0 12px;
-  border-radius: 4px;
+  min-height: 36px;
+  padding: 0 13px;
+  border-radius: 7px;
   font: inherit;
   font-size: 11px;
-  font-weight: 650;
+  font-weight: 680;
   cursor: pointer;
 }
 
 .primaryButton {
-  border: 1px solid #292b30;
-  background: #292b30;
+  border: 1px solid #315ee8;
+  background: #315ee8;
   color: #fff;
 }
 
 .primaryButton:hover {
-  background: #111317;
+  background: #244bc4;
 }
 
 .primaryButton:disabled {
-  border-color: #d8d4cd;
-  background: #d8d4cd;
+  border-color: #d8dde6;
+  background: #d8dde6;
   cursor: not-allowed;
 }
 
 .secondaryButton {
-  border: 0;
-  border-bottom: 1px solid #aaa49b;
-  border-radius: 0;
-  padding-inline: 0;
-  background: transparent;
-  color: #625d56;
+  border: 1px solid #dce1e8;
+  background: #fff;
+  color: #59616e;
+}
+
+.secondaryButton:hover {
+  border-color: #c7ced9;
+  color: #303641;
 }
 
 .nextPanel {
-  min-height: 84px;
-  padding: 18px 0;
-  border-top: 1px solid #f0ede8;
+  min-height: 90px;
+  padding: 18px;
+  border-top: 1px solid #edf0f4;
 }
 
 .nextPanel strong {
-  color: #313239;
+  color: #303641;
   font-size: 13px;
-  font-weight: 650;
+  font-weight: 680;
 }
 
 .nextPanel p,
 .result > p,
 .coverage p {
   margin: 5px 0 0;
-  color: #7e786f;
+  color: #7d8490;
   font-size: 11px;
   line-height: 1.75;
 }
 
 .result {
-  padding: 20px 0;
+  padding: 20px;
 }
 
 .resultTop > div {
@@ -161,9 +171,9 @@
 }
 
 .resultTop strong {
-  color: #292b30;
+  color: #252a33;
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 730;
   letter-spacing: -0.03em;
 }
 
@@ -176,11 +186,11 @@
 .coverage {
   margin-top: 18px;
   padding-top: 16px;
-  border-top: 1px solid #f0ede8;
+  border-top: 1px solid #e8ebf0;
 }
 
 .coverage p {
-  color: #5f5a53;
+  color: #515866;
   font-size: 12px;
 }
 
