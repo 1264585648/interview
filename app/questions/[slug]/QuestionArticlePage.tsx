@@ -3,6 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import { notFound } from 'next/navigation'
 import { QuestionComparison } from '@/components/QuestionComparison'
 import { QuestionDiagram } from '@/components/QuestionDiagram'
+import { QuestionLongform } from '@/components/QuestionLongform'
 import { SiteHeader } from '@/components/SiteHeader'
 import { InterviewTrainer } from '@/components/InterviewTrainer'
 import { getQuestionArticle } from '@/data/questionArticles'
@@ -156,17 +157,11 @@ export function QuestionArticlePage({ slug }: { slug: string }) {
               <span>04</span>
               <div>
                 <h2>完整解析</h2>
-                <p>把短答案拆开，理解每个判断背后的系统设计逻辑。</p>
+                <p>从控制机制、边界条件和生产取舍一路推导，不只记住结论。</p>
               </div>
             </div>
-            <div className={styles.deepDive}>
-              {question.deepDive.map((item) => (
-                <article key={item.title} className={styles.deepDiveBlock}>
-                  <h3>{item.title}</h3>
-                  <p>{item.content}</p>
-                </article>
-              ))}
-            </div>
+
+            <QuestionLongform question={question} />
 
             <QuestionComparison slug={question.slug} />
 
