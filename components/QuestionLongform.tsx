@@ -1,5 +1,6 @@
 import type { InterviewQuestion } from '@/data/questions'
 import { getQuestionLongform } from '@/data/questionLongform'
+import { getRuntimeToolLongform } from '@/data/runtimeToolContent'
 import styles from './QuestionLongform.module.css'
 
 type Props = {
@@ -7,7 +8,7 @@ type Props = {
 }
 
 export function QuestionLongform({ question }: Props) {
-  const longform = getQuestionLongform(question.slug)
+  const longform = getQuestionLongform(question.slug) ?? getRuntimeToolLongform(question.slug)
 
   if (!longform) {
     return (
