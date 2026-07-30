@@ -1,3 +1,5 @@
+import { runtimeToolQuestions } from './runtimeToolQuestions'
+
 export type InterviewQuestion = {
   slug: string
   title: string
@@ -111,6 +113,7 @@ export const questions: InterviewQuestion[] = [
       '工具超时和工具业务失败应该如何区分？'
     ]
   },
+  ...runtimeToolQuestions,
   {
     slug: 'agent-memory-types',
     title: 'Agent Memory 有哪些类型？应该如何设计？',
