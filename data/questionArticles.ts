@@ -1,3 +1,5 @@
+import { runtimeToolArticles } from './runtimeToolContent'
+
 export type QuestionArticleEnhancement = {
   keyConclusion: string
   answerStructure: string[]
@@ -111,5 +113,5 @@ export const questionArticles: Record<string, QuestionArticleEnhancement> = {
 }
 
 export function getQuestionArticle(slug: string) {
-  return questionArticles[slug]
+  return questionArticles[slug] ?? runtimeToolArticles[slug]
 }
