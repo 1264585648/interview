@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { notFound } from 'next/navigation'
+import { QuestionComparison } from '@/components/QuestionComparison'
 import { QuestionDiagram } from '@/components/QuestionDiagram'
 import { SiteHeader } from '@/components/SiteHeader'
 import { InterviewTrainer } from '@/components/InterviewTrainer'
@@ -166,6 +167,8 @@ export function QuestionArticlePage({ slug }: { slug: string }) {
                 </article>
               ))}
             </div>
+
+            <QuestionComparison slug={question.slug} />
 
             {article ? (
               <div className={articleStyles.codeExample}>
