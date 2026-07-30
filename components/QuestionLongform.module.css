@@ -1,0 +1,79 @@
+.longform,
+.fallback {
+  margin-left: 44px;
+}
+
+.intro {
+  margin: 0 0 34px;
+  padding: 0 0 20px;
+  border-bottom: 1px solid #e8e4de;
+  color: #666159;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.section + .section {
+  margin-top: 40px;
+}
+
+.section h3 {
+  margin: 0 0 12px;
+  color: #2c2e32;
+  font-size: 18px;
+  font-weight: 690;
+  line-height: 1.55;
+  letter-spacing: -0.02em;
+}
+
+.section > p {
+  margin: 0;
+  color: #504c46;
+  font-size: 15px;
+  line-height: 2.05;
+}
+
+.section > p + p {
+  margin-top: 15px;
+}
+
+.judgement {
+  margin: 22px 0 0;
+  padding: 4px 0 4px 18px;
+  border-left: 2px solid #bcb3a7;
+}
+
+.judgement span {
+  display: block;
+  margin-bottom: 7px;
+  color: #8c857b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.judgement p {
+  margin: 0;
+  color: #5f5a53;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+@media (max-width: 720px) {
+  .longform,
+  .fallback {
+    margin-left: 34px;
+  }
+
+  .intro,
+  .section > p {
+    font-size: 13px;
+  }
+
+  .section h3 {
+    font-size: 16px;
+  }
+
+  .section + .section {
+    margin-top: 32px;
+  }
+}
