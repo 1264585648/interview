@@ -59,6 +59,61 @@ export function QuestionDiagram({ slug }: { slug: string }) {
         </figure>
       )
 
+    case 'agent-state-design':
+      return (
+        <figure className={styles.figure}>
+          <figcaption><strong>State 驱动的 Runtime</strong><span>History 记录发生过什么；State 保存下一步控制流需要相信的事实。</span></figcaption>
+          <div className={styles.loopDiagram}>
+            <Pipeline items={['Structured State', 'Context Builder', '模型决策', 'Action / Observation']} />
+            <div className={styles.returnLine}>↺ reducer 生成新 State；关键步骤写入 checkpoint</div>
+            <div className={styles.guardRow}>
+              <Node muted>completed steps</Node><Node muted>resource ids</Node><Node muted>budget</Node><Node muted>checkpoint / version</Node>
+            </div>
+          </div>
+        </figure>
+      )
+
+    case 'agent-planning-replanning':
+      return (
+        <figure className={styles.figure}>
+          <figcaption><strong>Plan → Execute → Replan</strong><span>默认沿计划推进，只有 Observation 让原假设失效时才修改后续路径。</span></figcaption>
+          <div className={styles.loopDiagram}>
+            <Pipeline items={['目标', '结构化 Plan', 'Next Ready Step', 'Execute', 'Observation']} />
+            <div className={styles.returnLine}>↺ 假设失效 / 资源不可用 / 目标变化 → 局部 Replan</div>
+            <div className={styles.guardRow}>
+              <Node muted>Dependency</Node><Node muted>Step Status</Node><Node muted>Completion Criteria</Node><Node muted>Replan Reason</Node>
+            </div>
+          </div>
+        </figure>
+      )
+
+    case 'tool-schema-design':
+      return (
+        <figure className={styles.figure}>
+          <figcaption><strong>Tool Call 是候选请求</strong><span>模型负责提出动作，Schema、授权和业务校验负责决定它能不能执行。</span></figcaption>
+          <div className={styles.loopDiagram}>
+            <Pipeline items={['模型选 Tool', '生成参数', 'Schema Validation', '授权 / 业务校验', '执行']} />
+            <div className={styles.guardRow}>
+              <Node muted>required</Node><Node muted>enum / range</Node><Node muted>format</Node><Node muted>permission</Node>
+            </div>
+          </div>
+        </figure>
+      )
+
+    case 'tool-idempotency-retry':
+      return (
+        <figure className={styles.figure}>
+          <figcaption><strong>有副作用 Tool 的安全重试</strong><span>Timeout 可能代表结果未知；重试同一个逻辑 Action 必须保持同一个幂等身份。</span></figcaption>
+          <div className={styles.loopDiagram}>
+            <Pipeline items={['Logical Action', 'Idempotency Key', 'Tool Execute', 'Committed / Failed / Unknown']} />
+            <div className={styles.returnLine}>↺ Unknown → 查询状态 → 确认未提交后才用同一 key 重试</div>
+            <div className={styles.guardRow}>
+              <Node muted>Side Effect</Node><Node muted>Status Query</Node><Node muted>Compensation</Node><Node muted>Approval / Audit</Node>
+            </div>
+          </div>
+        </figure>
+      )
+
     case 'agent-memory-types':
       return (
         <figure className={styles.figure}>
