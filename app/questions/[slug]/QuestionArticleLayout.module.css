@@ -1,7 +1,31 @@
 .articlePage {
   --article-font: "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", "Source Han Sans SC", Arial, sans-serif;
+  --article-page-bg: #f4f5f8;
+  --article-surface: #ffffff;
+  --article-surface-muted: #f6f8fa;
+  --article-surface-raised: #fbfcfd;
+  --article-text: #1f2328;
+  --article-text-secondary: #59636e;
+  --article-text-muted: #6e7781;
+  --article-border: #d0d7de;
+  --article-border-muted: #d8dee4;
+  --article-accent: #0969da;
+  --article-accent-hover: #0550ae;
+  --article-accent-soft: #ddf4ff;
+  --article-success: #1a7f37;
+  --article-success-soft: #dafbe1;
+  --article-warning: #9a6700;
+  --article-warning-soft: #fff8c5;
+  --article-danger: #cf222e;
+  --article-danger-soft: #ffebe9;
+  --article-done: #8250df;
+  --article-done-soft: #f4f0ff;
+  --article-shadow: 0 8px 24px rgba(31, 35, 40, 0.055);
+  --article-shadow-subtle: 0 4px 14px rgba(31, 35, 40, 0.035);
   font-family: var(--article-font);
   font-feature-settings: "kern";
+  background: var(--article-page-bg) !important;
+  color: var(--article-text);
 }
 
 .articlePage h1,
@@ -19,12 +43,170 @@
 }
 
 .articlePage :global([class*='questionHeader']) h1 {
+  color: var(--article-text);
   letter-spacing: -0.025em;
+}
+
+.articlePage :global([class*='questionHeader']) > p,
+.articlePage :global([class*='breadcrumb']),
+.articlePage :global([class*='backLink']) {
+  color: var(--article-text-muted);
+}
+
+.articlePage :global([class*='panel']) {
+  border-color: var(--article-border-muted);
+  background: var(--article-surface);
+  box-shadow: var(--article-shadow-subtle);
+}
+
+.articlePage :global([class*='questionMeta']) span {
+  border-color: var(--article-border-muted);
+  background: var(--article-surface-muted);
+  color: var(--article-text-secondary);
+}
+
+.articlePage :global([class*='questionMeta']) span:first-child {
+  border-color: #b6d7f6;
+  background: var(--article-accent-soft);
+  color: var(--article-accent);
+}
+
+.articlePage :global([class*='stepSidebarInner']) {
+  border-color: var(--article-border-muted);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--article-shadow-subtle);
+}
+
+.articlePage :global([class*='stepSidebar']) nav a:hover {
+  background: var(--article-surface-muted);
+  color: var(--article-accent);
+}
+
+.articlePage :global([class*='stepSidebar']) nav a > span {
+  border-color: var(--article-border-muted);
+  color: var(--article-text-muted);
+}
+
+.articlePage :global([class*='activeStep']) {
+  background: var(--article-accent-soft) !important;
+  color: var(--article-accent) !important;
+}
+
+.articlePage :global([class*='activeStep']) > span {
+  border-color: var(--article-accent) !important;
+  background: var(--article-accent) !important;
+  box-shadow: 0 5px 14px rgba(9, 105, 218, 0.18) !important;
+}
+
+.articlePage :global([class*='activeStep']) strong,
+.articlePage :global([class*='panelEyebrow']) {
+  color: var(--article-accent) !important;
+}
+
+.articlePage :global([class*='questionBubble']) {
+  border-color: #c9dff4;
+  background: #f2f8fd;
+}
+
+.articlePage :global([class*='answerComposer']) {
+  border-color: var(--article-border-muted);
+  background: var(--article-surface-muted);
+}
+
+.articlePage :global([class*='answerComposer']):focus-within {
+  border-color: var(--article-accent);
+  background: var(--article-surface);
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.12);
+}
+
+.articlePage :global([class*='hintPanel']) {
+  border-color: #b6d7f6;
+  background: #f2f8fd;
+}
+
+.articlePage :global([class*='primaryAction']) {
+  border-color: var(--article-accent);
+  background: var(--article-accent);
+  box-shadow: 0 7px 18px rgba(9, 105, 218, 0.16);
+}
+
+.articlePage :global([class*='primaryAction']):hover {
+  background: var(--article-accent-hover);
+}
+
+.articlePage :global([class*='secondaryAction']) {
+  border-color: var(--article-border);
+  background: var(--article-surface);
+  color: var(--article-text-secondary);
+}
+
+.articlePage :global([class*='analysisTabs']) a {
+  border-color: var(--article-border-muted);
+  background: var(--article-surface-muted);
+  color: var(--article-text-secondary);
+}
+
+.articlePage :global([class*='analysisTabs']) a:first-child,
+.articlePage :global([class*='analysisTabs']) a:hover {
+  border-color: #b6d7f6;
+  background: var(--article-accent-soft);
+  color: var(--article-accent);
+}
+
+.articlePage :global([class*='keyConclusion']) {
+  border-color: #efd88f;
+  background: var(--article-warning-soft);
+  color: var(--article-warning);
+}
+
+.articlePage :global([class*='keyConclusion']) strong,
+.articlePage :global([class*='keyConclusion']) p {
+  color: #6f4e00;
+}
+
+.articlePage :global([class*='deepDiveGrid']) article {
+  border-color: var(--article-border-muted);
+  background: var(--article-surface-muted);
+}
+
+.articlePage :global([class*='deepDiveGrid']) article > span {
+  color: var(--article-accent);
+}
+
+.articlePage :global([class*='deepDiveGrid']) h3 {
+  color: var(--article-text);
+}
+
+.articlePage :global([class*='deepDiveGrid']) p,
+.articlePage :global([class*='practiceList']) li,
+.articlePage :global([class*='summaryPanel']) li,
+.articlePage :global([class*='followupBlock']) p {
+  color: var(--article-text-secondary);
+}
+
+.articlePage :global([class*='practiceList']) li::before,
+.articlePage :global([class*='summaryPanel']) svg {
+  color: var(--article-success);
+}
+
+.articlePage :global([class*='pointTags']) span {
+  border-color: var(--article-border-muted);
+  background: var(--article-surface-muted);
+  color: var(--article-text-secondary);
+}
+
+.articlePage :global([class*='practiceLink']) svg:last-child,
+.articlePage :global([class*='followupBlock']) p::before {
+  color: var(--article-accent);
+}
+
+.articlePage :global([class*='questionFooter']) {
+  color: var(--article-text-muted);
 }
 
 .articleGrid {
   grid-template-columns: minmax(0, 1fr) 320px !important;
-  gap: 26px !important;
+  gap: 28px !important;
   align-items: start;
 }
 
@@ -38,29 +220,51 @@
   top: 76px;
   gap: 14px !important;
   padding: 4px 0 4px 24px;
-  border-left: 1px solid #d6dee9;
-  background: linear-gradient(90deg, rgba(232, 237, 245, 0.65), rgba(247, 249, 252, 0.2) 18px, transparent 18px);
+  border-left: 1px solid var(--article-border);
+  background: linear-gradient(90deg, rgba(208, 215, 222, 0.28), rgba(244, 245, 248, 0.5) 18px, transparent 18px);
 }
 
 .supportRail :global([class*='referencePanel']),
 .supportRail :global([class*='summaryPanel']) {
-  border-color: #dde4ed;
-  background: #fbfcfe;
-  box-shadow: 0 5px 16px rgba(31, 45, 76, 0.035);
+  border-color: var(--article-border-muted);
+  background: var(--article-surface-raised);
+  box-shadow: var(--article-shadow-subtle);
 }
 
 .supportRail :global([class*='practiceLink']) {
-  border-color: #dde4ed;
-  background: #fbfcfe;
+  border-color: var(--article-border-muted);
+  background: var(--article-surface-raised);
   box-shadow: none;
+}
+
+.supportRail :global([class*='bonusPanel']) {
+  border: 1px solid #d8c9f5;
+  background: var(--article-done-soft);
+  color: var(--article-text);
+  box-shadow: var(--article-shadow-subtle);
+}
+
+.supportRail :global([class*='bonusPanel']) :global([class*='supportHeading']) {
+  color: var(--article-done);
+}
+
+.supportRail :global([class*='bonusPanel']) :global([class*='supportHeading']) h2 {
+  color: #4c2d7f;
+}
+
+.supportRail :global([class*='bonusPanel']) > p {
+  color: #57466f;
+}
+
+.supportRail :global([class*='bonusPanel']) > div:last-child {
+  border-top-color: #dfd2f4;
+  color: #6d52a2;
 }
 
 .shortAnswerMain {
   padding: 22px !important;
-  border-color: #d9e6fb;
-  background:
-    radial-gradient(circle at 96% 6%, rgba(23, 105, 255, 0.075), transparent 28%),
-    rgba(255, 255, 255, 0.98);
+  border-color: #b6d7f6 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f6fbff 100%) !important;
 }
 
 .shortAnswerTopline {
@@ -69,7 +273,7 @@
   justify-content: space-between;
   gap: 14px;
   padding-bottom: 16px;
-  border-bottom: 1px solid #e7edf6;
+  border-bottom: 1px solid #dce8f3;
 }
 
 .shortAnswerBadge {
@@ -77,10 +281,10 @@
   min-height: 28px;
   align-items: center;
   padding: 0 10px;
-  border: 1px solid #cfe0ff;
+  border: 1px solid #b6d7f6;
   border-radius: 999px;
-  background: #edf4ff;
-  color: #1769ff;
+  background: var(--article-accent-soft);
+  color: var(--article-accent);
   font-size: 10px;
   font-weight: 700;
 }
@@ -96,7 +300,7 @@
 .answerStructure > strong {
   display: block;
   margin-bottom: 8px;
-  color: #8290a4;
+  color: var(--article-text-muted);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.02em;
@@ -104,14 +308,14 @@
 
 .answerCopy p {
   margin: 0;
-  color: #3e495d;
+  color: var(--article-text);
   font-size: 13.5px;
   line-height: 1.86;
 }
 
 .answerStructure {
   padding-left: 24px;
-  border-left: 1px solid #e4eaf3;
+  border-left: 1px solid var(--article-border-muted);
 }
 
 .answerStructure ol {
@@ -135,14 +339,14 @@
   height: auto !important;
   padding-top: 2px;
   background: transparent !important;
-  color: #1769ff;
+  color: var(--article-accent);
   font-size: 10px !important;
   font-weight: 700;
 }
 
 .answerStructure li p {
   margin: 0 !important;
-  color: #657187;
+  color: var(--article-text-secondary);
   font-size: 11.5px !important;
   line-height: 1.72 !important;
 }
@@ -166,8 +370,8 @@
 .articleGrid .articleBody :global([class*='QuestionLongform_intro']) {
   margin-bottom: 28px;
   padding-bottom: 18px;
-  border-color: #e5eaf1;
-  color: #596578;
+  border-color: var(--article-border-muted);
+  color: var(--article-text-secondary);
   font-size: 13px;
   line-height: 1.9;
 }
@@ -178,7 +382,7 @@
 
 .articleGrid .articleBody :global([class*='QuestionLongform_section']) h3 {
   margin-bottom: 10px;
-  color: #273246;
+  color: var(--article-text);
   font-size: 15px;
   font-weight: 700;
   line-height: 1.55;
@@ -186,25 +390,30 @@
 }
 
 .articleGrid .articleBody :global([class*='QuestionLongform_section']) > p {
-  color: #566174;
+  color: var(--article-text-secondary);
   font-size: 13px;
   line-height: 1.9;
 }
 
+.articleGrid .articleBody :global([class*='QuestionLongform_judgement']) {
+  border-left-color: #b6d7f6;
+  background: #f6fbff;
+}
+
 .articleGrid .articleBody :global([class*='QuestionLongform_judgement']) p {
-  color: #5e687a;
+  color: var(--article-text-secondary);
   font-size: 12px;
   line-height: 1.82;
 }
 
 .articleGrid .articleBody :global([class*='ArticleRichText_richText']) {
-  color: #566174;
+  color: var(--article-text-secondary);
 }
 
 .articleGrid .articleBody :global([class*='ArticleRichText_richText']) h2 {
   margin: 28px 0 11px;
   padding-top: 22px;
-  color: #273246;
+  color: var(--article-text);
   font-size: 17px;
   font-weight: 700;
   line-height: 1.5;
@@ -213,7 +422,7 @@
 
 .articleGrid .articleBody :global([class*='ArticleRichText_richText']) h3 {
   margin: 22px 0 9px;
-  color: #273246;
+  color: var(--article-text);
   font-size: 15px;
   font-weight: 700;
   line-height: 1.55;
@@ -222,13 +431,13 @@
 
 .articleGrid .articleBody :global([class*='ArticleRichText_richText']) p,
 .articleGrid .articleBody :global([class*='ArticleRichText_richText']) li {
-  color: #566174;
+  color: var(--article-text-secondary);
   font-size: 13px;
   line-height: 1.9;
 }
 
 .articleGrid .articleBody :global([class*='ArticleRichText_richText']) strong {
-  color: #303b4f;
+  color: var(--article-text);
   font-weight: 700;
 }
 
@@ -238,13 +447,13 @@
 }
 
 .mainArticle .productionBody :global([class*='QuestionArticle_caseRow']) p {
-  color: #566174;
+  color: var(--article-text-secondary);
   font-size: 13px;
   line-height: 1.85;
 }
 
 .mainArticle .productionBody :global([class*='QuestionArticle_codeIntro']) p {
-  color: #6e798b;
+  color: var(--article-text-muted);
   font-size: 11.5px;
   line-height: 1.72;
 }
@@ -273,7 +482,7 @@
   .supportRail {
     position: static;
     padding: 22px 0 0;
-    border-top: 1px solid #d6dee9;
+    border-top: 1px solid var(--article-border);
     border-left: 0;
     background: transparent;
   }
@@ -287,7 +496,7 @@
   .answerStructure {
     padding-top: 18px;
     padding-left: 0;
-    border-top: 1px solid #e4eaf3;
+    border-top: 1px solid var(--article-border-muted);
     border-left: 0;
   }
 }
