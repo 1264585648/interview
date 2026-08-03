@@ -1,7 +1,4 @@
-'use client'
-
 import Link from 'next/link'
-import { useEffect, useMemo, useState } from 'react'
 import {
   Activity,
   ArrowLeft,
@@ -15,15 +12,14 @@ import {
   GitBranch,
   Lightbulb,
   MessageSquareQuote,
-  RotateCcw,
   ShieldCheck,
   Sparkles,
   Target,
-  TimerReset,
   Wrench
 } from 'lucide-react'
 import { SiteHeader } from '@/components/SiteHeader'
 import styles from '../meituan-langgraph-agent/page.module.css'
+import launchStyles from './JdAgentVsWorkflowPage.module.css'
 
 const sources = [
   {
@@ -105,53 +101,7 @@ const followUps = [
   }
 ]
 
-const referenceAnswer = `我认为 Agent 和普通 Workflow 最核心的区别，是谁决定下一步执行什么。
-
-普通 Workflow 的节点、顺序和主要分支通常由开发者提前定义。系统收到输入后按照确定的流程执行，因此它更稳定、可预测，也更容易测试和审计。
-
-Agent 会把一部分运行时控制权交给模型。模型根据任务目标、当前上下文和工具返回结果，动态决定下一步是调用哪个工具、补充询问、重新规划还是结束。因此 Agent 更适合路径无法提前完全穷举的任务，但也会带来成本、延迟、循环、误调用和结果不稳定等问题。
-
-所以工程上我不会把两者理解成谁替代谁。更常见的方案是外层使用 Workflow 保证关键路径和安全边界，只在需要理解、规划和动态选择的局部环节使用 Agent。`
-
-function formatTime(seconds: number) {
-  const minutes = Math.floor(seconds / 60)
-  const rest = seconds % 60
-  return `${String(minutes).padStart(2, '0')}:${String(rest).padStart(2, '0')}`
-}
-
 export function JdAgentVsWorkflowPage() {
-  const [answer, setAnswer] = useState('')
-  const [seconds, setSeconds] = useState(0)
-  const [running, setRunning] = useState(false)
-  const [showReference, setShowReference] = useState(false)
-
-  useEffect(() => {
-    if (!running) return
-    const timer = window.setInterval(() => setSeconds((value) => value + 1), 1000)
-    return () => window.clearInterval(timer)
-  }, [running])
-
-  const answerStatus = useMemo(() => {
-    const text = answer.trim()
-    if (!text) return '还未开始作答'
-
-    const hasControl = /控制|决定下一步|动态决策/.test(text)
-    const hasTradeoff = /稳定|可控|成本|延迟|测试|灵活/.test(text)
-    const hasBoundary = /结合|混合|局部|外层|场景/.test(text)
-
-    if (!hasControl) return '建议先回答：谁决定下一步？'
-    if (!hasTradeoff) return '核心区别已有，再补充工程取舍'
-    if (!hasBoundary) return '结构不错，再补充选型边界'
-    return '回答框架完整，可以继续压缩表达'
-  }, [answer])
-
-  function resetPractice() {
-    setAnswer('')
-    setSeconds(0)
-    setRunning(false)
-    setShowReference(false)
-  }
-
   return (
     <>
       <SiteHeader />
@@ -211,53 +161,20 @@ export function JdAgentVsWorkflowPage() {
 
           <div className={styles.layout}>
             <div className={styles.mainColumn}>
-              <section className={`${styles.panel} ${styles.practicePanel}`}>
-                <div className={styles.sectionHeader}>
-                  <div>
-                    <span>STEP 01 · ANSWER FIRST</span>
-                    <h2>先用自己的话回答</h2>
-                  </div>
-                  <div className={styles.timer}><TimerReset size={17} /> {formatTime(seconds)}</div>
+              <Link className={launchStyles.practiceLaunch} href="/questions/agent-vs-workflow/practice">
+                <div className={launchStyles.launchIcon}><Sparkles size={21} /></div>
+                <div className={launchStyles.launchCopy}>
+                  <span>INTERVIEW PRACTICE</span>
+                  <h2>先独立作答，再阅读解析</h2>
+                  <p>进入专注作答页，完成 2 分钟回答后与参考答案对照。</p>
                 </div>
-
-                <textarea
-                  aria-label="输入你的面试回答"
-                  value={answer}
-                  onChange={(event) => setAnswer(event.target.value)}
-                  onFocus={() => setRunning(true)}
-                  placeholder="提示：先回答谁决定下一步，再比较稳定性与灵活性，最后说明实际系统通常如何组合使用。"
-                />
-
-                <div className={styles.practiceFooter}>
-                  <div>
-                    <strong>{answerStatus}</strong>
-                    <span>{answer.trim().length} 字</span>
-                  </div>
-                  <div className={styles.actionGroup}>
-                    <button className={styles.secondaryButton} type="button" onClick={resetPractice}>
-                      <RotateCcw size={15} /> 重置
-                    </button>
-                    <button className={styles.primaryButton} type="button" onClick={() => setShowReference((value) => !value)}>
-                      {showReference ? '收起参考回答' : '提交并对照'} <ArrowRight size={15} />
-                    </button>
-                  </div>
-                </div>
-
-                {showReference ? (
-                  <div className={styles.referenceAnswer}>
-                    <div className={styles.referenceTitle}>
-                      <Sparkles size={17} />
-                      <div><strong>2 分钟参考回答</strong><span>重点比较结构，而不是逐字背诵</span></div>
-                    </div>
-                    {referenceAnswer.split('\n\n').map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-                  </div>
-                ) : null}
-              </section>
+                <strong>开始作答 <ArrowRight size={17} /></strong>
+              </Link>
 
               <section className={styles.panel}>
                 <div className={styles.sectionHeader}>
                   <div>
-                    <span>STEP 02 · CORE DIFFERENCE</span>
+                    <span>STEP 01 · CORE DIFFERENCE</span>
                     <h2>最核心的区别：谁决定下一步</h2>
                   </div>
                   <Lightbulb size={21} />
@@ -298,7 +215,7 @@ export function JdAgentVsWorkflowPage() {
               <section className={styles.panel}>
                 <div className={styles.sectionHeader}>
                   <div>
-                    <span>STEP 03 · INTERVIEW INTENT</span>
+                    <span>STEP 02 · INTERVIEW INTENT</span>
                     <h2>面试官到底在考什么</h2>
                   </div>
                   <Target size={21} />
@@ -317,7 +234,7 @@ export function JdAgentVsWorkflowPage() {
               <section className={styles.panel}>
                 <div className={styles.sectionHeader}>
                   <div>
-                    <span>STEP 04 · ANSWER STRUCTURE</span>
+                    <span>STEP 03 · ANSWER STRUCTURE</span>
                     <h2>高质量回答框架</h2>
                   </div>
                   <BookOpenCheck size={21} />
@@ -335,7 +252,7 @@ export function JdAgentVsWorkflowPage() {
               <section className={styles.panel}>
                 <div className={styles.sectionHeader}>
                   <div>
-                    <span>STEP 05 · PRODUCTION CHOICE</span>
+                    <span>STEP 04 · PRODUCTION CHOICE</span>
                     <h2>真实系统通常不是二选一</h2>
                   </div>
                   <GitBranch size={21} />
@@ -368,7 +285,7 @@ export function JdAgentVsWorkflowPage() {
               <section className={styles.panel}>
                 <div className={styles.sectionHeader}>
                   <div>
-                    <span>STEP 06 · FOLLOW UPS</span>
+                    <span>STEP 05 · FOLLOW UPS</span>
                     <h2>面试官可能继续追问</h2>
                   </div>
                   <MessageSquareQuote size={21} />
@@ -410,9 +327,9 @@ export function JdAgentVsWorkflowPage() {
                 <p>“LLM + Tool + Memory”只描述了组成，没有解释系统为什么能够自主决定下一步。</p>
               </section>
 
-              <Link className={styles.nextAction} href="/practice">
+              <Link className={styles.nextAction} href="/questions/agent-vs-workflow/practice">
                 <Sparkles size={17} />
-                <span><strong>进入模拟面试</strong><small>继续练习连续追问</small></span>
+                <span><strong>开始作答</strong><small>进入独立的专注作答页</small></span>
                 <ArrowRight size={16} />
               </Link>
             </aside>
