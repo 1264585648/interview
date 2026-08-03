@@ -1,5 +1,5 @@
 .richText {
-  color: #4f596c;
+  color: var(--article-text-secondary, #59636e);
 }
 
 .richText > :first-child {
@@ -9,14 +9,14 @@
 .richText h2,
 .richText h3 {
   scroll-margin-top: 96px;
-  color: #202a3c;
-  letter-spacing: -0.025em;
+  color: var(--article-text, #1f2328);
+  letter-spacing: -0.015em;
 }
 
 .richText h2 {
   margin: 30px 0 12px;
   padding-top: 24px;
-  border-top: 1px solid #e7ebf1;
+  border-top: 1px solid var(--article-border-muted, #d8dee4);
   font-size: 20px;
   line-height: 1.45;
 }
@@ -38,27 +38,31 @@
 }
 
 .richText strong {
-  color: #29354a;
-  font-weight: 760;
+  color: var(--article-text, #1f2328);
+  font-weight: 700;
 }
 
 .richText em {
-  color: #59657a;
+  color: var(--article-text-secondary, #59636e);
 }
 
 .richText a {
-  color: #1769ff;
+  color: var(--article-accent, #0969da);
   text-decoration: underline;
-  text-decoration-color: rgba(23, 105, 255, 0.28);
+  text-decoration-color: rgba(9, 105, 218, 0.3);
   text-underline-offset: 3px;
+}
+
+.richText a:hover {
+  color: var(--article-accent-hover, #0550ae);
 }
 
 .richText code {
   padding: 2px 6px;
-  border: 1px solid #e1e6ee;
+  border: 1px solid #c9dff4;
   border-radius: 6px;
-  background: #f5f7fa;
-  color: #2e4d80;
+  background: #f2f8fd;
+  color: #0550ae;
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 0.88em;
 }
@@ -72,27 +76,27 @@
 }
 
 .richText li::marker {
-  color: #1769ff;
+  color: var(--article-accent, #0969da);
   font-weight: 750;
 }
 
 .richText blockquote {
   margin: 22px 0;
   padding: 17px 20px;
-  border-left: 3px solid #7ba8ff;
+  border-left: 3px solid var(--article-accent, #0969da);
   border-radius: 0 10px 10px 0;
-  background: #f5f8ff;
+  background: #f2f8fd;
 }
 
 .richText blockquote p {
   margin: 0;
-  color: #3f4b62;
+  color: #424d5f;
 }
 
 .richText blockquote cite {
   display: block;
   margin-top: 9px;
-  color: #8290a5;
+  color: var(--article-text-muted, #6e7781);
   font-size: 11px;
   font-style: normal;
 }
@@ -100,40 +104,40 @@
 .callout {
   margin: 22px 0;
   padding: 17px 19px;
-  border: 1px solid #d8e5fb;
+  border: 1px solid #b6d7f6;
   border-radius: 12px;
-  background: #f5f9ff;
+  background: #f2f8fd;
 }
 
 .callout strong {
   display: block;
   margin-bottom: 6px;
-  color: #2259ae;
+  color: var(--article-accent-hover, #0550ae);
   font-size: 12px;
 }
 
 .callout p {
   margin: 0;
-  color: #53627a;
+  color: var(--article-text-secondary, #59636e);
   font-size: 13px;
 }
 
 .warning {
-  border-color: #eeddb8;
-  background: #fffaf0;
+  border-color: #efd88f;
+  background: var(--article-warning-soft, #fff8c5);
 }
 
 .warning strong {
-  color: #8b611b;
+  color: var(--article-warning, #9a6700);
 }
 
 .success {
-  border-color: #cce7d9;
-  background: #f3fbf7;
+  border-color: #a8dfb6;
+  background: var(--article-success-soft, #dafbe1);
 }
 
 .success strong {
-  color: #267152;
+  color: var(--article-success, #1a7f37);
 }
 
 .codeBlock,
@@ -144,7 +148,7 @@
 .codeBlock figcaption,
 .tableBlock figcaption {
   margin-bottom: 9px;
-  color: #778397;
+  color: var(--article-text-muted, #6e7781);
   font-size: 11px;
   line-height: 1.6;
 }
@@ -153,10 +157,10 @@
   margin: 0;
   padding: 18px 20px;
   overflow-x: auto;
-  border: 1px solid #e0e6ee;
+  border: 1px solid var(--article-border-muted, #d8dee4);
   border-radius: 10px;
-  background: #f7f8fa;
-  color: #303743;
+  background: #f6f8fa;
+  color: #24292f;
   font-size: 12px;
   line-height: 1.8;
   tab-size: 2;
@@ -172,7 +176,7 @@
 
 .tableBlock > div {
   overflow-x: auto;
-  border: 1px solid #e1e6ee;
+  border: 1px solid var(--article-border-muted, #d8dee4);
   border-radius: 10px;
 }
 
@@ -180,26 +184,26 @@
   width: 100%;
   min-width: 560px;
   border-collapse: collapse;
-  background: #fff;
+  background: var(--article-surface, #ffffff);
   font-size: 12px;
 }
 
 .tableBlock th,
 .tableBlock td {
   padding: 12px 14px;
-  border-bottom: 1px solid #e8ecf2;
+  border-bottom: 1px solid #e8ecf0;
   text-align: left;
   line-height: 1.65;
 }
 
 .tableBlock th {
-  background: #f6f8fb;
-  color: #334057;
-  font-weight: 740;
+  background: var(--article-surface-muted, #f6f8fa);
+  color: var(--article-text, #1f2328);
+  font-weight: 700;
 }
 
 .tableBlock td {
-  color: #5f6b7f;
+  color: var(--article-text-secondary, #59636e);
 }
 
 .tableBlock tr:last-child td {
@@ -209,7 +213,7 @@
 .richText hr {
   margin: 28px 0;
   border: 0;
-  border-top: 1px solid #e3e8ef;
+  border-top: 1px solid var(--article-border-muted, #d8dee4);
 }
 
 @media (max-width: 720px) {
