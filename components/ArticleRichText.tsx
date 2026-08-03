@@ -67,13 +67,15 @@ export function ArticleRichText({ blocks }: Props) {
               </blockquote>
             )
 
-          case 'callout':
+          case 'callout': {
+            const toneClass = block.tone ? styles[block.tone] : ''
             return (
-              <aside className={`${styles.callout} ${styles[block.tone ?? 'info']}`} key={key}>
+              <aside className={`${styles.callout} ${toneClass}`} key={key}>
                 <strong>{block.title}</strong>
                 <p><InlineContent content={block.content} /></p>
               </aside>
             )
+          }
 
           case 'code':
             return (
