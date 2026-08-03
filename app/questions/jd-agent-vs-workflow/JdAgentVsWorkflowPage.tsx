@@ -188,8 +188,8 @@ export function JdAgentVsWorkflowPage() {
             <aside className={styles.sourceCard}>
               <div className={styles.sourceHeader}>
                 <div>
-                  <span>来源可信度</span>
-                  <strong>A-</strong>
+                  <span>出现频率</span>
+                  <strong>高频</strong>
                 </div>
                 <ShieldCheck size={22} />
               </div>
