@@ -18,7 +18,7 @@ export function QuestionPracticeWorkspace({ question }: Props) {
       <div className={styles.panelHeader}>
         <div>
           <span className={styles.panelEyebrow}>INTERVIEW SCENE</span>
-          <h1>面试场景</h1>
+          <h2>面试场景</h2>
         </div>
         <div className={styles.sceneTags}>
           <span>{question.category}</span>
@@ -45,6 +45,7 @@ export function QuestionPracticeWorkspace({ question }: Props) {
         <textarea
           id="practice-answer"
           value={answer}
+          maxLength={1000}
           onChange={(event) => setAnswer(event.target.value)}
           placeholder="写下你的回答……建议先给结论，再解释原理和工程取舍。"
           rows={4}
