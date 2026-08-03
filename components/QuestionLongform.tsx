@@ -1,4 +1,5 @@
 import type { InterviewQuestion } from '@/data/questions'
+import { observabilityLongform } from '@/data/observabilityContent'
 import { getQuestionLongform } from '@/data/questionLongform'
 import { getRuntimeToolLongform } from '@/data/runtimeToolContent'
 import styles from './QuestionLongform.module.css'
@@ -8,7 +9,10 @@ type Props = {
 }
 
 export function QuestionLongform({ question }: Props) {
-  const longform = getQuestionLongform(question.slug) ?? getRuntimeToolLongform(question.slug)
+  const longform =
+    getQuestionLongform(question.slug) ??
+    getRuntimeToolLongform(question.slug) ??
+    (question.slug === 'agent-observability-tracing' ? observabilityLongform : undefined)
 
   if (!longform) {
     return (
