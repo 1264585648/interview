@@ -1,6 +1,6 @@
 # AgentInterview
 
-<!-- deploy-trigger: 2026-08-03T15:00+08:00 -->
+<!-- deploy-trigger: 2026-08-03T16:14+08:00 -->
 
 一个面向 **AI Agent Engineer / LLM Application Engineer / 大模型应用开发工程师** 的面试训练 Demo。
 
@@ -11,6 +11,7 @@
 - 首页：今日一题、Agent 100、专题学习、学习进度、最新面经
 - 题库：按专题筛选、难度和题型展示
 - 单题页：题目背景、考察点、30 秒参考回答、追问列表
+- 真实面经试点页：美团 LangGraph 多轮对话 Agent
 - 模拟面试：输入回答、连续追问、结果反馈闭环
 - 8 道真实 Agent / MCP / RAG / Memory / Evaluation / System Design 示例题
 - 响应式桌面与移动端样式
@@ -37,10 +38,11 @@ npm run dev
 ## 页面
 
 ```text
-/                              首页
-/questions                     Agent 面试题库
-/questions/agent-tool-loop     单题训练示例
-/questions/agent-memory-types  Memory 训练示例
+/                                       首页
+/questions                              Agent 面试题库
+/questions/agent-tool-loop              单题训练示例
+/questions/agent-memory-types           Memory 训练示例
+/questions/meituan-langgraph-agent      美团真实面经试点页
 ```
 
 ## 下一步
