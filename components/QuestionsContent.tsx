@@ -1,51 +1,19 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
-import { Search } from 'lucide-react'
+import {
+  Bookmark,
+  Building2,
+  ChevronDown,
+  Clock3,
+  Flame,
+  Search,
+  SlidersHorizontal
+} from 'lucide-react'
 import { categories, questions } from '@/data/questions'
-import { getTopicForCategory } from '@/data/topics'
 import styles from './QuestionsContent.module.css'
-
-const categoryDescriptions: Record<string, string> = {
-  'Agent 基础': '理解 Agent 的控制流、状态和自主决策边界。',
-  'Agent Runtime': '关注停止条件、失败恢复、预算控制和运行时可靠性。',
-  'Tool Calling': '理解工具选择、参数生成、执行结果和权限边界。',
-  MCP: '理解 MCP 的协议边界、工具发现与资源接入。',
-  RAG: '掌握检索、查询改写、多源路由和 Agentic RAG。',
-  Memory: '掌握记忆的写入、检索、更新、过期和遗忘。',
-  'Context Engineering': '理解有限 Context 下的信息选择、压缩与排序。',
-  Evaluation: '从任务成功、轨迹、成本和线上指标评价 Agent。',
-  'System Design': '把规划、工具、状态和可靠性组合成生产级系统。'
-}
-
-const learningStages = [
-  {
-    id: 'agent-foundation',
-    title: 'Agent 基础与运行时',
-    categories: ['Agent 基础', 'Agent Runtime'],
-    description: '先理解 Agent 的行为模型，再进入停止条件、失败恢复与运行时控制。'
-  },
-  {
-    id: 'tools-and-knowledge',
-    title: '工具、协议与知识',
-    categories: ['Tool Calling', 'MCP', 'RAG'],
-    description: '理解 Agent 如何调用外部能力，以及协议和检索在系统里的边界。'
-  },
-  {
-    id: 'state-and-context',
-    title: '状态、记忆与上下文',
-    categories: ['Memory', 'Context Engineering'],
-    description: '处理长任务里的状态保留、记忆检索和上下文组织。'
-  },
-  {
-    id: 'reliability-and-design',
-    title: '评估与系统设计',
-    categories: ['Evaluation', 'System Design'],
-    description: '从单点能力进入生产级可靠性、评估与整体架构设计。'
-  }
-]
 
 const difficultyLabel: Record<number, string> = {
   1: '入门',
@@ -53,6 +21,38 @@ const difficultyLabel: Record<number, string> = {
   3: '核心',
   4: '进阶',
   5: '系统设计'
+}
+
+const difficultyOptions = [
+  { value: '全部', label: '全部难度' },
+  { value: '1-2', label: '入门 / 基础' },
+  { value: '3', label: '核心' },
+  { value: '4-5', label: '进阶 / 系统设计' }
+]
+
+const sourceToneClasses = [
+  styles.sourceOrange,
+  styles.sourceBlue,
+  styles.sourceGold,
+  styles.sourceRed,
+  styles.sourceGreen,
+  styles.sourcePurple
+]
+
+function getQuestionSource(question: (typeof questions)[number]) {
+  const extendedQuestion = question as typeof question & {
+    companies?: string[]
+    sourceCompany?: string
+  }
+
+  return extendedQuestion.companies?.[0] || extendedQuestion.sourceCompany || '公开整理'
+}
+
+function matchesDifficulty(difficulty: number, filter: string) {
+  if (filter === '全部') return true
+  if (filter === '1-2') return difficulty <= 2
+  if (filter === '3') return difficulty === 3
+  return difficulty >= 4
 }
 
 export function QuestionsContent() {
@@ -63,73 +63,77 @@ export function QuestionsContent() {
 
 export function QuestionsView({ activeCategory }: { activeCategory: string }) {
   const [keyword, setKeyword] = useState('')
+  const [difficulty, setDifficulty] = useState('全部')
+  const [visibleCount, setVisibleCount] = useState(12)
+
   const learningCategories = categories.filter((category) =>
     category !== '全部' && questions.some((question) => question.category === category)
   )
 
   const matchedQuestions = useMemo(() => {
     const normalized = keyword.trim().toLowerCase()
-    const categoryQuestions = activeCategory === '全部'
-      ? questions
-      : questions.filter((question) => question.category === activeCategory)
 
-    if (!normalized) return categoryQuestions
-
-    return categoryQuestions.filter((question) => {
+    return questions.filter((question) => {
+      const matchesCategory = activeCategory === '全部' || question.category === activeCategory
+      const matchesLevel = matchesDifficulty(question.difficulty, difficulty)
+      const source = getQuestionSource(question)
       const haystack = [
         question.title,
         question.category,
         question.type,
         question.frequency,
+        source,
         ...question.topics,
         ...question.keyPoints
       ].join(' ').toLowerCase()
 
-      return haystack.includes(normalized)
+      return matchesCategory && matchesLevel && (!normalized || haystack.includes(normalized))
     })
-  }, [activeCategory, keyword])
+  }, [activeCategory, difficulty, keyword])
 
-  const groups = activeCategory === '全部'
-    ? learningStages
-        .map((stage) => ({
-          ...stage,
-          questions: matchedQuestions.filter((question) => stage.categories.includes(question.category))
-        }))
-        .filter((stage) => stage.questions.length > 0)
-    : [{
-        id: `topic-${activeCategory}`,
-        title: activeCategory,
-        categories: [activeCategory],
-        description: categoryDescriptions[activeCategory] || '围绕这一专题整理核心面试题。',
-        questions: matchedQuestions
-      }].filter((group) => group.questions.length > 0)
+  useEffect(() => {
+    setVisibleCount(12)
+  }, [activeCategory, difficulty, keyword])
 
-  const pageTitle = activeCategory === '全部' ? 'Agent 面试题' : `${activeCategory} 面试题`
-  const pageDescription = activeCategory === '全部'
-    ? '按知识路径整理的 Agent Engineer 面试题。先自己回答，再进入完整解析和追问。'
-    : categoryDescriptions[activeCategory] || '按专题整理的 Agent Engineer 面试题。'
-  const topicGuide = activeCategory === '全部' ? null : getTopicForCategory(activeCategory)
+  const visibleQuestions = matchedQuestions.slice(0, visibleCount)
+  const hasMore = visibleCount < matchedQuestions.length
 
   return (
-    <main className={`${styles.page} container`}>
-      <div className={styles.directory}>
-        <header className={styles.header}>
+    <main className={styles.page}>
+      <div className={styles.shell}>
+        <header className={styles.hero}>
           <div>
-            <h1>{pageTitle}</h1>
-            <p>{pageDescription}</p>
+            <span className={styles.kicker}>Agent Engineer Interview Library</span>
+            <h1>题库</h1>
+            <p>搜集大厂面试真题，模拟真实面试场景。</p>
           </div>
-          <span>{matchedQuestions.length} 道</span>
+          <div className={styles.summary}>
+            <strong>{questions.length}</strong>
+            <span>道核心题目</span>
+          </div>
         </header>
 
-        <div className={styles.searchBox}>
-          <Search size={15} />
-          <input
-            value={keyword}
-            onChange={(event) => setKeyword(event.target.value)}
-            placeholder="搜索题目或知识点"
-            aria-label="搜索 Agent 面试题"
-          />
-        </div>
+        <section className={styles.controls} aria-label="题库筛选">
+          <label className={styles.searchBox}>
+            <Search size={18} />
+            <input
+              value={keyword}
+              onChange={(event) => setKeyword(event.target.value)}
+              placeholder="搜索题目、关键词或公司"
+              aria-label="搜索面试题"
+            />
+          </label>
+
+          <label className={styles.filterSelect}>
+            <SlidersHorizontal size={17} />
+            <select value={difficulty} onChange={(event) => setDifficulty(event.target.value)}>
+              {difficultyOptions.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
+            </select>
+            <ChevronDown size={15} />
+          </label>
+        </section>
 
         <nav className={styles.categoryNav} aria-label="题目专题">
           <Link href="/questions" className={activeCategory === '全部' ? styles.active : ''}>全部</Link>
@@ -144,42 +148,76 @@ export function QuestionsView({ activeCategory }: { activeCategory: string }) {
           ))}
         </nav>
 
-        <div className={styles.guideLink}>
-          {topicGuide ? (
-            <Link href={`/topics/${topicGuide.slug}`}>先读「{topicGuide.title}」专题导读 →</Link>
-          ) : (
-            <Link href="/topics">不知道从哪开始？按 4 个专题系统学习 →</Link>
-          )}
+        <div className={styles.resultBar}>
+          <p>
+            共找到 <strong>{matchedQuestions.length}</strong> 道题
+            {activeCategory !== '全部' ? <span> · {activeCategory}</span> : null}
+          </p>
+          <span>点击卡片查看完整解析与追问</span>
         </div>
 
-        {groups.length ? groups.map((group) => (
-          <section className={styles.group} id={group.id} key={group.id}>
-            <header className={styles.groupHeader}>
-              <div>
-                <h2>{group.title}</h2>
-                <p>{group.description}</p>
-              </div>
-              <span>{group.questions.length} 道</span>
-            </header>
+        {visibleQuestions.length ? (
+          <>
+            <section className={styles.cardGrid} aria-label="面试题列表">
+              {visibleQuestions.map((question, index) => {
+                const source = getQuestionSource(question)
+                const toneClass = sourceToneClasses[index % sourceToneClasses.length]
 
-            <div className={styles.questionList}>
-              {group.questions.map((question, questionIndex) => (
-                <Link className={styles.questionRow} href={`/questions/${question.slug}`} key={question.slug}>
-                  <span className={styles.number}>{String(questionIndex + 1).padStart(2, '0')}</span>
-                  <div>
-                    <h3>{question.title}</h3>
-                    <p>{question.category} · {question.frequency} · {question.type} · {difficultyLabel[question.difficulty]}</p>
-                  </div>
-                  <span className={styles.arrow}>→</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )) : (
+                return (
+                  <Link className={styles.card} href={`/questions/${question.slug}`} key={question.slug}>
+                    <div className={styles.cardTop}>
+                      <span className={`${styles.sourceBadge} ${toneClass}`}>
+                        <Building2 size={14} />
+                        {source}
+                      </span>
+                      <span className={styles.bookmark} aria-hidden="true">
+                        <Bookmark size={18} />
+                      </span>
+                    </div>
+
+                    <h2>{question.title}</h2>
+
+                    <div className={styles.metaRow}>
+                      <span>{question.category}</span>
+                      <span className={question.difficulty >= 4 ? styles.hard : styles.medium}>
+                        {difficultyLabel[question.difficulty]}
+                      </span>
+                    </div>
+
+                    <footer className={styles.cardFooter}>
+                      <span><Flame size={14} /> {question.frequency}</span>
+                      <span><Clock3 size={14} /> {question.estimate}</span>
+                      <span>{question.type}</span>
+                    </footer>
+                  </Link>
+                )
+              })}
+            </section>
+
+            {hasMore ? (
+              <button
+                className={styles.loadMore}
+                type="button"
+                onClick={() => setVisibleCount((count) => count + 12)}
+              >
+                加载更多
+                <ChevronDown size={17} />
+              </button>
+            ) : null}
+          </>
+        ) : (
           <div className={styles.empty}>
             <h2>没有找到相关题目</h2>
-            <p>换一个关键词，或者查看其他专题。</p>
-            <button type="button" onClick={() => setKeyword('')}>清空搜索</button>
+            <p>换一个关键词或筛选条件试试。</p>
+            <button
+              type="button"
+              onClick={() => {
+                setKeyword('')
+                setDifficulty('全部')
+              }}
+            >
+              清空筛选
+            </button>
           </div>
         )}
       </div>
