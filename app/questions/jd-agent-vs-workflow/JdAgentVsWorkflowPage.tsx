@@ -105,8 +105,8 @@ export function JdAgentVsWorkflowPage() {
   return (
     <>
       <SiteHeader />
-      <main className={styles.page}>
-        <div className={styles.shell}>
+      <main className={`${styles.page} ${launchStyles.compactPage}`}>
+        <div className={`${styles.shell} ${launchStyles.compactShell}`}>
           <nav className={styles.breadcrumb} aria-label="面包屑">
             <Link href="/questions"><ArrowLeft size={14} /> 面试题库</Link>
             <span>/</span>
@@ -115,8 +115,8 @@ export function JdAgentVsWorkflowPage() {
             <strong>京东 · Agent 基础</strong>
           </nav>
 
-          <header className={styles.hero}>
-            <div className={styles.heroMain}>
+          <header className={`${styles.hero} ${launchStyles.compactHero}`}>
+            <div className={`${styles.heroMain} ${launchStyles.heroMain}`}>
               <div className={styles.badges}>
                 <span className={styles.realBadge}><ShieldCheck size={14} /> 多份真实面经</span>
                 <span>Agent 开发</span>
@@ -135,7 +135,7 @@ export function JdAgentVsWorkflowPage() {
               </div>
             </div>
 
-            <aside className={styles.sourceCard}>
+            <aside className={`${styles.sourceCard} ${launchStyles.sourceCard}`}>
               <div className={styles.sourceHeader}>
                 <div>
                   <span>出现频率</span>
@@ -159,10 +159,10 @@ export function JdAgentVsWorkflowPage() {
             </aside>
           </header>
 
-          <div className={styles.layout}>
-            <div className={styles.mainColumn}>
+          <div className={`${styles.layout} ${launchStyles.compactLayout}`}>
+            <div className={`${styles.mainColumn} ${launchStyles.articleColumn}`}>
               <Link className={launchStyles.practiceLaunch} href="/questions/agent-vs-workflow/practice">
-                <div className={launchStyles.launchIcon}><Sparkles size={21} /></div>
+                <div className={launchStyles.launchIcon}><Sparkles size={20} /></div>
                 <div className={launchStyles.launchCopy}>
                   <span>INTERVIEW PRACTICE</span>
                   <h2>先独立作答，再阅读解析</h2>
@@ -171,167 +171,173 @@ export function JdAgentVsWorkflowPage() {
                 <strong>开始作答 <ArrowRight size={17} /></strong>
               </Link>
 
-              <section className={styles.panel}>
-                <div className={styles.sectionHeader}>
-                  <div>
-                    <span>STEP 01 · CORE DIFFERENCE</span>
-                    <h2>最核心的区别：谁决定下一步</h2>
+              <article className={launchStyles.articleSurface}>
+                <section className={`${styles.panel} ${launchStyles.articleSection}`}>
+                  <div className={`${styles.sectionHeader} ${launchStyles.sectionHeader}`}>
+                    <div>
+                      <span>STEP 01 · CORE DIFFERENCE</span>
+                      <h2>最核心的区别：谁决定下一步</h2>
+                    </div>
+                    <Lightbulb size={21} />
                   </div>
-                  <Lightbulb size={21} />
-                </div>
 
-                <div className={styles.comparisonGrid}>
-                  <article>
-                    <span>WORKFLOW</span>
-                    <h3>开发者预先决定路径</h3>
-                    <ul>
-                      <li><CheckCircle2 size={16} /> 节点和主要分支提前定义</li>
-                      <li><CheckCircle2 size={16} /> 相同输入通常走相似路径</li>
-                      <li><CheckCircle2 size={16} /> 执行结果更稳定、更容易审计</li>
-                      <li><CheckCircle2 size={16} /> 适合步骤明确的确定性任务</li>
-                    </ul>
-                  </article>
-                  <article>
-                    <span>AGENT</span>
-                    <h3>模型根据状态动态决策</h3>
-                    <ul>
-                      <li><CheckCircle2 size={16} /> 根据目标和上下文选择动作</li>
-                      <li><CheckCircle2 size={16} /> 读取工具结果后重新决策</li>
-                      <li><CheckCircle2 size={16} /> 路径可能在运行时发生变化</li>
-                      <li><CheckCircle2 size={16} /> 适合无法预先穷举的任务</li>
-                    </ul>
-                  </article>
-                </div>
-
-                <div className={styles.boundaryNote}>
-                  <MessageSquareQuote size={19} />
-                  <div>
-                    <strong>判断标准不是有没有 LLM、Tool 或 Memory</strong>
-                    <p>固定顺序执行“检索 → 调模型 → 调工具 → 返回结果”，即使每一步都用了大模型，也可能仍然只是 Workflow。</p>
-                  </div>
-                </div>
-              </section>
-
-              <section className={styles.panel}>
-                <div className={styles.sectionHeader}>
-                  <div>
-                    <span>STEP 02 · INTERVIEW INTENT</span>
-                    <h2>面试官到底在考什么</h2>
-                  </div>
-                  <Target size={21} />
-                </div>
-                <div className={styles.dimensionGrid}>
-                  {dimensions.map(({ icon: Icon, title, description }) => (
-                    <article key={title}>
-                      <Icon size={19} />
-                      <h3>{title}</h3>
-                      <p>{description}</p>
+                  <div className={`${styles.comparisonGrid} ${launchStyles.flatComparison}`}>
+                    <article>
+                      <span>WORKFLOW</span>
+                      <h3>开发者预先决定路径</h3>
+                      <ul>
+                        <li><CheckCircle2 size={16} /> 节点和主要分支提前定义</li>
+                        <li><CheckCircle2 size={16} /> 相同输入通常走相似路径</li>
+                        <li><CheckCircle2 size={16} /> 执行结果更稳定、更容易审计</li>
+                        <li><CheckCircle2 size={16} /> 适合步骤明确的确定性任务</li>
+                      </ul>
                     </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className={styles.panel}>
-                <div className={styles.sectionHeader}>
-                  <div>
-                    <span>STEP 03 · ANSWER STRUCTURE</span>
-                    <h2>高质量回答框架</h2>
-                  </div>
-                  <BookOpenCheck size={21} />
-                </div>
-                <div className={styles.frameworkList}>
-                  {answerFramework.map((item) => (
-                    <article key={item.index}>
-                      <span>{item.index}</span>
-                      <div><h3>{item.title}</h3><p>{item.content}</p></div>
+                    <article>
+                      <span>AGENT</span>
+                      <h3>模型根据状态动态决策</h3>
+                      <ul>
+                        <li><CheckCircle2 size={16} /> 根据目标和上下文选择动作</li>
+                        <li><CheckCircle2 size={16} /> 读取工具结果后重新决策</li>
+                        <li><CheckCircle2 size={16} /> 路径可能在运行时发生变化</li>
+                        <li><CheckCircle2 size={16} /> 适合无法预先穷举的任务</li>
+                      </ul>
                     </article>
-                  ))}
-                </div>
-              </section>
-
-              <section className={styles.panel}>
-                <div className={styles.sectionHeader}>
-                  <div>
-                    <span>STEP 04 · PRODUCTION CHOICE</span>
-                    <h2>真实系统通常不是二选一</h2>
                   </div>
-                  <GitBranch size={21} />
-                </div>
 
-                <div className={styles.comparisonGrid}>
-                  <article>
-                    <span>OUTER WORKFLOW</span>
-                    <h3>用确定性流程守住边界</h3>
-                    <ul>
-                      <li><CheckCircle2 size={16} /> 权限、预算和最大步数</li>
-                      <li><CheckCircle2 size={16} /> 核心交易与高风险动作</li>
-                      <li><CheckCircle2 size={16} /> 超时、重试和人工审批</li>
-                      <li><CheckCircle2 size={16} /> 审计日志与停止条件</li>
-                    </ul>
-                  </article>
-                  <article>
-                    <span>LOCAL AGENT</span>
-                    <h3>在不确定环节动态决策</h3>
-                    <ul>
-                      <li><CheckCircle2 size={16} /> 理解开放式用户意图</li>
-                      <li><CheckCircle2 size={16} /> 动态拆解复杂任务</li>
-                      <li><CheckCircle2 size={16} /> 根据反馈选择工具</li>
-                      <li><CheckCircle2 size={16} /> 缺少信息时主动追问</li>
-                    </ul>
-                  </article>
-                </div>
-              </section>
-
-              <section className={styles.panel}>
-                <div className={styles.sectionHeader}>
-                  <div>
-                    <span>STEP 05 · FOLLOW UPS</span>
-                    <h2>面试官可能继续追问</h2>
+                  <div className={`${styles.boundaryNote} ${launchStyles.boundaryNote}`}>
+                    <MessageSquareQuote size={19} />
+                    <div>
+                      <strong>判断标准不是有没有 LLM、Tool 或 Memory</strong>
+                      <p>固定顺序执行“检索 → 调模型 → 调工具 → 返回结果”，即使每一步都用了大模型，也可能仍然只是 Workflow。</p>
+                    </div>
                   </div>
-                  <MessageSquareQuote size={21} />
+                </section>
+
+                <div className={launchStyles.splitSection}>
+                  <section className={`${styles.panel} ${launchStyles.articleSection} ${launchStyles.halfSection}`}>
+                    <div className={`${styles.sectionHeader} ${launchStyles.sectionHeader}`}>
+                      <div>
+                        <span>STEP 02 · INTERVIEW INTENT</span>
+                        <h2>面试官在考什么</h2>
+                      </div>
+                      <Target size={20} />
+                    </div>
+                    <div className={`${styles.dimensionGrid} ${launchStyles.compactDimensionGrid}`}>
+                      {dimensions.map(({ icon: Icon, title, description }) => (
+                        <article key={title}>
+                          <Icon size={18} />
+                          <h3>{title}</h3>
+                          <p>{description}</p>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+
+                  <section className={`${styles.panel} ${launchStyles.articleSection} ${launchStyles.halfSection}`}>
+                    <div className={`${styles.sectionHeader} ${launchStyles.sectionHeader}`}>
+                      <div>
+                        <span>STEP 03 · ANSWER STRUCTURE</span>
+                        <h2>高质量回答框架</h2>
+                      </div>
+                      <BookOpenCheck size={20} />
+                    </div>
+                    <div className={`${styles.frameworkList} ${launchStyles.compactFramework}`}>
+                      {answerFramework.map((item) => (
+                        <article key={item.index}>
+                          <span>{item.index}</span>
+                          <div><h3>{item.title}</h3><p>{item.content}</p></div>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
                 </div>
-                <div className={styles.followupList}>
-                  {followUps.map((item, index) => (
-                    <details key={item.question}>
-                      <summary><span>{String(index + 1).padStart(2, '0')}</span>{item.question}</summary>
-                      <p>{item.hint}</p>
-                    </details>
-                  ))}
-                </div>
-              </section>
+
+                <section className={`${styles.panel} ${launchStyles.articleSection}`}>
+                  <div className={`${styles.sectionHeader} ${launchStyles.sectionHeader}`}>
+                    <div>
+                      <span>STEP 04 · PRODUCTION CHOICE</span>
+                      <h2>真实系统通常不是二选一</h2>
+                    </div>
+                    <GitBranch size={21} />
+                  </div>
+
+                  <div className={`${styles.comparisonGrid} ${launchStyles.flatComparison}`}>
+                    <article>
+                      <span>OUTER WORKFLOW</span>
+                      <h3>用确定性流程守住边界</h3>
+                      <ul>
+                        <li><CheckCircle2 size={16} /> 权限、预算和最大步数</li>
+                        <li><CheckCircle2 size={16} /> 核心交易与高风险动作</li>
+                        <li><CheckCircle2 size={16} /> 超时、重试和人工审批</li>
+                        <li><CheckCircle2 size={16} /> 审计日志与停止条件</li>
+                      </ul>
+                    </article>
+                    <article>
+                      <span>LOCAL AGENT</span>
+                      <h3>在不确定环节动态决策</h3>
+                      <ul>
+                        <li><CheckCircle2 size={16} /> 理解开放式用户意图</li>
+                        <li><CheckCircle2 size={16} /> 动态拆解复杂任务</li>
+                        <li><CheckCircle2 size={16} /> 根据反馈选择工具</li>
+                        <li><CheckCircle2 size={16} /> 缺少信息时主动追问</li>
+                      </ul>
+                    </article>
+                  </div>
+                </section>
+
+                <section className={`${styles.panel} ${launchStyles.articleSection}`}>
+                  <div className={`${styles.sectionHeader} ${launchStyles.sectionHeader}`}>
+                    <div>
+                      <span>STEP 05 · FOLLOW UPS</span>
+                      <h2>面试官可能继续追问</h2>
+                    </div>
+                    <MessageSquareQuote size={21} />
+                  </div>
+                  <div className={`${styles.followupList} ${launchStyles.compactFollowups}`}>
+                    {followUps.map((item, index) => (
+                      <details key={item.question}>
+                        <summary><span>{String(index + 1).padStart(2, '0')}</span>{item.question}</summary>
+                        <p>{item.hint}</p>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              </article>
             </div>
 
-            <aside className={styles.sidebar}>
-              <section className={styles.sidePanel}>
-                <span className={styles.sideEyebrow}>一句话记忆</span>
-                <h2>看控制权</h2>
-                <p>Workflow 由开发者预设主要路径；Agent 根据状态与反馈动态决定下一步。</p>
-                <div className={styles.tagList}>
-                  <span>控制流</span><span>动态决策</span><span>状态</span><span>工程选型</span>
+            <aside className={`${styles.sidebar} ${launchStyles.summarySidebar}`}>
+              <section className={launchStyles.summaryCard}>
+                <div className={launchStyles.summaryBlock}>
+                  <span className={styles.sideEyebrow}>一句话记忆</span>
+                  <h2>看控制权</h2>
+                  <p>Workflow 由开发者预设主要路径；Agent 根据状态与反馈动态决定下一步。</p>
+                  <div className={styles.tagList}>
+                    <span>控制流</span><span>动态决策</span><span>状态</span><span>工程选型</span>
+                  </div>
                 </div>
-              </section>
 
-              <section className={styles.sidePanel}>
-                <span className={styles.sideEyebrow}>答题检查</span>
-                <ul className={styles.checklist}>
-                  <li><CheckCircle2 size={16} /> 是否回答谁决定下一步</li>
-                  <li><CheckCircle2 size={16} /> 是否讲清运行机制</li>
-                  <li><CheckCircle2 size={16} /> 是否比较工程取舍</li>
-                  <li><CheckCircle2 size={16} /> 是否给出混合架构</li>
-                </ul>
-              </section>
+                <div className={launchStyles.summaryBlock}>
+                  <span className={styles.sideEyebrow}>答题检查</span>
+                  <ul className={styles.checklist}>
+                    <li><CheckCircle2 size={16} /> 是否回答谁决定下一步</li>
+                    <li><CheckCircle2 size={16} /> 是否讲清运行机制</li>
+                    <li><CheckCircle2 size={16} /> 是否比较工程取舍</li>
+                    <li><CheckCircle2 size={16} /> 是否给出混合架构</li>
+                  </ul>
+                </div>
 
-              <section className={`${styles.sidePanel} ${styles.warningPanel}`}>
-                <span className={styles.sideEyebrow}>常见失分点</span>
-                <strong>把 Agent 说成组件集合</strong>
-                <p>“LLM + Tool + Memory”只描述了组成，没有解释系统为什么能够自主决定下一步。</p>
-              </section>
+                <div className={`${launchStyles.summaryBlock} ${launchStyles.warningBlock}`}>
+                  <span className={styles.sideEyebrow}>常见失分点</span>
+                  <strong>把 Agent 说成组件集合</strong>
+                  <p>“LLM + Tool + Memory”只描述了组成，没有解释系统为什么能够自主决定下一步。</p>
+                </div>
 
-              <Link className={styles.nextAction} href="/questions/agent-vs-workflow/practice">
-                <Sparkles size={17} />
-                <span><strong>开始作答</strong><small>进入独立的专注作答页</small></span>
-                <ArrowRight size={16} />
-              </Link>
+                <Link className={`${styles.nextAction} ${launchStyles.sidebarAction}`} href="/questions/agent-vs-workflow/practice">
+                  <Sparkles size={17} />
+                  <span><strong>开始作答</strong><small>进入独立的专注作答页</small></span>
+                  <ArrowRight size={16} />
+                </Link>
+              </section>
             </aside>
           </div>
         </div>
