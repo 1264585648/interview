@@ -6,8 +6,8 @@
 .intro {
   margin: 0 0 34px;
   padding: 0 0 20px;
-  border-bottom: 1px solid #e8e4de;
-  color: #666159;
+  border-bottom: 1px solid var(--article-border-muted, #d8dee4);
+  color: var(--article-text-secondary, #59636e);
   font-size: 15px;
   line-height: 2;
 }
@@ -18,16 +18,16 @@
 
 .section h3 {
   margin: 0 0 12px;
-  color: #2c2e32;
+  color: var(--article-text, #1f2328);
   font-size: 18px;
-  font-weight: 690;
+  font-weight: 700;
   line-height: 1.55;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
 .section > p {
   margin: 0;
-  color: #504c46;
+  color: var(--article-text-secondary, #59636e);
   font-size: 15px;
   line-height: 2.05;
 }
@@ -38,14 +38,16 @@
 
 .judgement {
   margin: 22px 0 0;
-  padding: 4px 0 4px 18px;
-  border-left: 2px solid #bcb3a7;
+  padding: 13px 16px;
+  border-left: 3px solid var(--article-accent, #0969da);
+  border-radius: 0 9px 9px 0;
+  background: #f2f8fd;
 }
 
 .judgement span {
   display: block;
   margin-bottom: 7px;
-  color: #8c857b;
+  color: var(--article-accent-hover, #0550ae);
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -53,7 +55,7 @@
 
 .judgement p {
   margin: 0;
-  color: #5f5a53;
+  color: var(--article-text-secondary, #59636e);
   font-size: 13px;
   line-height: 1.9;
 }
@@ -61,7 +63,7 @@
 @media (max-width: 720px) {
   .longform,
   .fallback {
-    margin-left: 34px;
+    margin-left: 0;
   }
 
   .intro,
