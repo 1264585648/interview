@@ -1,0 +1,234 @@
+.richText {
+  color: #4f596c;
+}
+
+.richText > :first-child {
+  margin-top: 0;
+}
+
+.richText h2,
+.richText h3 {
+  scroll-margin-top: 96px;
+  color: #202a3c;
+  letter-spacing: -0.025em;
+}
+
+.richText h2 {
+  margin: 30px 0 12px;
+  padding-top: 24px;
+  border-top: 1px solid #e7ebf1;
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.richText h3 {
+  margin: 24px 0 10px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.richText p,
+.richText li {
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.richText p {
+  margin: 12px 0;
+}
+
+.richText strong {
+  color: #29354a;
+  font-weight: 760;
+}
+
+.richText em {
+  color: #59657a;
+}
+
+.richText a {
+  color: #1769ff;
+  text-decoration: underline;
+  text-decoration-color: rgba(23, 105, 255, 0.28);
+  text-underline-offset: 3px;
+}
+
+.richText code {
+  padding: 2px 6px;
+  border: 1px solid #e1e6ee;
+  border-radius: 6px;
+  background: #f5f7fa;
+  color: #2e4d80;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-size: 0.88em;
+}
+
+.richText ul,
+.richText ol {
+  display: grid;
+  gap: 7px;
+  margin: 14px 0;
+  padding-left: 24px;
+}
+
+.richText li::marker {
+  color: #1769ff;
+  font-weight: 750;
+}
+
+.richText blockquote {
+  margin: 22px 0;
+  padding: 17px 20px;
+  border-left: 3px solid #7ba8ff;
+  border-radius: 0 10px 10px 0;
+  background: #f5f8ff;
+}
+
+.richText blockquote p {
+  margin: 0;
+  color: #3f4b62;
+}
+
+.richText blockquote cite {
+  display: block;
+  margin-top: 9px;
+  color: #8290a5;
+  font-size: 11px;
+  font-style: normal;
+}
+
+.callout {
+  margin: 22px 0;
+  padding: 17px 19px;
+  border: 1px solid #d8e5fb;
+  border-radius: 12px;
+  background: #f5f9ff;
+}
+
+.callout strong {
+  display: block;
+  margin-bottom: 6px;
+  color: #2259ae;
+  font-size: 12px;
+}
+
+.callout p {
+  margin: 0;
+  color: #53627a;
+  font-size: 13px;
+}
+
+.warning {
+  border-color: #eeddb8;
+  background: #fffaf0;
+}
+
+.warning strong {
+  color: #8b611b;
+}
+
+.success {
+  border-color: #cce7d9;
+  background: #f3fbf7;
+}
+
+.success strong {
+  color: #267152;
+}
+
+.codeBlock,
+.tableBlock {
+  margin: 22px 0;
+}
+
+.codeBlock figcaption,
+.tableBlock figcaption {
+  margin-bottom: 9px;
+  color: #778397;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.codeBlock pre {
+  margin: 0;
+  padding: 18px 20px;
+  overflow-x: auto;
+  border: 1px solid #e0e6ee;
+  border-radius: 10px;
+  background: #f7f8fa;
+  color: #303743;
+  font-size: 12px;
+  line-height: 1.8;
+  tab-size: 2;
+}
+
+.codeBlock pre code {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: inherit;
+}
+
+.tableBlock > div {
+  overflow-x: auto;
+  border: 1px solid #e1e6ee;
+  border-radius: 10px;
+}
+
+.tableBlock table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  background: #fff;
+  font-size: 12px;
+}
+
+.tableBlock th,
+.tableBlock td {
+  padding: 12px 14px;
+  border-bottom: 1px solid #e8ecf2;
+  text-align: left;
+  line-height: 1.65;
+}
+
+.tableBlock th {
+  background: #f6f8fb;
+  color: #334057;
+  font-weight: 740;
+}
+
+.tableBlock td {
+  color: #5f6b7f;
+}
+
+.tableBlock tr:last-child td {
+  border-bottom: 0;
+}
+
+.richText hr {
+  margin: 28px 0;
+  border: 0;
+  border-top: 1px solid #e3e8ef;
+}
+
+@media (max-width: 720px) {
+  .richText h2 {
+    font-size: 18px;
+  }
+
+  .richText h3 {
+    font-size: 15px;
+  }
+
+  .richText p,
+  .richText li {
+    font-size: 13px;
+    line-height: 1.82;
+  }
+
+  .codeBlock pre {
+    padding: 15px;
+    font-size: 11px;
+  }
+}
