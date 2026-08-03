@@ -59,15 +59,13 @@ export function LandingPage({ featuredQuestion, questionCount, topicCount }: Lan
           </span>
 
           <h1>
-            Agent 面试，
+            Agent 工程师
             <br />
-            不是刷题，而是
-            <span>练会真实回答。</span>
+            <span>面试手册</span>
           </h1>
 
           <p>
-            用真实面试题、连续追问与结构化复盘，
-            把零散知识练成面试中讲得清、答得深的系统能力。
+            搜集大厂面试真题，模拟真实面试场景。
           </p>
 
           <div className={styles.heroActions}>
