@@ -16,6 +16,7 @@ import { QuestionComparison } from '@/components/QuestionComparison'
 import { QuestionDiagram } from '@/components/QuestionDiagram'
 import { QuestionLongform } from '@/components/QuestionLongform'
 import { SiteHeader } from '@/components/SiteHeader'
+import { observabilityArticle } from '@/data/observabilityContent'
 import { getQuestionArticle } from '@/data/questionArticles'
 import { getQuestion, questions } from '@/data/questions'
 import { getTopicForCategory } from '@/data/topics'
@@ -44,7 +45,9 @@ export function QuestionArticlePage({ slug }: { slug: string }) {
 
   if (!question) notFound()
 
-  const article = getQuestionArticle(question.slug)
+  const article =
+    getQuestionArticle(question.slug) ??
+    (question.slug === 'agent-observability-tracing' ? observabilityArticle : undefined)
   const topic = getTopicForCategory(question.category)
   const questionIndex = questions.findIndex((item) => item.slug === question.slug)
   const previous = questionIndex > 0 ? questions[questionIndex - 1] : null
