@@ -87,6 +87,20 @@ export function QuestionDiagram({ slug }: { slug: string }) {
         </figure>
       )
 
+    case 'agent-observability-tracing':
+      return (
+        <figure className={styles.figure}>
+          <figcaption><strong>一次 Agent Task 的 Trace 结构</strong><span>同一个 trace_id 串联模型决策、Tool 执行、Observation 与 State Transition。</span></figcaption>
+          <div className={styles.loopDiagram}>
+            <Pipeline items={['User Goal', 'Model Decision', 'Tool Call', 'Observation', 'State Update', 'Final / Next Action']} />
+            <div className={styles.returnLine}>↺ 每个节点形成 Span；父子关系保留“为什么发生下一步”的因果链</div>
+            <div className={styles.guardRow}>
+              <Node muted>trace_id / span_id</Node><Node muted>state_version</Node><Node muted>error_type</Node><Node muted>token / latency / cost</Node><Node muted>replay / alert</Node>
+            </div>
+          </div>
+        </figure>
+      )
+
     case 'tool-schema-design':
       return (
         <figure className={styles.figure}>
