@@ -8,6 +8,7 @@ import { getTopicForCategory } from '@/data/topics'
 import { QuestionArticleLayout } from './QuestionArticleLayout'
 import styles from './QuestionDetail.module.css'
 import compactStyles from './QuestionDetailCompact.module.css'
+import templateStyles from './QuestionArticleLayout.module.css'
 
 const difficultyLabel: Record<number, string> = {
   1: '入门',
@@ -38,7 +39,7 @@ export function QuestionArticlePage({ slug }: { slug: string }) {
   return (
     <>
       <SiteHeader />
-      <main className={`${styles.page} ${compactStyles.compact}`}>
+      <main className={`${styles.page} ${compactStyles.compact} ${templateStyles.articlePage}`}>
         <div className={styles.workspace}>
           <aside className={styles.stepSidebar}>
             <div className={styles.stepSidebarInner}>
