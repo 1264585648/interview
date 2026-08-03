@@ -33,8 +33,8 @@ export function QuestionArticleLayout({ question, article, previous, next }: Pro
   const bonusText = article?.interviewerNote ?? question.commonMistakes[0]
 
   return (
-    <div className={styles.contentGrid}>
-      <div className={styles.mainColumn}>
+    <div className={`${styles.contentGrid} ${templateStyles.articleGrid}`}>
+      <div className={`${styles.mainColumn} ${templateStyles.mainArticle}`}>
         <QuestionPracticeWorkspace question={question} />
 
         <section
@@ -117,11 +117,13 @@ export function QuestionArticleLayout({ question, article, previous, next }: Pro
           </div>
 
           <div className={styles.longformSection} id="tradeoffs">
-            {article?.richText?.length ? (
-              <ArticleRichText blocks={article.richText} />
-            ) : (
-              <QuestionLongform question={question} />
-            )}
+            <div className={templateStyles.articleBody}>
+              {article?.richText?.length ? (
+                <ArticleRichText blocks={article.richText} />
+              ) : (
+                <QuestionLongform question={question} />
+              )}
+            </div>
             <QuestionComparison slug={question.slug} />
           </div>
 
@@ -131,32 +133,34 @@ export function QuestionArticleLayout({ question, article, previous, next }: Pro
               <p>从概念正确走到系统可运行。</p>
             </div>
 
-            {article ? (
-              <>
-                <div className={articleStyles.engineeringCase}>
-                  <div className={articleStyles.caseRow}>
-                    <span>错误现场</span>
-                    <p>{article.engineeringCase.problem}</p>
+            <div className={templateStyles.productionBody}>
+              {article ? (
+                <>
+                  <div className={articleStyles.engineeringCase}>
+                    <div className={articleStyles.caseRow}>
+                      <span>错误现场</span>
+                      <p>{article.engineeringCase.problem}</p>
+                    </div>
+                    <div className={articleStyles.caseRow}>
+                      <span>更稳妥的做法</span>
+                      <p>{article.engineeringCase.better}</p>
+                    </div>
                   </div>
-                  <div className={articleStyles.caseRow}>
-                    <span>更稳妥的做法</span>
-                    <p>{article.engineeringCase.better}</p>
-                  </div>
-                </div>
 
-                <div className={articleStyles.codeExample}>
-                  <div className={articleStyles.codeIntro}>
-                    <span>把原理落到伪代码</span>
-                    <p>{article.codeCaption}</p>
+                  <div className={articleStyles.codeExample}>
+                    <div className={articleStyles.codeIntro}>
+                      <span>把原理落到伪代码</span>
+                      <p>{article.codeCaption}</p>
+                    </div>
+                    <pre><code>{article.pseudoCode}</code></pre>
                   </div>
-                  <pre><code>{article.pseudoCode}</code></pre>
-                </div>
-              </>
-            ) : null}
+                </>
+              ) : null}
 
-            <ul className={styles.practiceList}>
-              {question.engineeringPractice.map((item) => <li key={item}>{item}</li>)}
-            </ul>
+              <ul className={styles.practiceList}>
+                {question.engineeringPractice.map((item) => <li key={item}>{item}</li>)}
+              </ul>
+            </div>
           </div>
         </section>
 
@@ -170,7 +174,7 @@ export function QuestionArticleLayout({ question, article, previous, next }: Pro
         </footer>
       </div>
 
-      <aside className={styles.supportColumn}>
+      <aside className={`${styles.supportColumn} ${templateStyles.supportRail}`}>
         <section className={`${styles.panel} ${styles.referencePanel}`}>
           <div className={styles.supportHeading}>
             <Target size={18} />
