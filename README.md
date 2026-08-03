@@ -1,5 +1,7 @@
 # AgentInterview
 
+<!-- deploy-trigger: 2026-08-03T15:00+08:00 -->
+
 一个面向 **AI Agent Engineer / LLM Application Engineer / 大模型应用开发工程师** 的面试训练 Demo。
 
 核心目标不是让用户“看答案”，而是通过 **每日一题 → 自己回答 → 连续追问 → 结果反馈 → 深度解析** 的方式，训练真实面试表达和工程思考。
