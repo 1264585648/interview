@@ -1,7 +1,7 @@
 .figure {
-  margin: 36px 0 0 44px;
+  margin: 34px 0 0;
   padding-top: 22px;
-  border-top: 1px solid #e8e4de;
+  border-top: 1px solid var(--article-border-muted, #d8dee4);
 }
 
 .figure figcaption {
@@ -14,22 +14,25 @@
 }
 
 .figure figcaption strong {
-  color: #30322f;
+  color: var(--article-text, #1f2328);
   font-size: 15px;
-  font-weight: 680;
+  font-weight: 700;
   line-height: 1.55;
 }
 
 .figure figcaption span {
   max-width: 680px;
   margin-top: 6px;
-  color: #7b756d;
+  color: var(--article-text-muted, #6e7781);
   font-size: 12px;
   line-height: 1.75;
 }
 
 .tableWrap {
   overflow-x: auto;
+  border: 1px solid var(--article-border-muted, #d8dee4);
+  border-radius: 10px;
+  background: var(--article-surface, #ffffff);
 }
 
 .figure table {
@@ -40,9 +43,10 @@
 }
 
 .figure thead th {
-  padding: 10px 14px 10px 0;
-  border-bottom: 1px solid #dcd7d0;
-  color: #827c73;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--article-border, #d0d7de);
+  background: var(--article-surface-muted, #f6f8fa);
+  color: var(--article-text-secondary, #59636e);
   font-size: 10px;
   font-weight: 700;
   line-height: 1.5;
@@ -56,28 +60,34 @@
 
 .figure tbody th,
 .figure tbody td {
-  padding: 14px 16px 14px 0;
-  border-bottom: 1px solid #ece8e2;
+  padding: 14px;
+  border-bottom: 1px solid #e8ecf0;
   vertical-align: top;
   text-align: left;
 }
 
 .figure tbody th {
-  color: #5b5751;
+  background: #fbfcfd;
+  color: var(--article-text-secondary, #59636e);
   font-size: 11px;
-  font-weight: 680;
+  font-weight: 700;
   line-height: 1.7;
 }
 
 .figure tbody td {
-  color: #4f4b45;
+  color: var(--article-text-secondary, #59636e);
   font-size: 13px;
   line-height: 1.8;
 }
 
+.figure tbody tr:last-child th,
+.figure tbody tr:last-child td {
+  border-bottom: 0;
+}
+
 @media (max-width: 720px) {
   .figure {
-    margin-left: 34px;
+    margin-left: 0;
   }
 
   .figure table {
