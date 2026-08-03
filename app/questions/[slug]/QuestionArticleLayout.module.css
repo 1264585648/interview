@@ -1,0 +1,132 @@
+.shortAnswerMain {
+  padding: 22px;
+  border-color: #d9e6fb;
+  background:
+    radial-gradient(circle at 96% 6%, rgba(23, 105, 255, 0.09), transparent 28%),
+    rgba(255, 255, 255, 0.98);
+}
+
+.shortAnswerTopline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e7edf6;
+}
+
+.shortAnswerBadge {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 10px;
+  border: 1px solid #cfe0ff;
+  border-radius: 999px;
+  background: #edf4ff;
+  color: #1769ff;
+  font-size: 10px;
+  font-weight: 760;
+}
+
+.shortAnswerBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 26px;
+  padding-top: 20px;
+}
+
+.answerCopy > span,
+.answerStructure > strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #8290a4;
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: 0.04em;
+}
+
+.answerCopy p {
+  margin: 0;
+  color: #344056;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.answerStructure {
+  padding-left: 24px;
+  border-left: 1px solid #e4eaf3;
+}
+
+.answerStructure ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.answerStructure li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+}
+
+.answerStructure li > span {
+  padding-top: 2px;
+  color: #1769ff;
+  font-size: 10px;
+  font-weight: 820;
+}
+
+.answerStructure li p {
+  margin: 0;
+  color: #657187;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+@media (max-width: 1280px) {
+  .shortAnswerBody {
+    grid-template-columns: minmax(0, 1.2fr) minmax(250px, 0.8fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 860px) {
+  .shortAnswerBody {
+    grid-template-columns: 1fr;
+  }
+
+  .answerStructure {
+    padding-top: 18px;
+    padding-left: 0;
+    border-top: 1px solid #e4eaf3;
+    border-left: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .shortAnswerMain {
+    padding: 17px;
+  }
+
+  .shortAnswerTopline {
+    align-items: flex-start;
+    padding-bottom: 13px;
+  }
+
+  .shortAnswerBadge {
+    display: none;
+  }
+
+  .shortAnswerBody {
+    gap: 18px;
+    padding-top: 16px;
+  }
+
+  .answerCopy p {
+    font-size: 13px;
+    line-height: 1.82;
+  }
+}
