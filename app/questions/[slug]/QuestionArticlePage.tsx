@@ -21,6 +21,7 @@ import { getQuestion, questions } from '@/data/questions'
 import { getTopicForCategory } from '@/data/topics'
 import { QuestionPracticeWorkspace } from './QuestionPracticeWorkspace'
 import styles from './QuestionDetail.module.css'
+import compactStyles from './QuestionDetailCompact.module.css'
 import articleStyles from './QuestionArticle.module.css'
 
 const difficultyLabel: Record<number, string> = {
@@ -54,7 +55,7 @@ export function QuestionArticlePage({ slug }: { slug: string }) {
   return (
     <>
       <SiteHeader />
-      <main className={styles.page}>
+      <main className={`${styles.page} ${compactStyles.compact}`}>
         <div className={styles.workspace}>
           <aside className={styles.stepSidebar}>
             <div className={styles.stepSidebarInner}>
