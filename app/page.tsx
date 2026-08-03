@@ -1,7 +1,15 @@
-import { LearningWorkspace } from '@/components/LearningWorkspace'
+import { LandingPage } from '@/components/LandingPage'
 import { questions } from '@/data/questions'
 import { topicGuides } from '@/data/topics'
 
 export default function HomePage() {
-  return <LearningWorkspace questions={questions} topics={topicGuides} />
+  const featuredQuestion = questions.find((question) => question.slug === 'agent-tool-loop') ?? questions[0]
+
+  return (
+    <LandingPage
+      featuredQuestion={featuredQuestion}
+      questionCount={questions.length}
+      topicCount={topicGuides.length}
+    />
+  )
 }
