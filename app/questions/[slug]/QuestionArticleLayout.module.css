@@ -1,5 +1,5 @@
 .shortAnswerMain {
-  padding: 22px;
+  padding: 22px !important;
   border-color: #d9e6fb;
   background:
     radial-gradient(circle at 96% 6%, rgba(23, 105, 255, 0.09), transparent 28%),
@@ -59,31 +59,35 @@
 
 .answerStructure ol {
   display: grid;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-top: 0 !important;
   list-style: none;
 }
 
 .answerStructure li {
   display: grid;
-  grid-template-columns: 28px minmax(0, 1fr);
-  gap: 9px;
+  grid-template-columns: 28px minmax(0, 1fr) !important;
+  gap: 9px !important;
   align-items: start;
 }
 
 .answerStructure li > span {
+  width: auto !important;
+  height: auto !important;
   padding-top: 2px;
+  background: transparent !important;
   color: #1769ff;
-  font-size: 10px;
+  font-size: 10px !important;
   font-weight: 820;
 }
 
 .answerStructure li p {
-  margin: 0;
+  margin: 0 !important;
   color: #657187;
-  font-size: 12px;
-  line-height: 1.7;
+  font-size: 12px !important;
+  line-height: 1.7 !important;
 }
 
 @media (max-width: 1280px) {
@@ -108,7 +112,7 @@
 
 @media (max-width: 720px) {
   .shortAnswerMain {
-    padding: 17px;
+    padding: 17px !important;
   }
 
   .shortAnswerTopline {
@@ -128,5 +132,9 @@
   .answerCopy p {
     font-size: 13px;
     line-height: 1.82;
+  }
+
+  .answerStructure li p {
+    font-size: 11px !important;
   }
 }
