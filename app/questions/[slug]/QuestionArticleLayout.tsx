@@ -13,8 +13,7 @@ import {
 import { ArticleRichText } from '@/components/ArticleRichText'
 import { QuestionComparison } from '@/components/QuestionComparison'
 import { QuestionDiagram } from '@/components/QuestionDiagram'
-import { QuestionLongform } from '@/components/QuestionLongform'
-import type { QuestionArticleDocument } from '@/data/articleRichText'
+import type { QuestionArticleDocument, RichTextBlock } from '@/data/articleRichText'
 import type { InterviewQuestion } from '@/data/questions'
 import { QuestionPracticeWorkspace } from './QuestionPracticeWorkspace'
 import styles from './QuestionDetail.module.css'
@@ -31,6 +30,19 @@ type Props = {
 export function QuestionArticleLayout({ question, article, previous, next }: Props) {
   const summaryItems = question.engineeringPractice.slice(0, 3)
   const bonusText = article?.interviewerNote ?? question.commonMistakes[0]
+  const fallbackRichText: RichTextBlock[] = question.deepDive.flatMap((item, index) => [
+    {
+      type: 'heading' as const,
+      level: 2 as const,
+      id: `fallback-section-${index + 1}`,
+      content: [item.title]
+    },
+    {
+      type: 'paragraph' as const,
+      content: [item.content]
+    }
+  ])
+  const articleBody = article?.richText?.length ? article.richText : fallbackRichText
 
   return (
     <div className={`${styles.contentGrid} ${templateStyles.articleGrid}`}>
@@ -118,11 +130,7 @@ export function QuestionArticleLayout({ question, article, previous, next }: Pro
 
           <div className={styles.longformSection} id="tradeoffs">
             <div className={templateStyles.articleBody}>
-              {article?.richText?.length ? (
-                <ArticleRichText blocks={article.richText} />
-              ) : (
-                <QuestionLongform question={question} />
-              )}
+              <ArticleRichText blocks={articleBody} />
             </div>
             <QuestionComparison slug={question.slug} />
           </div>
