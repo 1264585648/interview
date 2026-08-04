@@ -1,3 +1,5 @@
+import { memoryConflictArticle } from './memoryConflictContent'
+import { memoryConflictRichText } from './memoryConflictRichText'
 import { observabilityArticle } from './observabilityContent'
 import { observabilityRichText } from './observabilityRichText'
 import { getQuestionArticle } from './questionArticles'
@@ -7,6 +9,10 @@ import { getRuntimeToolLongform } from './runtimeToolContent'
 import type { QuestionArticleDocument, RichTextBlock } from './articleRichText'
 
 const richArticleDocuments: Record<string, QuestionArticleDocument> = {
+  'agent-memory-conflict': defineQuestionArticle({
+    ...memoryConflictArticle,
+    richText: memoryConflictRichText
+  }),
   'agent-observability-tracing': defineQuestionArticle({
     ...observabilityArticle,
     richText: observabilityRichText
