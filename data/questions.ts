@@ -1,3 +1,4 @@
+import { memoryConflictQuestions } from './memoryConflictQuestion'
 import { runtimeToolQuestions } from './runtimeToolQuestions'
 
 export type InterviewQuestion = {
@@ -114,6 +115,7 @@ export const questions: InterviewQuestion[] = [
     ]
   },
   ...runtimeToolQuestions,
+  ...memoryConflictQuestions,
   {
     slug: 'agent-memory-types',
     title: 'Agent Memory 有哪些类型？应该如何设计？',
