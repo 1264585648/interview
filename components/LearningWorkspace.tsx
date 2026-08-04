@@ -9,19 +9,14 @@ import {
   ChevronRight,
   CircleHelp,
   Clock3,
-  Command,
-  Flame,
-  LayoutDashboard,
   Library,
-  Menu,
   MessageSquareText,
   Pause,
   Play,
   RotateCcw,
   Search,
   Sparkles,
-  Target,
-  X
+  Target
 } from 'lucide-react'
 import type { InterviewQuestion } from '@/data/questions'
 import type { TopicGuide } from '@/data/topics'
@@ -32,7 +27,7 @@ type WorkspaceProps = {
   topics: TopicGuide[]
 }
 
-const topicIcons = [Target, Command, BookOpen, Sparkles]
+const topicIcons = [Target, BookOpen]
 
 function formatTime(totalSeconds: number) {
   const minutes = Math.floor(totalSeconds / 60)
@@ -41,16 +36,15 @@ function formatTime(totalSeconds: number) {
 }
 
 export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
-  const initialQuestion = questions.find((item) => item.slug === 'agent-tool-loop') ?? questions[0]
+  const initialQuestion = questions[0]
   const [selectedTopic, setSelectedTopic] = useState(topics[0]?.slug ?? '')
-  const [selectedSlug, setSelectedSlug] = useState(initialQuestion.slug)
-  const [completed, setCompleted] = useState<string[]>(['agent-vs-workflow'])
+  const [selectedSlug, setSelectedSlug] = useState(initialQuestion?.slug ?? '')
+  const [completed, setCompleted] = useState<string[]>([])
   const [query, setQuery] = useState('')
   const [showAnswer, setShowAnswer] = useState(false)
   const [notes, setNotes] = useState('')
   const [timerRunning, setTimerRunning] = useState(false)
   const [seconds, setSeconds] = useState(0)
-  const [mobileNavOpen, setMobileNavOpen] = useState(false)
 
   useEffect(() => {
     if (!timerRunning) return
@@ -59,6 +53,7 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
   }, [timerRunning])
 
   const activeTopic = topics.find((topic) => topic.slug === selectedTopic) ?? topics[0]
+
   const topicQuestions = useMemo(() => {
     if (!activeTopic) return questions
     return questions.filter((question) => activeTopic.categories.includes(question.category))
@@ -68,6 +63,7 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
     const normalized = query.trim().toLowerCase()
     const source = normalized ? questions : topicQuestions
     if (!normalized) return source
+
     return source.filter((question) =>
       [question.title, question.category, question.type, ...question.topics]
         .join(' ')
@@ -76,28 +72,32 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
     )
   }, [query, questions, topicQuestions])
 
+  if (!initialQuestion) {
+    return <main className={styles.workspace}>题库暂时为空。</main>
+  }
+
   const selectedQuestion = questions.find((question) => question.slug === selectedSlug) ?? initialQuestion
   const completedPercent = Math.round((completed.length / Math.max(questions.length, 1)) * 100)
   const topicCompleted = topicQuestions.filter((question) => completed.includes(question.slug)).length
+
+  function resetQuestionState() {
+    setShowAnswer(false)
+    setNotes('')
+    setSeconds(0)
+    setTimerRunning(false)
+  }
 
   function chooseTopic(slug: string) {
     const topic = topics.find((item) => item.slug === slug)
     const firstQuestion = questions.find((question) => topic?.categories.includes(question.category))
     setSelectedTopic(slug)
     if (firstQuestion) setSelectedSlug(firstQuestion.slug)
-    setShowAnswer(false)
-    setNotes('')
-    setSeconds(0)
-    setTimerRunning(false)
-    setMobileNavOpen(false)
+    resetQuestionState()
   }
 
   function chooseQuestion(slug: string) {
     setSelectedSlug(slug)
-    setShowAnswer(false)
-    setNotes('')
-    setSeconds(0)
-    setTimerRunning(false)
+    resetQuestionState()
   }
 
   function toggleComplete() {
@@ -110,25 +110,18 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
 
   return (
     <div className={styles.appShell}>
-      <aside className={`${styles.sidebar} ${mobileNavOpen ? styles.sidebarOpen : ''}`}>
+      <aside className={styles.sidebar}>
         <div className={styles.brandRow}>
           <Link className={styles.brand} href="/">
             <span className={styles.brandMark}><Sparkles size={17} /></span>
             <span>
               <strong>Agent Interview</strong>
-              <small>Learning workspace</small>
+              <small>Curated workspace</small>
             </span>
           </Link>
-          <button className={styles.mobileClose} onClick={() => setMobileNavOpen(false)} aria-label="关闭导航">
-            <X size={19} />
-          </button>
         </div>
 
         <nav className={styles.primaryNav} aria-label="学习导航">
-          <button className={styles.navActive} type="button">
-            <LayoutDashboard size={17} />
-            <span>学习总览</span>
-          </button>
           <Link href="/questions">
             <Library size={17} />
             <span>全部题库</span>
@@ -136,19 +129,20 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
           </Link>
           <Link href="/topics">
             <BookOpen size={17} />
-            <span>知识专题</span>
+            <span>学习路径</span>
           </Link>
-          <button type="button" onClick={() => document.getElementById('coach')?.scrollIntoView({ behavior: 'smooth' })}>
+          <a href="#coach">
             <MessageSquareText size={17} />
             <span>模拟面试</span>
-          </button>
+          </a>
         </nav>
 
-        <div className={styles.sidebarLabel}>学习路径</div>
+        <div className={styles.sidebarLabel}>当前专题</div>
         <div className={styles.topicNav}>
           {topics.map((topic, index) => {
             const Icon = topicIcons[index % topicIcons.length]
             const count = questions.filter((question) => topic.categories.includes(question.category)).length
+
             return (
               <button
                 className={selectedTopic === topic.slug ? styles.topicNavActive : ''}
@@ -159,7 +153,7 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
                 <span className={styles.topicIcon}><Icon size={15} /></span>
                 <span>
                   <strong>{topic.title}</strong>
-                  <small>{count} 道核心题</small>
+                  <small>{count} 道题</small>
                 </span>
                 <ChevronRight size={14} />
               </button>
@@ -177,25 +171,18 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
         </div>
       </aside>
 
-      {mobileNavOpen ? <button className={styles.backdrop} aria-label="关闭导航" onClick={() => setMobileNavOpen(false)} /> : null}
-
       <main className={styles.workspace}>
         <header className={styles.topbar}>
-          <button className={styles.menuButton} onClick={() => setMobileNavOpen(true)} aria-label="打开导航">
-            <Menu size={20} />
-          </button>
           <label className={styles.searchBox}>
             <Search size={17} />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="搜索题目、概念或技术关键词"
+              placeholder="搜索 Planning、Tracing 或 Memory"
               aria-label="搜索题目"
             />
-            <kbd>⌘ K</kbd>
           </label>
           <div className={styles.topActions}>
-            <span className={styles.streak}><Flame size={16} /> 连续学习 3 天</span>
             <Link className={styles.libraryButton} href="/questions">打开题库 <ArrowRight size={15} /></Link>
           </div>
         </header>
@@ -203,40 +190,20 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
         <div className={styles.canvas}>
           <section className={styles.hero}>
             <div className={styles.heroCopy}>
-              <span className={styles.eyebrow}><Sparkles size={14} /> AI Agent Engineer · Interview Lab</span>
-              <h1>不要背答案，<br />练会系统化表达。</h1>
+              <span className={styles.eyebrow}><Sparkles size={14} /> Curated Agent Interview Questions</span>
+              <h1>逐题打磨，<br />练会系统化表达。</h1>
               <p>
-                把 Agent Runtime、Tool、Memory、Context 和 Evaluation 串成一套可交互的面试训练路径。
-                每道题都从真实追问开始，直到你能说清原理、边界与生产实践。
+                当前只保留 Planning、可观测性与长期记忆冲突三道重点题。
+                先独立回答，再对照完整解析和工程实践。
               </p>
               <div className={styles.heroActions}>
-                <button type="button" onClick={() => document.getElementById('daily-task')?.scrollIntoView({ behavior: 'smooth' })}>
-                  <Play size={16} fill="currentColor" /> 开始今日训练
-                </button>
+                <a href="#daily-task"><Play size={16} fill="currentColor" /> 开始训练</a>
                 <Link href={`/topics/${activeTopic?.slug ?? topics[0]?.slug}`}>查看学习路线 <ArrowRight size={15} /></Link>
               </div>
               <div className={styles.heroMetrics}>
-                <span><strong>{questions.length}</strong> 核心问题</span>
-                <span><strong>{topics.length}</strong> 学习专题</span>
+                <span><strong>{questions.length}</strong> 道精选题</span>
+                <span><strong>{topics.length}</strong> 条学习路径</span>
                 <span><strong>{completed.length}</strong> 已掌握</span>
-              </div>
-            </div>
-
-            <div className={styles.heroVisual} aria-label="Agent 学习路径可视化">
-              <div className={styles.visualGlow} />
-              <div className={`${styles.orbit} ${styles.orbitOne}`}><span>Runtime</span></div>
-              <div className={`${styles.orbit} ${styles.orbitTwo}`}><span>Tools</span></div>
-              <div className={`${styles.orbit} ${styles.orbitThree}`}><span>Memory</span></div>
-              <div className={styles.coreNode}>
-                <Sparkles size={28} />
-                <strong>Agent</strong>
-                <span>Interview Map</span>
-              </div>
-              <div className={`${styles.floatCard} ${styles.floatTop}`}>
-                <Check size={14} /> 结构化回答
-              </div>
-              <div className={`${styles.floatCard} ${styles.floatBottom}`}>
-                <MessageSquareText size={14} /> 连续追问
               </div>
             </div>
           </section>
@@ -246,7 +213,7 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
               <div className={styles.sectionHeading}>
                 <div>
                   <span>Today's focus</span>
-                  <h2>今日训练任务</h2>
+                  <h2>当前训练题</h2>
                 </div>
                 <div className={styles.topicProgress}>
                   <span>{activeTopic?.title}</span>
@@ -272,19 +239,16 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
                 </div>
 
                 <div className={styles.questionActions}>
-                  <button type="button" onClick={() => document.getElementById('coach')?.scrollIntoView({ behavior: 'smooth' })}>
-                    <Play size={15} fill="currentColor" /> 开始作答
-                  </button>
+                  <a href="#coach"><Play size={15} fill="currentColor" /> 开始作答</a>
                   <Link href={`/questions/${selectedQuestion.slug}`}>阅读完整解析 <ArrowRight size={15} /></Link>
                 </div>
 
                 <div className={styles.questionRail}>
-                  {topicQuestions.slice(0, 6).map((question, index) => (
+                  {topicQuestions.map((question, index) => (
                     <button
                       className={question.slug === selectedQuestion.slug ? styles.railActive : ''}
                       key={question.slug}
                       onClick={() => chooseQuestion(question.slug)}
-                      title={question.title}
                       type="button"
                     >
                       <span>{String(index + 1).padStart(2, '0')}</span>
@@ -326,7 +290,7 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
               <div className={styles.coachHeader}>
                 <div>
                   <span className={styles.coachAvatar}><Sparkles size={17} /></span>
-                  <div><strong>AI Interview Coach</strong><small>根据你的回答继续追问</small></div>
+                  <div><strong>AI Interview Coach</strong><small>先回答，再接受追问</small></div>
                 </div>
                 <span className={styles.onlineDot}>在线</span>
               </div>
@@ -337,7 +301,7 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
                   <p>{selectedQuestion.title}</p>
                 </div>
                 <div className={styles.followUpMessage}>
-                  <span>你回答后，我会继续问</span>
+                  <span>可能继续追问</span>
                   <p>{selectedQuestion.followUps[0]}</p>
                 </div>
 
@@ -362,7 +326,7 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
                   <textarea
                     value={notes}
                     onChange={(event) => setNotes(event.target.value)}
-                    placeholder="建议结构：先给结论 → 解释机制 → 补充生产实践与边界…"
+                    placeholder="建议结构：先给结论 → 拆职责或规则 → 补工程实践与边界…"
                   />
                   <small>{notes.length} 字 · 内容仅保存在当前页面</small>
                 </label>
@@ -404,7 +368,7 @@ export function LearningWorkspace({ questions, topics }: WorkspaceProps) {
             </div>
 
             <div className={styles.questionGrid}>
-              {visibleQuestions.slice(0, 6).map((question, index) => (
+              {visibleQuestions.map((question, index) => (
                 <button key={question.slug} onClick={() => chooseQuestion(question.slug)} type="button">
                   <div>
                     <span>{String(index + 1).padStart(2, '0')}</span>
