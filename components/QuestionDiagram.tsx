@@ -147,6 +147,20 @@ export function QuestionDiagram({ slug }: { slug: string }) {
         </figure>
       )
 
+    case 'agent-memory-conflict':
+      return (
+        <figure className={styles.figure}>
+          <figcaption><strong>Memory Conflict Resolver</strong><span>先识别信息类型和作用域，再决定采用、验证、临时覆盖或写回长期记忆。</span></figcaption>
+          <div className={styles.loopDiagram}>
+            <Pipeline items={['当前会话', '长期 Memory', '冲突检测', '优先级解析', 'Resolved State']} />
+            <div className={styles.returnLine}>↺ 明确长期纠正 → 新版本写入；高风险或低置信度 → Tool 验证 / 用户确认</div>
+            <div className={styles.guardRow}>
+              <Node muted>Authority</Node><Node muted>Scope</Node><Node muted>Recency</Node><Node muted>Confidence</Node><Node muted>Risk</Node>
+            </div>
+          </div>
+        </figure>
+      )
+
     case 'mcp-vs-function-calling':
       return (
         <figure className={styles.figure}>
