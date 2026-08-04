@@ -3,7 +3,7 @@ import { questions } from '@/data/questions'
 import { topicGuides } from '@/data/topics'
 
 export default function HomePage() {
-  const featuredQuestion = questions.find((question) => question.slug === 'agent-tool-loop') ?? questions[0]
+  const featuredQuestion = questions.find((question) => question.slug === 'agent-planning-replanning') ?? questions[0]
 
   return (
     <LandingPage
