@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { ArrowRight, Eye, MessageSquareText, Sparkles, UserRound } from 'lucide-react'
+import { ChevronDown, Eye, EyeOff, MessageSquareText } from 'lucide-react'
 import type { InterviewQuestion } from '@/data/questions'
 import styles from './QuestionDetail.module.css'
 
@@ -10,71 +10,52 @@ type Props = {
 }
 
 export function QuestionPracticeWorkspace({ question }: Props) {
+  const [expanded, setExpanded] = useState(false)
   const [answer, setAnswer] = useState('')
   const [showHints, setShowHints] = useState(false)
 
   return (
-    <section className={`${styles.panel} ${styles.scenePanel}`} id="intro">
-      <div className={styles.panelHeader}>
-        <div>
-          <span className={styles.panelEyebrow}>INTERVIEW SCENE</span>
-          <h2>面试场景</h2>
-        </div>
-        <div className={styles.sceneTags}>
-          <span>{question.category}</span>
-          <span>{question.type}</span>
-          <span>{question.frequency}</span>
-        </div>
-      </div>
+    <section className={styles.practiceDisclosure} aria-labelledby="practice-title">
+      <button
+        className={styles.practiceToggle}
+        type="button"
+        aria-expanded={expanded}
+        aria-controls="question-practice-panel"
+        onClick={() => setExpanded((value) => !value)}
+      >
+        <span><MessageSquareText size={16} /> <strong id="practice-title">先自己回答</strong></span>
+        <span>{expanded ? '收起' : '展开'} <ChevronDown className={expanded ? styles.chevronOpen : ''} size={16} /></span>
+      </button>
 
-      <div className={styles.interviewerRow}>
-        <div className={styles.interviewerAvatar} aria-hidden="true">
-          <UserRound size={20} />
-        </div>
-        <div className={styles.interviewerContent}>
-          <strong>面试官</strong>
-          <div className={styles.questionBubble}>
-            <p>{question.title}</p>
-            <span>在实际的 Agent 系统中，你会怎样解释自己的设计判断？</span>
+      {expanded ? (
+        <div className={styles.practiceBody} id="question-practice-panel">
+          <label className={styles.answerComposer} htmlFor="question-answer">
+            <span>你的回答</span>
+            <textarea
+              id="question-answer"
+              name="question-answer"
+              value={answer}
+              maxLength={1000}
+              onChange={(event) => setAnswer(event.target.value)}
+              placeholder="先给出结论，再说明依据和取舍。"
+              rows={4}
+            />
+          </label>
+          <div className={styles.practiceMeta}>
+            <button type="button" onClick={() => setShowHints((value) => !value)}>
+              {showHints ? <EyeOff size={15} /> : <Eye size={15} />}
+              {showHints ? '隐藏提示' : '查看提示'}
+            </button>
+            <span>{answer.length} / 1000 · 仅保存在当前页面</span>
           </div>
-        </div>
-      </div>
-
-      <label className={styles.answerComposer} htmlFor="practice-answer">
-        <MessageSquareText size={18} />
-        <textarea
-          id="practice-answer"
-          value={answer}
-          maxLength={1000}
-          onChange={(event) => setAnswer(event.target.value)}
-          placeholder="写下你的回答……建议先给结论，再解释原理和工程取舍。"
-          rows={4}
-        />
-        <span>{answer.length} / 1000</span>
-      </label>
-
-      {showHints ? (
-        <div className={styles.hintPanel}>
-          <div>
-            <Sparkles size={17} />
-            <strong>参考要点</strong>
-          </div>
-          <ul>
-            {question.keyPoints.map((point) => <li key={point}>{point}</li>)}
-          </ul>
+          {showHints ? (
+            <div className={styles.hintPanel} aria-live="polite">
+              <strong>回答要点</strong>
+              <ul>{question.keyPoints.map((point) => <li key={point}>{point}</li>)}</ul>
+            </div>
+          ) : null}
         </div>
       ) : null}
-
-      <div className={styles.sceneActions}>
-        <button type="button" className={styles.secondaryAction} onClick={() => setShowHints((value) => !value)}>
-          <Eye size={17} />
-          {showHints ? '收起参考要点' : '查看参考要点'}
-        </button>
-        <a className={styles.primaryAction} href="#detailed-answer">
-          进入详细解析
-          <ArrowRight size={17} />
-        </a>
-      </div>
     </section>
   )
 }

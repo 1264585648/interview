@@ -1,9 +1,8 @@
 import './globals.css'
-import './editorial.css'
 
 export const metadata = {
-  title: 'AgentInterview | AI Agent 工程师面试训练',
-  description: '通过真实面试题、AI 连续追问与结构化复盘，训练 AI Agent 工程师的系统设计与面试表达能力。'
+  title: 'Agent Interview | AI Agent 面试题库',
+  description: 'AI Agent 工程面试题与专题解析，覆盖 Planning、可观测性、工具调用和长期记忆。'
 }
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
