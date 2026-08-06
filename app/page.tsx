@@ -8,8 +8,9 @@ export default function HomePage() {
   return (
     <LandingPage
       featuredQuestion={featuredQuestion}
-      questionCount={questions.length}
-      topicCount={topicGuides.length}
+      recentQuestions={questions.slice(0, 3)}
+      questions={questions}
+      topics={topicGuides}
     />
   )
 }

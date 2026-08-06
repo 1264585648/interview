@@ -33,7 +33,7 @@ export default async function TopicPage({ params }: Props) {
           <Link className={styles.backLink} href="/topics">← 返回专题</Link>
 
           <header className={styles.header}>
-            <div className={styles.headerMeta}>专题 {String(currentIndex + 1).padStart(2, '0')} · {topicQuestions.length} 道题</div>
+            <div className={styles.headerMeta}>{topicQuestions.length} 道题</div>
             <h1>{topic.title}</h1>
             <p>{topic.summary}</p>
           </header>
@@ -45,7 +45,7 @@ export default async function TopicPage({ params }: Props) {
           <ConceptFlow items={topic.flow} label="这一专题的知识路径" />
 
           <section className={styles.goals}>
-            <h2>学完这一专题，你应该能回答</h2>
+            <h2>读完后可以回答</h2>
             <ul className={styles.goalList}>
               {topic.goals.map((goal) => <li key={goal}>{goal}</li>)}
             </ul>
@@ -60,14 +60,14 @@ export default async function TopicPage({ params }: Props) {
               return (
                 <section className={styles.phase} key={phase.title}>
                   <header className={styles.phaseHeader}>
-                    <h2>{phase.title}</h2>
+                    <h2>{phase.title.replace(/^\d+\s*·\s*/, '')}</h2>
                     <p>{phase.description}</p>
                   </header>
 
                   <div className={styles.questionList}>
                     {phaseQuestions.map((question, index) => (
                       <Link className={styles.questionRow} href={`/questions/${question.slug}`} key={question.slug}>
-                        <span>{String(index + 1).padStart(2, '0')}</span>
+                        <span>{index + 1}</span>
                         <div>
                           <h3>{question.title}</h3>
                           <p>{question.frequency} · {question.type} · {question.estimate}</p>
