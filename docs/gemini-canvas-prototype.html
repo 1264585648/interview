@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>符文之誓：面试匹配轮 | Aegis Arcana Wheel</title>
+
+  <style>
+    /* ==========================================================================
+       1. CSS RESET & FANTASY DESIGN SYSTEM TOKENS
+       ========================================================================== */
+    :root {
+      --bg-obsidian: #0B0F19;
+      --bg-navy-card: #121829;
+      --bg-navy-dark: #070A12;
+      --color-brass-light: #E5C07B;
+      --color-brass: #C5A059;
+      --color-brass-dark: #5E4823;
+      --color-cyan-energy: #00E5FF;
+      --color-amber-gold: #FFB300;
+      --color-slate-100: #F1F5F9;
+      --color-slate-300: #CBD5E1;
+      --color-slate-400: #94A3B8;
+      --color-slate-500: #64748B;
+      --color-slate-800: #1E293B;
+      --font-serif: Georgia, "Times New Roman", serif;
+      --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-obsidian);
+      color: var(--color-slate-100);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    ::selection {
+      background-color: var(--color-cyan-energy);
+      color: var(--bg-obsidian);
+    }
+
+    /* Screen Reader Only Utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+    }
+
+    /* ==========================================================================
+       2. METALLIC & ENERGY VISUAL EFFECTS
+       ========================================================================== */
+    .brass-border {
+      border: 2px solid var(--color-brass);
+      box-shadow: inset 0 0 12px rgba(197, 160, 89, 0.25), 0 0 20px rgba(0, 0, 0, 0.8);
+      border-radius: 1rem;
+    }
+
+    .brass-gradient-text {
+      background: linear-gradient(135deg, #FFF0CA 0%, var(--color-brass) 50%, #7A5B22 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brass-btn {
+      background: linear-gradient(180deg, var(--color-brass-light) 0%, var(--color-brass) 40%, var(--color-brass-dark) 100%);
+      color: var(--bg-obsidian);
+      border: 1px solid var(--color-amber-gold);
+      font-family: var(--font-serif);
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+      transition: all 0.2s ease-in-out;
+    }
+
+    .brass-btn:hover:not(:disabled) {
+      background: linear-gradient(180deg, #FFF0CA 0%, #D8B168 40%, #9E7C42 100%);
+      box-shadow: 0 0 25px rgba(0, 229, 255, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .brass-btn:active:not(:disabled) {
+      transform: translateY(1px);
+    }
+
+    .brass-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      filter: grayscale(0.6);
+    }
+
+    /* Glow Animations */
+    @keyframes cyanPulse {
+      0%, 100% {
+        box-shadow: 0 0 15px rgba(0, 229, 255, 0.3), inset 0 0 15px rgba(0, 229, 255, 0.2);
+        border-color: rgba(0, 229, 255, 0.6);
+      }
+      50% {
+        box-shadow: 0 0 35px rgba(0, 229, 255, 0.8), inset 0 0 25px rgba(0, 229, 255, 0.5);
+        border-color: rgba(0, 229, 255, 1);
+      }
+    }
+
+    .glow-active {
+      animation: cyanPulse 1.6s infinite ease-in-out;
+    }
+
+    /* ==========================================================================
+       3. LAYOUT & STRUCTURE
+       ========================================================================== */
+    header {
+      width: 100%;
+      background: rgba(11, 15, 25, 0.95);
+      border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+      padding: 0.75rem 1.5rem;
+      z-index: 20;
+    }
+
+    .header-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--color-brass);
+      background: var(--bg-navy-card);
+      color: var(--color-cyan-energy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    }
+
+    .brand-title {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: var(--color-slate-400);
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .round-counter {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--color-brass-light);
+    }
+
+    .phase-pill {
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(0, 229, 255, 0.4);
+      background: rgba(0, 229, 255, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .phase-dot {
+      width: 0.6rem;
+      height: 0.6rem;
+      border-radius: 50%;
+      background: var(--color-slate-500);
+      transition: background-color 0.3s;
+    }
+
+    .phase-text {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--color-cyan-energy);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    main {
+      flex: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    @media (min-width: 992px) {
+      main {
+        grid-template-columns: 7fr 5fr;
+      }
+    }
+
+    /* ==========================================================================
+       4. WHEEL SECTION & CANVAS OVERLAY
+       ========================================================================== */
+    .wheel-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .wheel-frame {
+      position: relative;
+      width: 320px;
+      height: 320px;
+      padding: 1rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, #181F33 0%, #0A0D17 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 640px) {
+      .wheel-frame {
+        width: 440px;
+        height: 440px;
+      }
+    }
+
+    .pointer-container {
+      position: absolute;
+      top: -0.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      filter: drop-shadow(0 4px 10px rgba(0, 229, 255, 0.8));
+    }
+
+    #hitParticleCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 25;
+      border-radius: 50%;
+    }
+
+    .wheel-wrapper {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      border: 4px solid var(--color-brass-dark);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+      will-change: transform;
+    }
+
+    .wheel-easing-lock {
+      transition: transform var(--lock-duration, 2800ms) cubic-bezier(0.12, 0.85, 0.25, 1.02);
+    }
+
+    .center-orb {
+      position: absolute;
+      width: 5.5rem;
+      height: 5.5rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, #242E48 0%, #0B0F19 100%);
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      border: 2px solid var(--color-brass);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+    }
+
+    .center-orb-gem {
+      width: 2.2rem;
+      height: 2.2rem;
+      border-radius: 50%;
+      background: rgba(0, 229, 255, 0.15);
+      border: 1px solid rgba(0, 229, 255, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.4s ease;
+    }
+
+    .center-orb-core {
+      width: 0.8rem;
+      height: 0.8rem;
+      border-radius: 50%;
+      background: var(--color-cyan-energy);
+      box-shadow: 0 0 12px var(--color-cyan-energy);
+    }
+
+    .center-orb-title {
+      font-family: var(--font-serif);
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: var(--color-brass-light);
+      letter-spacing: 0.15em;
+      margin-top: 0.25rem;
+    }
+
+    .controls-group {
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .start-btn {
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      border-radius: 0.75rem;
+      font-size: 1.05rem;
+      letter-spacing: 0.05em;
+    }
+
+    .controls-hint {
+      font-size: 0.75rem;
+      color: var(--color-slate-400);
+      text-align: center;
+    }
+
+    /* ==========================================================================
+       5. ARENA & 3D FANTASY CARD STAGE
+       ========================================================================== */
+    .card-arena {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .result-card-container {
+      width: 100%;
+      max-width: 440px;
+      height: 480px;
+      background: rgba(18, 24, 41, 0.85);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    }
+
+    /* Placeholder Idle View */
+    .card-placeholder {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border: 2px dashed rgba(100, 116, 139, 0.4);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+    }
+
+    .placeholder-orb {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 50%;
+      background: rgba(30, 41, 59, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      border: 1px solid rgba(197, 160, 89, 0.3);
+      color: var(--color-brass);
+    }
+
+    .placeholder-title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--color-brass-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .placeholder-desc {
+      font-size: 0.8rem;
+      color: var(--color-slate-400);
+      line-height: 1.5;
+    }
+
+    /* 3D Card Stage */
+    .card-stage {
+      display: none;
+      flex: 1;
+      width: 100%;
+      height: 100%;
+      perspective: 1200px;
+      position: relative;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      border-radius: 0.75rem;
+    }
+
+    .card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-front, .card-back {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-front {
+      background: linear-gradient(145deg, #1A233A 0%, #121829 50%, #0A0D17 100%);
+      border: 2px solid var(--color-brass);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-front-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      color: var(--color-brass);
+      font-family: var(--font-serif);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    .card-front-orb {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      border: 2px solid rgba(197, 160, 89, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(11, 15, 25, 0.7);
+      font-size: 2.5rem;
+    }
+
+    .card-front-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-cyan-energy);
+      letter-spacing: 0.15em;
+    }
+
+    .card-back {
+      background: linear-gradient(145deg, #1E2942 0%, #0E1322 100%);
+      border: 2px solid var(--color-brass);
+      transform: rotateY(180deg);
+    }
+
+    .opp-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(197, 160, 89, 0.25);
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .opp-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .opp-avatar {
+      font-size: 2rem;
+      padding: 0.25rem;
+      background: rgba(11, 15, 25, 0.7);
+      border-radius: 0.5rem;
+      border: 1px solid rgba(197, 160, 89, 0.3);
+      line-height: 1;
+    }
+
+    .opp-name {
+      font-family: var(--font-serif);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--color-brass-light);
+    }
+
+    .opp-title {
+      font-size: 0.7rem;
+      font-family: var(--font-mono);
+      color: var(--color-cyan-energy);
+    }
+
+    .opp-diff-badge {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.25rem;
+      background: rgba(255, 179, 0, 0.15);
+      border: 1px solid var(--color-amber-gold);
+      color: var(--color-amber-gold);
+    }
+
+    .opp-perk-box {
+      background: rgba(11, 15, 25, 0.6);
+      border-radius: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 0.75rem;
+      font-size: 0.75rem;
+    }
+
+    .opp-perk-title {
+      color: var(--color-amber-gold);
+      font-family: var(--font-serif);
+      font-weight: 700;
+      margin-right: 0.25rem;
+    }
+
+    .question-box {
+      background: var(--bg-navy-card);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+      border-radius: 0.5rem;
+      padding: 0.85rem;
+      position: relative;
+    }
+
+    .question-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+    }
+
+    .question-domain {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      padding: 0.15rem 0.5rem;
+      border-radius: 0.25rem;
+      background: rgba(0, 229, 255, 0.1);
+      color: var(--color-cyan-energy);
+      border: 1px solid rgba(0, 229, 255, 0.3);
+    }
+
+    .question-stars {
+      font-size: 0.75rem;
+      color: var(--color-amber-gold);
+      letter-spacing: 0.1em;
+    }
+
+    .question-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--color-slate-100);
+      margin-bottom: 0.3rem;
+      line-height: 1.35;
+    }
+
+    .question-prompt {
+      font-size: 0.75rem;
+      color: var(--color-slate-300);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .card-footer {
+      border-top: 1px solid rgba(197, 160, 89, 0.25);
+      padding-top: 0.5rem;
+      margin-top: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.7rem;
+    }
+
+    .card-footer-status {
+      color: var(--color-slate-400);
+      font-family: var(--font-mono);
+    }
+
+    .card-footer-slot {
+      color: var(--color-brass-light);
+      font-family: var(--font-serif);
+      font-weight: 700;
+    }
+
+    /* Fly in Animation */
+    @keyframes cardFlyIn {
+      0% {
+        opacity: 0;
+        transform: translate(-60px, -30px) scale(0.7) rotate(-10deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1) rotate(0deg);
+      }
+    }
+
+    .animate-card-fly {
+      animation: cardFlyIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.27) forwards;
+    }
+
+    /* Footer */
+    footer {
+      width: 100%;
+      border-top: 1px solid rgba(30, 41, 59, 0.8);
+      background: rgba(11, 15, 25, 0.95);
+      padding: 0.75rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--color-slate-500);
+    }
+
+    /* ==========================================================================
+       6. ACCESSIBILITY: PREFERS-REDUCED-MOTION OVERRIDES
+       ========================================================================== */
+    @media (prefers-reduced-motion: reduce) {
+      .wheel-easing-lock {
+        transition: none !important;
+      }
+      .card-inner {
+        transition: none !important;
+      }
+      .animate-card-fly {
+        animation: none !important;
+      }
+      .glow-active {
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Screen Reader Live Region for Accessibility Announcements -->
+  <div id="ariaAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Top Navigation Bar -->
+  <header>
+    <div class="header-content">
+      <div class="brand-group">
+        <div class="brand-icon">⚙</div>
+        <div>
+          <h1 class="brand-title brass-gradient-text">AEGIS ARCANA</h1>
+          <p class="brand-subtitle">奇幻面试试炼轮盘 • 命运导师真题法典</p>
+        </div>
+      </div>
+
+      <div class="status-badge">
+        <span class="round-counter">ROUND <span id="roundCounterText">1</span></span>
+        <div class="phase-pill">
+          <span id="phaseIndicatorDot" class="phase-dot"></span>
+          <span id="phaseText" data-testid="phase" class="phase-text">IDLE</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid Container -->
+  <main>
+
+    <!-- Left Section: Interactive SVG Wheel & Canvas Hit Particles -->
+    <section class="wheel-section">
+
+      <!-- Outer Frame -->
+      <div class="wheel-frame brass-border">
+
+        <!-- Top Pointer SVG -->
+        <div class="pointer-container">
+          <svg width="40" height="48" viewBox="0 0 40 48" fill="none">
+            <path d="M20 48L2 12C2 5.37258 10.0589 0 20 0C29.9411 0 38 5.37258 38 12L20 48Z" fill="url(#pointerGrad)" stroke="#C5A059" stroke-width="2"/>
+            <circle cx="20" cy="14" r="5" fill="#00E5FF"/>
+            <defs>
+              <linearGradient id="pointerGrad" x1="20" y1="0" x2="20" y2="48" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FFE5A3"/>
+                <stop offset="0.5" stop-color="#C5A059"/>
+                <stop offset="1" stop-color="#3A2D16"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
+        <!-- Canvas Hit Sparks Particle Layer (Hits/Sparks only) -->
+        <canvas id="hitParticleCanvas"></canvas>
+
+        <!-- Dynamic SVG Wheel -->
+        <div id="wheelWrapper" class="wheel-wrapper">
+          <svg id="wheelSvg" style="width: 100%; height: 100%;" viewBox="0 0 500 500">
+            <!-- 8 Opponent Slots populated dynamically by JS -->
+          </svg>
+        </div>
+
+        <!-- Center Brass Hub -->
+        <div class="center-orb">
+          <div id="centerOrbGem" class="center-orb-gem">
+            <div class="center-orb-core"></div>
+          </div>
+          <span class="center-orb-title">AEGIS</span>
+        </div>
+
+      </div>
+
+      <!-- Wheel Control Button -->
+      <div class="controls-group">
+        <button id="startMatchBtn" data-testid="start-match" class="brass-btn start-btn" aria-label="开始抽取匹配试炼官">
+          ⚡ 启动命运转轮 [Space]
+        </button>
+        <p class="controls-hint">点击按钮或按 [Space / Enter] 键发起匹配</p>
+      </div>
+
+    </section>
+
+    <!-- Right Section: Result Card Arena -->
+    <section class="card-arena">
+
+      <div id="resultCardContainer" data-testid="result-card" class="result-card-container brass-border">
+
+        <!-- Placeholder View when Idle -->
+        <div id="cardPlaceholder" class="card-placeholder">
+          <div class="placeholder-orb">🔮</div>
+          <h2 class="placeholder-title">转轮未启动</h2>
+          <p class="placeholder-desc">
+            启动古老转轮以唤醒命运试炼官，抽取属于你的奇幻面试挑战题牌。
+          </p>
+        </div>
+
+        <!-- 3D Flipping Fantasy Card Stage -->
+        <div id="cardStage" class="card-stage">
+          <div id="cardInner" class="card-inner">
+
+            <!-- Card Front (Cover) -->
+            <div class="card-front">
+              <div class="card-front-header">
+                <span>AEGIS RUNE</span>
+                <span>★ SECRET ★</span>
+              </div>
+              <div class="card-front-orb">✨</div>
+              <div class="card-front-tag">DEALING RUNE...</div>
+            </div>
+
+            <!-- Card Back (Revealed Content) -->
+            <div class="card-back">
+              <div>
+                <!-- Opponent Profile -->
+                <div class="opp-header">
+                  <div class="opp-profile">
+                    <span id="oppAvatar" class="opp-avatar"></span>
+                    <div>
+                      <h3 id="oppName" class="opp-name"></h3>
+                      <p id="oppTitle" class="opp-title"></p>
+                    </div>
+                  </div>
+                  <span id="oppDifficulty" class="opp-diff-badge"></span>
+                </div>
+
+                <!-- Opponent Perk -->
+                <div class="opp-perk-box">
+                  <span class="opp-perk-title">【导师天赋】</span>
+                  <span id="oppPerk"></span>
+                </div>
+
+                <!-- Interview Question -->
+                <div class="question-box">
+                  <div class="question-top">
+                    <span id="questDomain" class="question-domain"></span>
+                    <span id="questDifficulty" class="question-stars"></span>
+                  </div>
+                  <h4 id="questTitle" class="question-title"></h4>
+                  <p id="questPrompt" class="question-prompt"></p>
+                </div>
+              </div>
+
+              <!-- Footer Slot Info -->
+              <div class="card-footer">
+                <span class="card-footer-status">MATCH COMPLETE</span>
+                <span id="oppSlotTag" class="card-footer-slot">SLOT #</span>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    Aegis Arcana © 2026 Interactive Matchmaker • Pure CSS/JS Native Wheel Engine
+  </footer>
+
+  <script>
+    /* ==========================================================================
+       1. CENTRALIZED CONSTANTS & DESIGN TOKENS
+       ========================================================================== */
+    const DESIGN_TOKENS = {
+      colors: {
+        obsidian: '#0B0F19',
+        navyCard: '#121829',
+        brass: '#C5A059',
+        brassLight: '#E5C07B',
+        cyanEnergy: '#00E5FF',
+        amberHighlight: '#FFB300',
+        sectors: [
+          '#131B2E', '#1A243D', '#111828', '#162035',
+          '#141C30', '#18233B', '#0F1624', '#151F33'
+        ]
+      }
+    };
+
+    const TIMING = {
+      searchingDuration: 1400, // Uniform spin phase duration (ms)
+      lockingDuration: 2800,   // Deceleration and spring bounce duration (ms)
+      revealGlowDuration: 800, // Hit spark effect duration (ms)
+      dealingDuration: 900     // Card fly & flip animation duration (ms)
+    };
+
+    /* ==========================================================================
+       2. INDEPENDENT DATA POOLS (Opponents vs Interview Questions)
+       ========================================================================== */
+    // Opponent Pool (Exactly 8 Slots mapped to wheel)
+    const OPPONENT_POOL = [
+      {
+        id: 'opp-arch-vaelen',
+        slotIndex: 0,
+        name: '大架构师 维伦',
+        title: '云端符文长者',
+        avatar: '🧙‍♂️',
+        difficulty: 'SSR • 难极',
+        perk: '高并发解构：重点考察分布式缓存、死锁与系统扩展性。'
+      },
+      {
+        id: 'opp-overseer-kaelen',
+        slotIndex: 1,
+        name: '执政官 凯伦',
+        title: '行为契约审判官',
+        avatar: '⚖️',
+        difficulty: 'SR • 偏难',
+        perk: '审判之眼：注重团队分歧调停、逆境决策与项目推进力。'
+      },
+      {
+        id: 'opp-sage-eldrin',
+        slotIndex: 2,
+        name: '贤者 埃尔德林',
+        title: '算法咒印研究者',
+        avatar: '📜',
+        difficulty: 'SSR • 难极',
+        perk: '时空坍缩：关注算法渐进复杂度与内存压榨极限。'
+      },
+      {
+        id: 'opp-weaver-maya',
+        slotIndex: 3,
+        name: '织时者 玛雅',
+        title: '异步并发织梦师',
+        avatar: '⏳',
+        difficulty: 'SR • 中等',
+        perk: '时间流转：考核 Event Loop、微任务机制与并发限制。'
+      },
+      {
+        id: 'opp-defender-jax',
+        slotIndex: 4,
+        name: '铁卫 贾克斯',
+        title: '安全结界守卫者',
+        avatar: '🛡️',
+        difficulty: 'R • 普通',
+        perk: '无瑕防护：严查 XSS、CSRF、CORS 与鉴权漏洞。'
+      },
+      {
+        id: 'opp-artisan-lyra',
+        slotIndex: 5,
+        name: '幻彩者 莱拉',
+        title: '渲染视界塑造师',
+        avatar: '🎨',
+        difficulty: 'SR • 偏难',
+        perk: '像素微操：审查 CSS 布局重绘、GPU 合成与响应式细节。'
+      },
+      {
+        id: 'opp-tester-nix',
+        slotIndex: 6,
+        name: '影袭者 尼克斯',
+        title: '边界缺陷拷问者',
+        avatar: '🗡️',
+        difficulty: 'SR • 偏难',
+        perk: '混沌突袭：擅长捕获未处理异常、内存泄漏与极端边界。'
+      },
+      {
+        id: 'opp-alchemist-theron',
+        slotIndex: 7,
+        name: '炼金术士 塞隆',
+        title: '全栈管线调和者',
+        avatar: '🧪',
+        difficulty: 'SSR • 难极',
+        perk: '持续转化：考验 CI/CD 自动化、Docker 与云原生构架。'
+      }
+    ];
+
+    // Separate Interview Question Pool (Distinct from Opponent Pool)
+    const QUESTION_POOL = [
+      {
+        id: 'q-sys-01',
+        domain: '系统架构',
+        difficulty: '★ ★ ★ ★ ★',
+        title: '如何设计一个承受十万级 QPS 的高并发符文校验系统？',
+        prompt: '请阐述缓存预热、分库分表及限流降级（如令牌桶/漏桶算法）的具体实现。'
+      },
+      {
+        id: 'q-alg-02',
+        domain: '算法结界',
+        difficulty: '★ ★ ★ ★ ☆',
+        title: '如何在 $O(N \log K)$ 时间复杂度内合并 K 个有序链表？',
+        prompt: '请用优先队列（最小堆）或分治归并分析其空间开销与指针移动过程。'
+      },
+      {
+        id: 'q-async-03',
+        domain: '异步编织',
+        difficulty: '★ ★ ★ ☆ ☆',
+        title: '请手写实现一个支持最大并发限制的 Promise 调度器。',
+        prompt: '解释事件循环（Event Loop）微任务队列在此过程中的调度顺序。'
+      },
+      {
+        id: 'q-beh-04',
+        domain: '行为考察',
+        difficulty: '★ ★ ★ ☆ ☆',
+        title: '当团队成员在技术选型发生严重分歧时，你如何推动决断？',
+        prompt: '请结合 POC 验证数据、风险评估与沟通技巧阐述你的过往实战案例。'
+      },
+      {
+        id: 'q-sec-05',
+        domain: '安全防护',
+        difficulty: '★ ★ ★ ☆ ☆',
+        title: '防范跨站脚本攻击（XSS）与 CSRF 攻击的核心机制是什么？',
+        prompt: '详细说明 SameSite Cookie 属性、CSP 头配置与双重 Token 验证原理。'
+      },
+      {
+        id: 'q-ui-06',
+        domain: '前端渲染',
+        difficulty: '★ ★ ★ ★ ☆',
+        title: '浏览器渲染管线中，如何避免昂贵的 Layout 重排（Reflow）？',
+        prompt: '讨论 CSS transform/opacity 的 GPU 合成层加速原理及 rAF 优化。'
+      },
+      {
+        id: 'q-test-07',
+        domain: '工程质量',
+        difficulty: '★ ★ ★ ☆ ☆',
+        title: '如何搭建前端自动化单元测试与 E2E 测试链路？',
+        prompt: '说明 Mock 机制、测试覆盖率指标与持续集成（CI）卡点设置标准。'
+      }
+    ];
+
+    /* ==========================================================================
+       3. STATE MACHINE CLASS
+       ========================================================================== */
+    class WheelStateMachine {
+      constructor() {
+        this.phase = 'idle'; // idle | searching | locking | reveal | dealing | ready
+        this.round = 1;
+        this.targetOpponentId = null;
+        this.selectedQuestionId = null;
+        this.lastLandingAngle = 0;
+        this.isAnimating = false;
+        this.listeners = [];
+      }
+
+      subscribe(listener) {
+        this.listeners.push(listener);
+      }
+
+      notify() {
+        this.listeners.forEach(fn => fn(this));
+      }
+
+      setPhase(newPhase) {
+        this.phase = newPhase;
+        this.isAnimating = (newPhase !== 'idle' && newPhase !== 'ready');
+        this.notify();
+
+        // Broadcast to Accessibility Live Region
+        const announcer = document.getElementById('ariaAnnouncer');
+        if (announcer) {
+          announcer.textContent = `面试试炼阶段更新为：${newPhase}`;
+        }
+      }
+
+      startMatch() {
+        if (this.isAnimating) return;
+
+        // Reset round targets
+        this.targetOpponentId = null;
+        this.selectedQuestionId = null;
+
+        // Step 1: Transition to 'searching'
+        this.setPhase('searching');
+
+        // Step 2: Randomly determine Target Opponent FIRST
+        const targetOpponent = OPPONENT_POOL[Math.floor(Math.random() * OPPONENT_POOL.length)];
+        this.targetOpponentId = targetOpponent.id;
+
+        // Calculate Target Landing Angle (8 slots = 45 deg per slot)
+        // Slot center angle = slotIndex * 45 + 22.5 deg
+        // Pointer is at Top (0 deg). To land sector center at pointer: Angle = (360 - sectorCenter)
+        const sectorCenter = targetOpponent.slotIndex * 45 + 22.5;
+        const baseLandingAngle = (360 - sectorCenter) % 360;
+
+        // Respect reduced motion settings
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const extraRounds = prefersReducedMotion ? 1 : 5; // Extra full spins
+        this.lastLandingAngle = (extraRounds * 360) + baseLandingAngle;
+
+        // Mandated PLAN Console Log
+        console.log('PLAN', {
+          round: this.round,
+          targetOpponentId: targetOpponent.id,
+          targetSlot: targetOpponent.slotIndex,
+          calculatedAngle: this.lastLandingAngle
+        });
+
+        // Step 3: Trigger locking after uniform search phase
+        setTimeout(() => {
+          this.setPhase('locking');
+        }, TIMING.searchingDuration);
+      }
+
+      completeLocking() {
+        this.setPhase('reveal');
+
+        // Draw Interview Question from independent QUESTION_POOL
+        const drawnQuestion = QUESTION_POOL[Math.floor(Math.random() * QUESTION_POOL.length)];
+        this.selectedQuestionId = drawnQuestion.id;
+
+        // Mandated REVEAL Console Log
+        console.log('REVEAL', {
+          round: this.round,
+          opponentId: this.targetOpponentId,
+          questionId: this.selectedQuestionId
+        });
+
+        // Transition to 'dealing'
+        setTimeout(() => {
+          this.setPhase('dealing');
+        }, TIMING.revealGlowDuration);
+      }
+
+      completeDealing() {
+        this.setPhase('ready');
+      }
+
+      nextRound() {
+        this.round += 1;
+        this.setPhase('idle');
+      }
+    }
+
+    /* ==========================================================================
+       4. CANVAS HIT PARTICLE SYSTEM
+       ========================================================================== */
+    class HitParticleSystem {
+      constructor(canvasId) {
+        this.canvas = document.getElementById(canvasId);
+        this.ctx = this.canvas.getContext('2d');
+        this.particles = [];
+        this.animId = null;
+        this.resize();
+        window.addEventListener('resize', () => this.resize());
+      }
+
+      resize() {
+        const rect = this.canvas.getBoundingClientRect();
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
+      }
+
+      burst(x, y, color = '#00E5FF') {
+        const count = 45;
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 6 + 2;
+          this.particles.push({
+            x: x || this.canvas.width / 2,
+            y: y || 20, // Default top pointer position
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            radius: Math.random() * 3.5 + 1.5,
+            color: Math.random() > 0.35 ? color : '#FFB300',
+            alpha: 1,
+            decay: Math.random() * 0.03 + 0.015
+          });
+        }
+        if (!this.animId) this.animate();
+      }
+
+      animate() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= p.decay;
+          this.ctx.save();
+          this.ctx.globalAlpha = Math.max(0, p.alpha);
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          this.ctx.fillStyle = p.color;
+          this.ctx.shadowBlur = 8;
+          this.ctx.shadowColor = p.color;
+          this.ctx.fill();
+          this.ctx.restore();
+        });
+
+        this.particles = this.particles.filter(p => p.alpha > 0);
+        if (this.particles.length > 0) {
+          this.animId = requestAnimationFrame(() => this.animate());
+        } else {
+          this.animId = null;
+        }
+      }
+    }
+
+    /* ==========================================================================
+       5. UI CONTROLLER & RENDERING
+       ========================================================================== */
+    class UIController {
+      constructor(stateMachine, particleSystem) {
+        this.state = stateMachine;
+        this.particles = particleSystem;
+        this.currentWheelRotation = 0;
+
+        // Cache DOM Elements
+        this.startBtn = document.getElementById('startMatchBtn');
+        this.phaseText = document.getElementById('phaseText');
+        this.phaseDot = document.getElementById('phaseIndicatorDot');
+        this.roundText = document.getElementById('roundCounterText');
+        this.wheelSvg = document.getElementById('wheelSvg');
+        this.wheelWrapper = document.getElementById('wheelWrapper');
+        this.cardPlaceholder = document.getElementById('cardPlaceholder');
+        this.cardStage = document.getElementById('cardStage');
+        this.cardInner = document.getElementById('cardInner');
+        this.centerOrbGem = document.getElementById('centerOrbGem');
+
+        // Card Detail Elements
+        this.oppAvatar = document.getElementById('oppAvatar');
+        this.oppName = document.getElementById('oppName');
+        this.oppTitle = document.getElementById('oppTitle');
+        this.oppDifficulty = document.getElementById('oppDifficulty');
+        this.oppPerk = document.getElementById('oppPerk');
+        this.questDomain = document.getElementById('questDomain');
+        this.questDifficulty = document.getElementById('questDifficulty');
+        this.questTitle = document.getElementById('questTitle');
+        this.questPrompt = document.getElementById('questPrompt');
+        this.oppSlotTag = document.getElementById('oppSlotTag');
+
+        this.initSVGWheel();
+        this.bindEvents();
+        this.state.subscribe(s => this.renderPhase(s));
+      }
+
+      // Render 8 SVG wheel sectors dynamically
+      initSVGWheel() {
+        const cx = 250, cy = 250, r = 240;
+        let svgContent = '';
+
+        OPPONENT_POOL.forEach((opp, i) => {
+          const startAngle = (i * 45) * Math.PI / 180;
+          const endAngle = ((i + 1) * 45) * Math.PI / 180;
+
+          const x1 = cx + r * Math.cos(startAngle);
+          const y1 = cy + r * Math.sin(startAngle);
+          const x2 = cx + r * Math.cos(endAngle);
+          const y2 = cy + r * Math.sin(endAngle);
+
+          const pathData = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 0 1 ${x2} ${y2} Z`;
+          const fillColor = DESIGN_TOKENS.colors.sectors[i % DESIGN_TOKENS.colors.sectors.length];
+
+          // Text & Icon Position
+          const midAngle = startAngle + (45 * Math.PI / 360);
+          const textR = r * 0.68;
+          const tx = cx + textR * Math.cos(midAngle);
+          const ty = cy + textR * Math.sin(midAngle);
+          const textRot = (i * 45) + 22.5 + 90;
+
+          svgContent += `
+            <g class="sector-group" data-slot="${i}">
+              <path d="${pathData}" fill="${fillColor}" stroke="#C5A059" stroke-width="1.5"/>
+              <g transform="translate(${tx}, ${ty}) rotate(${textRot})">
+                <text text-anchor="middle" y="-10" fill="#E5C07B" font-size="22" font-family="sans-serif">${opp.avatar}</text>
+                <text text-anchor="middle" y="14" fill="#F1F5F9" font-size="11" font-weight="bold" font-family="serif">${opp.name.split(' ')[0]}</text>
+              </g>
+            </g>
+          `;
+        });
+
+        // Add SVG Framing Ring
+        svgContent += `
+          <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#C5A059" stroke-width="6"/>
+          <circle cx="${cx}" cy="${cy}" r="75" fill="none" stroke="#C5A059" stroke-width="3" stroke-dasharray="4 4"/>
+        `;
+
+        this.wheelSvg.innerHTML = svgContent;
+      }
+
+      bindEvents() {
+        this.startBtn.addEventListener('click', () => this.handleButtonClick());
+
+        // Keyboard operation (Space or Enter)
+        window.addEventListener('keydown', (e) => {
+          if ((e.code === 'Space' || e.code === 'Enter') && document.activeElement !== this.startBtn) {
+            e.preventDefault();
+            if (!this.state.isAnimating) {
+              this.handleButtonClick();
+            }
+          }
+        });
+      }
+
+      handleButtonClick() {
+        if (this.state.phase === 'ready') {
+          this.state.nextRound();
+          this.resetCardStage();
+        } else if (this.state.phase === 'idle') {
+          this.state.startMatch();
+        }
+      }
+
+      resetCardStage() {
+        this.cardInner.classList.remove('flipped');
+        this.cardStage.style.display = 'none';
+        this.cardPlaceholder.style.display = 'flex';
+      }
+
+      renderPhase(s) {
+        this.phaseText.textContent = s.phase.toUpperCase();
+        this.roundText.textContent = s.round;
+
+        // Disable button during animation
+        this.startBtn.disabled = s.isAnimating;
+
+        switch (s.phase) {
+          case 'idle':
+            this.phaseDot.style.backgroundColor = '#64748B';
+            this.startBtn.textContent = '⚡ 启动命运转轮 [Space]';
+            this.centerOrbGem.classList.remove('glow-active');
+            break;
+
+          case 'searching':
+            this.phaseDot.style.backgroundColor = '#FFB300';
+            this.wheelWrapper.style.cssText = `
+              transform: rotate(${this.currentWheelRotation + 720}deg);
+              transition: transform ${TIMING.searchingDuration}ms linear;
+            `;
+            this.currentWheelRotation += 720;
+            break;
+
+          case 'locking':
+            this.phaseDot.style.backgroundColor = '#00E5FF';
+
+            // Deceleration with spring easing
+            const targetRot = Math.floor(this.currentWheelRotation / 360) * 360 + s.lastLandingAngle;
+            this.wheelWrapper.style.setProperty('--lock-duration', `${TIMING.lockingDuration}ms`);
+            this.wheelWrapper.className = 'wheel-wrapper wheel-easing-lock';
+            this.wheelWrapper.style.transform = `rotate(${targetRot}deg)`;
+            this.currentWheelRotation = targetRot;
+
+            setTimeout(() => {
+              s.completeLocking();
+            }, TIMING.lockingDuration);
+            break;
+
+          case 'reveal':
+            this.phaseDot.style.backgroundColor = '#34D399';
+            this.centerOrbGem.classList.add('glow-active');
+
+            // Spark particle explosion at pointer
+            const canvasRect = this.particles.canvas.getBoundingClientRect();
+            this.particles.burst(canvasRect.width / 2, 20, '#00E5FF');
+            break;
+
+          case 'dealing':
+            this.phaseDot.style.backgroundColor = '#C084FC';
+
+            // Render Card Data
+            const targetOpp = OPPONENT_POOL.find(o => o.id === s.targetOpponentId);
+            const drawnQuest = QUESTION_POOL.find(q => q.id === s.selectedQuestionId);
+
+            if (targetOpp && drawnQuest) {
+              this.oppAvatar.textContent = targetOpp.avatar;
+              this.oppName.textContent = targetOpp.name;
+              this.oppTitle.textContent = targetOpp.title;
+              this.oppDifficulty.textContent = targetOpp.difficulty;
+              this.oppPerk.textContent = targetOpp.perk;
+              this.oppSlotTag.textContent = `SLOT #${targetOpp.slotIndex + 1}`;
+
+              this.questDomain.textContent = drawnQuest.domain;
+              this.questDifficulty.textContent = drawnQuest.difficulty;
+              this.questTitle.textContent = drawnQuest.title;
+              this.questPrompt.textContent = drawnQuest.prompt;
+            }
+
+            // Animate Card Entry
+            this.cardPlaceholder.style.display = 'none';
+            this.cardStage.style.display = 'block';
+            this.cardStage.classList.add('animate-card-fly');
+
+            // 3D Card Flip
+            setTimeout(() => {
+              this.cardInner.classList.add('flipped');
+            }, 300);
+
+            setTimeout(() => {
+              s.completeDealing();
+            }, TIMING.dealingDuration);
+            break;
+
+          case 'ready':
+            this.phaseDot.style.backgroundColor = '#00E5FF';
+            this.startBtn.disabled = false;
+            this.startBtn.textContent = '⚔️ 接受试炼 / 进入下一轮';
+            break;
+        }
+      }
+    }
+
+    /* ==========================================================================
+       6. APPLICATION INITIALIZATION & TEST INTERFACE
+       ========================================================================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      const stateMachine = new WheelStateMachine();
+      const particleSystem = new HitParticleSystem('hitParticleCanvas');
+      const uiController = new UIController(stateMachine, particleSystem);
+
+      // Expose window.__wheelTest read-only getters for automated validation
+      Object.defineProperty(window, '__wheelTest', {
+        value: Object.freeze({
+          get phase() { return stateMachine.phase; },
+          get round() { return stateMachine.round; },
+          get targetOpponentId() { return stateMachine.targetOpponentId; },
+          get selectedQuestionId() { return stateMachine.selectedQuestionId; },
+          get lastLandingAngle() { return stateMachine.lastLandingAngle; },
+          get isAnimating() { return stateMachine.isAnimating; }
+        }),
+        writable: false,
+        configurable: false
+      });
+
+      console.log('Aegis Arcana Single-File Wheel System Ready.');
+    });
+  </script>
+</body>
+</html>
