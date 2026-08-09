@@ -3,8 +3,8 @@ import { MatchArena } from '@/components/MatchArena/MatchArena'
 import { questions } from '@/data/questions'
 
 export const metadata: Metadata = {
-  title: '星铸试炼 | Agent Interview',
-  description: '在全屏卡牌试炼场匹配面试对手或挑战模式，再从 AI Agent 工程师题库抽取题目。'
+  title: '面试匹配 | Agent Interview',
+  description: '启动 Interview Match Engine，依次锁定面试领域、题型与难度，再进入本场挑战。'
 }
 
 export default function MatchPage() {
