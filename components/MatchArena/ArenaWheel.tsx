@@ -62,12 +62,14 @@ export function ArenaWheel({ onStart, phase, result }: ArenaWheelProps) {
               <strong>开始匹配</strong>
               <small>START MATCH</small>
             </button>
-          ) : phase === 'matched' && result ? (
-            <div className={styles.matchFound}>
-              <span>MATCH</span>
-              <strong>FOUND</strong>
-              <small>{result.domain}</small>
-            </div>
+          ) : phase === 'matched' ? (
+            result ? (
+              <div className={styles.matchFound}>
+                <span>MATCH</span>
+                <strong>FOUND</strong>
+                <small>{result.domain}</small>
+              </div>
+            ) : null
           ) : (
             <div className={styles.coreStatus}>
               <span>{coreCopy[phase].eyebrow}</span>
