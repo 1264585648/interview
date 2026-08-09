@@ -6,13 +6,13 @@ import { ArrowRight, Check, RotateCcw } from 'lucide-react'
 import type { InterviewQuestion } from '@/data/questions'
 import { ArenaHud } from './ArenaHud'
 import { ArenaWheel } from './ArenaWheel'
-import type { ArenaPhase, MatchResult } from './types'
+import type { MatchPhase, MatchResult } from './types'
 import { matchAsset } from './assetPath'
 import styles from './MatchArena.module.css'
 
 type MatchArenaProps = { questions: InterviewQuestion[] }
 
-const phaseCopy: Record<ArenaPhase, { eyebrow: string; title: string; description: string }> = {
+const phaseCopy: Record<MatchPhase, { eyebrow: string; title: string; description: string }> = {
   idle: {
     eyebrow: 'INTERVIEW MATCH',
     title: '准备好接受挑战了吗？',
@@ -52,7 +52,7 @@ function stars(difficulty: number) {
 }
 
 export function MatchArena({ questions }: MatchArenaProps) {
-  const [phase, setPhase] = useState<ArenaPhase>('idle')
+  const [phase, setPhase] = useState<MatchPhase>('idle')
   const [result, setResult] = useState<MatchResult | null>(null)
   const runningRef = useRef(false)
   const runRef = useRef(0)
