@@ -9,7 +9,7 @@ type ArenaWheelProps = {
 }
 
 const phaseClass: Record<MatchPhase, string> = {
-  idle: styles.phaseIdle,
+  idle: '',
   searching: styles.phaseSearching,
   'domain-locked': styles.phaseDomainLocked,
   'type-locked': styles.phaseTypeLocked,
