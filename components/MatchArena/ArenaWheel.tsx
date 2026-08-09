@@ -1,14 +1,14 @@
-import type { ArenaPhase, MatchResult } from './types'
+import type { MatchPhase, MatchResult } from './types'
 import styles from './MatchArena.module.css'
 import { matchAsset } from './assetPath'
 
 type ArenaWheelProps = {
   onStart: () => void
-  phase: ArenaPhase
+  phase: MatchPhase
   result: MatchResult | null
 }
 
-const phaseClass: Record<ArenaPhase, string> = {
+const phaseClass: Record<MatchPhase, string> = {
   idle: styles.phaseIdle,
   searching: styles.phaseSearching,
   'domain-locked': styles.phaseDomainLocked,
@@ -17,7 +17,7 @@ const phaseClass: Record<ArenaPhase, string> = {
   matched: styles.phaseMatched
 }
 
-const coreCopy: Record<Exclude<ArenaPhase, 'idle' | 'matched'>, { eyebrow: string; title: string }> = {
+const coreCopy: Record<Exclude<MatchPhase, 'idle' | 'matched'>, { eyebrow: string; title: string }> = {
   searching: { eyebrow: 'MATCHMAKING', title: '正在分析挑战' },
   'domain-locked': { eyebrow: 'DOMAIN LOCKED', title: '领域已锁定' },
   'type-locked': { eyebrow: 'TYPE LOCKED', title: '题型已锁定' },
@@ -70,8 +70,8 @@ export function ArenaWheel({ onStart, phase, result }: ArenaWheelProps) {
             </div>
           ) : (
             <div className={styles.coreStatus}>
-              <span>{coreCopy[phase as Exclude<ArenaPhase, 'idle' | 'matched'>].eyebrow}</span>
-              <strong>{coreCopy[phase as Exclude<ArenaPhase, 'idle' | 'matched'>].title}</strong>
+              <span>{coreCopy[phase].eyebrow}</span>
+              <strong>{coreCopy[phase].title}</strong>
               <i aria-hidden="true" />
             </div>
           )}
