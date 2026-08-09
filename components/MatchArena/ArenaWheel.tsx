@@ -1,118 +1,84 @@
-import type { CSSProperties } from 'react'
-import { motion, useTransform, type MotionValue } from 'motion/react'
-import type { ArenaPhase, MatchProfile } from './types'
+import type { MatchPhase, MatchResult } from './types'
 import styles from './MatchArena.module.css'
 import { matchAsset } from './assetPath'
 
 type ArenaWheelProps = {
   onStart: () => void
-  phase: ArenaPhase
-  profiles: MatchProfile[]
-  reduceMotion: boolean
-  rotation: MotionValue<number>
-  selectedProfile: MatchProfile | null
-  selectedSlot: number | null
+  phase: MatchPhase
+  result: MatchResult | null
 }
 
-const resolvedPhases: ArenaPhase[] = ['reveal', 'dealing', 'ready']
-
-type WheelSlotProps = {
-  index: number
-  profile: MatchProfile
-  rotation: MotionValue<number>
-  selected: boolean
-  slotAngle: number
+const phaseClass: Record<MatchPhase, string> = {
+  idle: '',
+  searching: styles.phaseSearching,
+  'domain-locked': styles.phaseDomainLocked,
+  'type-locked': styles.phaseTypeLocked,
+  'level-locked': styles.phaseLevelLocked,
+  matched: styles.phaseMatched
 }
 
-function WheelSlot({ index, profile, rotation, selected, slotAngle }: WheelSlotProps) {
-  const angle = index * slotAngle
-  const counterRotation = useTransform(rotation, (value) => -(value + angle))
-  const slotStyle = { '--slot-angle': `${angle}deg` } as CSSProperties
+const coreCopy: Record<Exclude<MatchPhase, 'idle' | 'matched'>, { eyebrow: string; title: string }> = {
+  searching: { eyebrow: 'MATCHMAKING', title: '正在分析挑战' },
+  'domain-locked': { eyebrow: 'DOMAIN LOCKED', title: '领域已锁定' },
+  'type-locked': { eyebrow: 'TYPE LOCKED', title: '题型已锁定' },
+  'level-locked': { eyebrow: 'LEVEL LOCKED', title: '难度已锁定' }
+}
 
+export function ArenaWheel({ onStart, phase, result }: ArenaWheelProps) {
   return (
-    <div className={`${styles.slot} ${selected ? styles.slotSelected : ''}`} style={slotStyle}>
-      <motion.div className={styles.slotFace} style={{ rotate: counterRotation }}>
-        <span>{profile.kind === 'opponent' ? '对手' : '模式'}</span>
-        <strong>{profile.label}</strong>
-      </motion.div>
-    </div>
-  )
-}
-
-const coreStatus: Record<Exclude<ArenaPhase, 'idle'>, string> = {
-  searching: '巡游中',
-  locking: '锁定中',
-  reveal: '印记降临',
-  dealing: '牌库响应',
-  ready: '试炼就绪'
-}
-
-export function ArenaWheel({
-  onStart,
-  phase,
-  profiles,
-  reduceMotion,
-  rotation,
-  selectedProfile,
-  selectedSlot
-}: ArenaWheelProps) {
-  const slotAngle = 360 / profiles.length
-  const revealed = resolvedPhases.includes(phase)
-
-  return (
-    <section className={styles.wheelZone} aria-label="试炼匹配轮">
-      <div className={styles.pointer} aria-hidden="true"><span /></div>
-
-      <motion.div className={styles.wheelRotor} style={{ rotate: rotation }}>
+    <section className={`${styles.wheelZone} ${phaseClass[phase]}`} aria-label="面试匹配引擎">
+      <div className={styles.wheelStage}>
         <img
           alt=""
+          aria-hidden="true"
           className={styles.wheelArtwork}
           draggable="false"
           src={matchAsset('interview-wheel-ornament-square.webp')}
         />
-        <div className={styles.slotRing} aria-hidden="true">
-          {profiles.map((profile, index) => (
-            <WheelSlot
-              index={index}
-              key={profile.id}
-              profile={profile}
-              rotation={rotation}
-              selected={revealed && selectedSlot === index}
-              slotAngle={slotAngle}
-            />
-          ))}
+
+        <div className={`${styles.liveRing} ${styles.outerRing}`} aria-hidden="true">
+          <span className={styles.ringSweep} />
+          <span className={styles.ringLockMark}>DOMAIN</span>
         </div>
-      </motion.div>
+        <div className={`${styles.liveRing} ${styles.middleRing}`} aria-hidden="true">
+          <span className={styles.ringSweep} />
+          <span className={styles.ringLockMark}>TYPE</span>
+        </div>
+        <div className={`${styles.liveRing} ${styles.innerRing}`} aria-hidden="true">
+          <span className={styles.ringSweep} />
+          <span className={styles.ringLockMark}>LEVEL</span>
+        </div>
 
-      <div className={styles.wheelCore}>
-        {phase === 'idle' ? (
-          <button className={styles.summonButton} onClick={onStart} type="button">
-            <span aria-hidden="true">✦</span>
-            <strong>召唤试炼</strong>
-            <small>匹配对手</small>
-          </button>
-        ) : revealed && selectedProfile ? (
-          <motion.div
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            className={styles.coreImprint}
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.35, y: '-34vh' }}
-            key={selectedProfile.id}
-            transition={{ type: 'spring', stiffness: 180, damping: 16 }}
-          >
-            <span>{selectedProfile.eyebrow}</span>
-            <strong>{selectedProfile.label}</strong>
-          </motion.div>
-        ) : (
-          <div className={styles.coreStatus}>
-            <span aria-hidden="true">✦</span>
-            <strong>{coreStatus[phase]}</strong>
-          </div>
-        )}
+        <div className={styles.energyCore} aria-hidden="true">
+          <span />
+          <span />
+          <span />
+        </div>
+
+        <div className={styles.wheelCore}>
+          {phase === 'idle' ? (
+            <button className={styles.matchButton} onClick={onStart} type="button">
+              <span className={styles.matchButtonGlyph} aria-hidden="true">✦</span>
+              <strong>开始匹配</strong>
+              <small>START MATCH</small>
+            </button>
+          ) : phase === 'matched' ? (
+            result ? (
+              <div className={styles.matchFound}>
+                <span>MATCH</span>
+                <strong>FOUND</strong>
+                <small>{result.domain}</small>
+              </div>
+            ) : null
+          ) : (
+            <div className={styles.coreStatus}>
+              <span>{coreCopy[phase].eyebrow}</span>
+              <strong>{coreCopy[phase].title}</strong>
+              <i aria-hidden="true" />
+            </div>
+          )}
+        </div>
       </div>
-
-      <ol className={styles.visuallyHidden} aria-label="可匹配的对手和挑战模式">
-        {profiles.map((profile) => <li key={profile.id}>{profile.eyebrow}：{profile.label}</li>)}
-      </ol>
     </section>
   )
 }

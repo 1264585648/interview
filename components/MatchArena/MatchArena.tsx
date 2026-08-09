@@ -1,174 +1,122 @@
 'use client'
 
-import { useEffect, useReducer, useRef, useState } from 'react'
-import { animate, useMotionValue, useReducedMotion, type AnimationPlaybackControls } from 'motion/react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
+import { ArrowRight, Check, RotateCcw } from 'lucide-react'
 import type { InterviewQuestion } from '@/data/questions'
 import { ArenaHud } from './ArenaHud'
 import { ArenaWheel } from './ArenaWheel'
-import { DeckStack } from './DeckStack'
-import { OpponentSeat } from './OpponentSeat'
-import { ParticleBurst } from './ParticleBurst'
-import { matchProfiles } from './profiles'
-import { QuestionCard } from './QuestionCard'
-import type { ArenaPhase, ArenaState, MatchProfile } from './types'
-import { useArenaAudio } from './useArenaAudio'
+import type { MatchPhase, MatchResult } from './types'
 import { matchAsset } from './assetPath'
 import styles from './MatchArena.module.css'
 
 type MatchArenaProps = { questions: InterviewQuestion[] }
 
-type ArenaAction =
-  | { type: 'start'; profile: MatchProfile; question: InterviewQuestion; slot: number }
-  | { type: 'phase'; phase: ArenaPhase }
-
-const initialState: ArenaState = {
-  phase: 'idle',
-  selectedProfile: null,
-  selectedQuestion: null,
-  selectedSlot: null,
-  round: 0
-}
-
-const phaseLabel: Record<ArenaPhase, string> = {
-  idle: '点击轮心，召唤本局试炼',
-  searching: '星盘正在巡游匹配池',
-  locking: '命运指针正在锁定',
-  reveal: '匹配印记已经降临',
-  dealing: '题目牌库正在发牌',
-  ready: '题目已揭晓，试炼开始'
-}
-
-function reducer(state: ArenaState, action: ArenaAction): ArenaState {
-  if (action.type === 'start') {
-    return {
-      phase: 'searching',
-      selectedProfile: action.profile,
-      selectedQuestion: action.question,
-      selectedSlot: action.slot,
-      round: state.round + 1
-    }
+const phaseCopy: Record<MatchPhase, { eyebrow: string; title: string; description: string }> = {
+  idle: {
+    eyebrow: 'INTERVIEW MATCH',
+    title: '准备好接受挑战了吗？',
+    description: '启动匹配引擎，依次锁定本场面试的领域、题型与难度。'
+  },
+  searching: {
+    eyebrow: 'MATCHMAKING',
+    title: '正在生成本场挑战',
+    description: '匹配引擎正在读取题库并组合适合本局的面试参数。'
+  },
+  'domain-locked': {
+    eyebrow: 'DOMAIN LOCKED',
+    title: '领域已锁定',
+    description: '第一层完成，继续匹配本场面试题型。'
+  },
+  'type-locked': {
+    eyebrow: 'TYPE LOCKED',
+    title: '题型已锁定',
+    description: '第二层完成，正在确定最终挑战强度。'
+  },
+  'level-locked': {
+    eyebrow: 'LEVEL LOCKED',
+    title: '难度已锁定',
+    description: '本场参数已经确定，正在完成最终确认。'
+  },
+  matched: {
+    eyebrow: 'MATCH FOUND',
+    title: '本场面试已准备就绪',
+    description: '只展示挑战参数，进入面试后才会揭晓具体问题。'
   }
-  return { ...state, phase: action.phase }
 }
 
 const wait = (milliseconds: number) => new Promise((resolve) => window.setTimeout(resolve, milliseconds))
 
+function stars(difficulty: number) {
+  return `${'★'.repeat(difficulty)}${'☆'.repeat(Math.max(0, 5 - difficulty))}`
+}
+
 export function MatchArena({ questions }: MatchArenaProps) {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  const [soundEnabled, setSoundEnabled] = useState(true)
-  const reduceMotion = useReducedMotion() ?? false
-  const rotation = useMotionValue(0)
-  const audio = useArenaAudio(soundEnabled)
+  const [phase, setPhase] = useState<MatchPhase>('idle')
+  const [result, setResult] = useState<MatchResult | null>(null)
   const runningRef = useRef(false)
   const runRef = useRef(0)
-  const animationRef = useRef<AnimationPlaybackControls | null>(null)
-  const tickTimerRef = useRef<number | null>(null)
-  const questionLinkRef = useRef<HTMLAnchorElement>(null)
-
-  useEffect(() => {
-    if (state.phase === 'ready') questionLinkRef.current?.focus()
-  }, [state.phase])
-
-  useEffect(() => () => {
-    runRef.current += 1
-    animationRef.current?.stop()
-    if (tickTimerRef.current !== null) window.clearInterval(tickTimerRef.current)
-  }, [])
 
   async function startMatch() {
     if (runningRef.current || questions.length === 0) return
+
     runningRef.current = true
-    const targetSlot = Math.floor(Math.random() * matchProfiles.length)
-    const profile = matchProfiles[targetSlot]
-    const question = questions[Math.floor(Math.random() * questions.length)]
     const run = ++runRef.current
-    dispatch({ type: 'start', profile, question, slot: targetSlot })
+    const previousSlug = result?.question.slug
+    const candidates = questions.length > 1
+      ? questions.filter((question) => question.slug !== previousSlug)
+      : questions
+    const question = candidates[Math.floor(Math.random() * candidates.length)] ?? questions[0]
+    const nextResult: MatchResult = {
+      domain: question.category,
+      type: question.type,
+      difficulty: question.difficulty,
+      topics: question.topics.slice(0, 2),
+      estimate: question.estimate,
+      question
+    }
+
+    setResult(nextResult)
+    setPhase('searching')
+
     try {
-      await audio.prime()
+      await wait(900)
       if (run !== runRef.current) return
+      setPhase('domain-locked')
 
-      const slotAngle = 360 / matchProfiles.length
-      const targetAngle = ((-targetSlot * slotAngle) % 360 + 360) % 360
-
-      if (reduceMotion) {
-        await wait(360)
-        if (run !== runRef.current) return
-        dispatch({ type: 'phase', phase: 'locking' })
-        rotation.set(targetAngle)
-        await wait(360)
-      } else {
-        animationRef.current = animate(rotation, rotation.get() + 360, {
-          duration: 0.78,
-          ease: 'linear',
-          repeat: Infinity
-        })
-        tickTimerRef.current = window.setInterval(audio.tick, 135)
-        await wait(980)
-        if (run !== runRef.current) return
-        animationRef.current.stop()
-        animationRef.current = null
-        window.clearInterval(tickTimerRef.current)
-        tickTimerRef.current = null
-        dispatch({ type: 'phase', phase: 'locking' })
-
-        const current = rotation.get()
-        const normalized = ((current % 360) + 360) % 360
-        const delta = (targetAngle - normalized + 360) % 360
-        animationRef.current = animate(rotation, current + 720 + delta, {
-          duration: 2.05,
-          ease: [0.1, 0.7, 0.16, 1]
-        })
-        await animationRef.current
-        animationRef.current = null
-      }
-
+      await wait(720)
       if (run !== runRef.current) return
-      audio.lock()
-      dispatch({ type: 'phase', phase: 'reveal' })
-      await wait(reduceMotion ? 400 : 700)
+      setPhase('type-locked')
+
+      await wait(720)
       if (run !== runRef.current) return
-      audio.deal()
-      dispatch({ type: 'phase', phase: 'dealing' })
-      await wait(reduceMotion ? 400 : 880)
+      setPhase('level-locked')
+
+      await wait(620)
       if (run !== runRef.current) return
-      audio.ready()
-      dispatch({ type: 'phase', phase: 'ready' })
+      setPhase('matched')
     } finally {
-      animationRef.current?.stop()
-      animationRef.current = null
-      if (tickTimerRef.current !== null) {
-        window.clearInterval(tickTimerRef.current)
-        tickTimerRef.current = null
-      }
       if (run === runRef.current) runningRef.current = false
     }
-  }
-
-  function toggleSound() {
-    const next = !soundEnabled
-    setSoundEnabled(next)
-    if (next) void audio.prime(true)
   }
 
   if (questions.length === 0) {
     return (
       <main className={`${styles.arena} ${styles.emptyArena}`}>
-        <h1>试炼场尚未装入题目</h1>
-        <p>先向题库添加题目，再回来召唤一局。</p>
+        <h1>暂时没有可匹配的题目</h1>
+        <p>题库补充内容后，这里会自动恢复匹配。</p>
         <Link href="/questions">返回题库</Link>
       </main>
     )
   }
 
-  const liveMessage = state.phase === 'ready' && state.selectedQuestion
-    ? `题目已揭晓：${state.selectedQuestion.title}`
-    : state.phase === 'reveal' && state.selectedProfile
-      ? `匹配到${state.selectedProfile.eyebrow}：${state.selectedProfile.label}`
-      : phaseLabel[state.phase]
+  const copy = phaseCopy[phase]
+  const showDomain = phase === 'domain-locked' || phase === 'type-locked' || phase === 'level-locked' || phase === 'matched'
+  const showType = phase === 'type-locked' || phase === 'level-locked' || phase === 'matched'
+  const showLevel = phase === 'level-locked' || phase === 'matched'
 
   return (
-    <main className={`${styles.arena} ${state.phase === 'ready' ? styles.arenaReady : ''}`}>
+    <main className={`${styles.arena} ${phase === 'matched' ? styles.arenaMatched : ''}`}>
       <img
         alt=""
         aria-hidden="true"
@@ -176,43 +124,66 @@ export function MatchArena({ questions }: MatchArenaProps) {
         draggable="false"
         src={matchAsset('interview-match-concept-16x9.webp')}
       />
-      <ArenaHud onToggleSound={toggleSound} soundEnabled={soundEnabled} />
+      <div className={styles.atmosphereVeil} aria-hidden="true" />
+      <ArenaHud />
 
-      <div className={styles.battlefield}>
-        <OpponentSeat phase={state.phase} profile={state.selectedProfile} reduceMotion={reduceMotion} />
-        <div className={styles.summonAxis} aria-hidden="true" />
-        <ArenaWheel
-          onStart={startMatch}
-          phase={state.phase}
-          profiles={matchProfiles}
-          reduceMotion={reduceMotion}
-          rotation={rotation}
-          selectedProfile={state.selectedProfile}
-          selectedSlot={state.selectedSlot}
-        />
-        <ParticleBurst active={state.phase === 'reveal' || state.phase === 'dealing'} reduceMotion={reduceMotion} />
+      <section className={styles.matchLayout}>
+        <header className={styles.matchIntro}>
+          <span>{copy.eyebrow}</span>
+          <h1>{copy.title}</h1>
+          <p>{copy.description}</p>
+        </header>
 
-        {(state.phase === 'dealing' || state.phase === 'ready') && state.selectedQuestion && state.selectedProfile ? (
-          <QuestionCard
-            linkRef={questionLinkRef}
-            onRematch={startMatch}
-            phase={state.phase}
-            profile={state.selectedProfile}
-            question={state.selectedQuestion}
-            reduceMotion={reduceMotion}
-            round={state.round}
-          />
-        ) : null}
+        <ArenaWheel onStart={startMatch} phase={phase} result={result} />
 
-        <DeckStack count={questions.length} phase={state.phase} />
-        <div className={styles.playerSeat}>
-          <span className={styles.playerGem} aria-hidden="true">A</span>
-          <p>{phaseLabel[state.phase]}</p>
-          {state.phase === 'ready' && state.selectedProfile ? <small>{state.selectedProfile.modifier}</small> : null}
+        <div className={styles.matchFacts} aria-label="本场匹配参数">
+          <div className={`${styles.fact} ${showDomain ? styles.factResolved : ''}`}>
+            <span>DOMAIN</span>
+            <strong>{showDomain && result ? result.domain : '—'}</strong>
+            {showDomain ? <Check size={13} aria-hidden="true" /> : null}
+          </div>
+          <div className={`${styles.fact} ${showType ? styles.factResolved : ''}`}>
+            <span>TYPE</span>
+            <strong>{showType && result ? result.type : '—'}</strong>
+            {showType ? <Check size={13} aria-hidden="true" /> : null}
+          </div>
+          <div className={`${styles.fact} ${showLevel ? styles.factResolved : ''}`}>
+            <span>LEVEL</span>
+            <strong className={styles.stars}>{showLevel && result ? stars(result.difficulty) : '—'}</strong>
+            {showLevel ? <Check size={13} aria-hidden="true" /> : null}
+          </div>
         </div>
-      </div>
 
-      <p className={styles.liveStatus} aria-atomic="true" aria-live="polite">{liveMessage}</p>
+        {phase === 'matched' && result ? (
+          <div className={styles.matchResultActions}>
+            <div className={styles.matchMeta}>
+              <span>{result.topics.join(' · ') || result.domain}</span>
+              <i aria-hidden="true" />
+              <span>{result.estimate}</span>
+              <i aria-hidden="true" />
+              <span>3 ROUNDS</span>
+            </div>
+            <div className={styles.actionRow}>
+              <Link className={styles.acceptButton} href={`/questions/${result.question.slug}`}>
+                <span>接受挑战</span>
+                <ArrowRight size={16} aria-hidden="true" />
+              </Link>
+              <button className={styles.rematchButton} onClick={startMatch} type="button">
+                <RotateCcw size={14} aria-hidden="true" />
+                重新匹配
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p className={styles.matchHint}>{phase === 'idle' ? '预计 5–8 分钟 · 具体题目将在进入面试后揭晓' : '请稍候，匹配引擎正在锁定参数'}</p>
+        )}
+      </section>
+
+      <p className={styles.liveStatus} aria-atomic="true" aria-live="polite">
+        {phase === 'matched' && result
+          ? `匹配完成：${result.domain}，${result.type}，难度 ${result.difficulty} 星`
+          : copy.title}
+      </p>
     </main>
   )
 }
